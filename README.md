@@ -84,7 +84,7 @@ standard product IDs?
     * User's profile
 
 ## Wireframes
-<img src="https://github.com/alexscott08/FBU-ClosetWear/raw/master/closetwearWireframe.jpg" width=600>
+<img src="https://github.com/alexscott08/ClosetWear/raw/master/closetwearWireframe.jpg" width=600>
 
 ### [BONUS] Digital Wireframes & Mockups
 
