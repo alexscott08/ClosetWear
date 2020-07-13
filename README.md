@@ -167,14 +167,14 @@ OutfitPost
 - [Create basic snippets for each Parse network request]
 - [OPTIONAL: List endpoints if using existing API such as Yelp]
 
-## FBU App Expectations
+## FBU App Expectations (based on MVP)
 - [x] Your app has multiple views
 - [x] Your app interacts with a database (e.g. Parse)
 - [x] You can log in/log out of your app as a user
 - [x] You can sign up with a new user profile
-- [x] Somewhere in your app you can use the camera to take a picture and do something with the picture (e.g. take a photo and share it to a feed, or take a photo and set a user’s profile picture)
-- [x] Your app integrates with a SDK (e.g. Google Maps SDK, Facebook SDK)
-- [ ] Your app contains at least one more complex algorithm (talk over this with your manager)
+- [x] Somewhere in your app you can use the camera to take a picture and do something with the picture (take photo of clothing article or outfit and add descriptions and caption)
+- [x] Your app integrates with a SDK (Google Sign-In SDK)
+- [x] Your app contains at least one more complex algorithm (sorting home screen based on most liked)
 - [x] Your app uses gesture recognizers (e.g. double tap to like, e.g. pinch to scale)
-- [x] Your app use an animation (doesn’t have to be fancy) (e.g. fade in/out, e.g. animating a view growing and shrinking)
-- [x] Your app incorporates an external library to add visual polish
+- [x] Your app use an animation (double tap to like animation/gesture)
+- [x] Your app incorporates an external library to add visual polish (Google MD)
