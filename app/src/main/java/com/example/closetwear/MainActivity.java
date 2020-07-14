@@ -10,6 +10,7 @@ import android.view.MenuItem;
 
 import com.example.closetwear.fragments.ComposeFragment;
 import com.example.closetwear.fragments.HomeFragment;
+import com.example.closetwear.fragments.OutfitsFragment;
 import com.example.closetwear.fragments.ProfileFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -45,6 +46,9 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case R.id.action_compose:
                         fragment = new ComposeFragment();
+                        break;
+                    case R.id.action_outfits:
+                        fragment = new OutfitsFragment();
                         break;
                     case R.id.action_profile:
                     default:

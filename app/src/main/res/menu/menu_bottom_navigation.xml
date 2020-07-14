@@ -13,6 +13,11 @@
         android:title="Compose"
         app:showAsAction="always" />
     <item
+        android:id="@+id/action_outfits"
+        android:icon="@android:drawable/ic_menu_myplaces"
+        android:title="Outfits"
+        app:showAsAction="always" />
+    <item
         android:id="@+id/action_profile"
         android:icon="@android:drawable/ic_menu_view"
         android:title="Profile"
