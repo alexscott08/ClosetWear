@@ -59,7 +59,7 @@ public class ProfileFragment extends Fragment {
         ParseUser user = ParseUser.getCurrentUser();
         name.setText(user.getParseFile("name") + "");
         username.setText(user.getUsername());
-        
+
         logoutBtn = view.findViewById(R.id.logoutBtn);
 //        queryPosts();
         logoutBtn.setOnClickListener(new View.OnClickListener() {
