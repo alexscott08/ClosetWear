@@ -58,8 +58,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider" />
 
-    <ScrollView
-        android:id="@+id/clothingScrollView"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/clothingRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="268dp"
         android:layout_marginTop="1dp"
@@ -70,6 +70,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical" />
-    </ScrollView>
+    </androidx.recyclerview.widget.RecyclerView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

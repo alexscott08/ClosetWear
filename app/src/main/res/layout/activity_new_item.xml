@@ -7,7 +7,7 @@ android:layout_height="match_parent"
 tools:context=".fragments.NewOutfitActivity">
 
 <ImageView
-    android:id="@+id/imageView3"
+    android:id="@+id/itemImg"
     android:layout_width="match_parent"
     android:layout_height="221dp"
     android:scaleType="centerInside"
@@ -23,7 +23,7 @@ tools:context=".fragments.NewOutfitActivity">
     android:layout_marginStart="28dp"
     android:layout_marginTop="28dp"
     app:layout_constraintStart_toEndOf="@+id/categoryText"
-    app:layout_constraintTop_toBottomOf="@+id/imageView3" />
+    app:layout_constraintTop_toBottomOf="@+id/itemImg" />
 
 <Spinner
     android:id="@+id/subcatSpinner"
@@ -69,7 +69,7 @@ tools:context=".fragments.NewOutfitActivity">
     android:layout_marginTop="29dp"
     android:text="Category:"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/imageView3" />
+    app:layout_constraintTop_toBottomOf="@+id/itemImg" />
 
 <TextView
     android:id="@+id/subcatText"
