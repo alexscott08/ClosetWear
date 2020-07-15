@@ -20,7 +20,10 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.closetwear.NewItemActivity;
 import com.example.closetwear.R;
+
+import org.parceler.Parcels;
 
 import java.io.File;
 
@@ -32,6 +35,10 @@ public class ComposeFragment extends Fragment {
     public String photoFileName = "photo.jpg";
     public static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 42;
 
+    private Button cameraBtn;
+    private ImageView postImgView;
+    private Button outfitBtn;
+    private Button itemBtn;
     public ComposeFragment() {
 
     }
@@ -45,36 +52,45 @@ public class ComposeFragment extends Fragment {
 
     // This event is triggered soon after onCreateView().
     // Any view setup should occur here.  E.g., view lookups and attaching view listeners.
-//    @Override
-//    public void onViewCreated(View view, Bundle savedInstanceState) {
-//        super.onViewCreated(view, savedInstanceState);
-//        descriptionEditText = view.findViewById(R.id.descriptionEditText);
-//        captureImgBtn = view.findViewById(R.id.captureImgBtn);
-//        postImgView = view.findViewById(R.id.postImgView);
-//        submitBtn = view.findViewById(R.id.submitBtn);
-//
-//        captureImgBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                launchCamera();
-//            }
-//        });
-//        submitBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                String description = descriptionEditText.getText().toString();
-//                if (description.isEmpty()) {
-//                    Toast.makeText(getContext(), "Description cannot be empty", Toast.LENGTH_SHORT).show();
-//                }
-//                if (photoFile == null || postImgView.getDrawable() == null) {
-//                    Toast.makeText(getContext(), "There is no image!", Toast.LENGTH_SHORT).show();
-//                    return;
-//                }
-//                ParseUser currentUser = ParseUser.getCurrentUser();
-//                savePost(description, currentUser, photoFile);
-//            }
-//        });
-//    }
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        cameraBtn = view.findViewById(R.id.cameraBtn);
+        postImgView = view.findViewById(R.id.postImgView);
+        outfitBtn = view.findViewById(R.id.outfitBtn);
+        itemBtn = view.findViewById(R.id.itemBtn);
+
+        cameraBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                launchCamera();
+            }
+        });
+
+        // If pic has been taken, user can then fill out details on outfit
+        outfitBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (photoFile != null) {
+                    Intent i = new Intent(getContext(), NewOutfitActivity.class);
+                    i.putExtra("photo", Parcels.wrap(photoFile));
+                    getContext().startActivity(i);
+                }
+            }
+        });
+
+        // If pic has been taken, user can then fill out details on clothing item
+        itemBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (photoFile != null) {
+                    Intent i = new Intent(getContext(), NewItemActivity.class);
+                    i.putExtra("photo", Parcels.wrap(photoFile));
+                    getContext().startActivity(i);
+                }
+            }
+        });
+    }
 
     private void launchCamera() {
         // create Intent to take a picture and return control to the calling application
@@ -93,7 +109,6 @@ public class ComposeFragment extends Fragment {
         if (intent.resolveActivity(getContext().getPackageManager()) != null) {
             // Start the image capture intent to take photo
             startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
-
         }
     }
 

@@ -57,8 +57,8 @@ public class ProfileFragment extends Fragment {
         username = view.findViewById(R.id.username);
 
         ParseUser user = ParseUser.getCurrentUser();
-        name.setText(user.getParseFile("name") + "");
-        username.setText(user.getUsername());
+        name.setText(user.getString("name"));
+        username.setText("@" + user.getUsername());
 
         logoutBtn = view.findViewById(R.id.logoutBtn);
 //        queryPosts();

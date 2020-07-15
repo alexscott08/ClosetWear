@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import com.example.closetwear.OutfitPost;
 import com.example.closetwear.R;
 import com.example.closetwear.adapters.HomeAdapter;
+import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 
@@ -56,7 +57,7 @@ public class HomeFragment extends Fragment {
         // set the layout manager on the recycler view
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         homeRecyclerView.setLayoutManager(linearLayoutManager);
-//        queryPosts();
+        queryPosts();
 
         // Getting SwipeContainerLayout
         swipeLayout = view.findViewById(R.id.swipeContainer);
@@ -64,7 +65,7 @@ public class HomeFragment extends Fragment {
         swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-//                queryPosts();
+                queryPosts();
                 // To keep animation for 4 seconds
                 new Handler().postDelayed(new Runnable() {
                     @Override public void run() {
@@ -84,29 +85,29 @@ public class HomeFragment extends Fragment {
         );
     }
 
-//    protected void queryPosts() {
-//        // specify what type of data we want to query - OutfitPost.class
-//        ParseQuery<OutfitPost> query = ParseQuery.getQuery(OutfitPost.class);
-//        // include data referred by user key
-//        query.include(OutfitPost.KEY_USER);
-//        // limit query to latest 20 items
-//        query.setLimit(20);
-//        // order posts by creation date (newest first)
-//        query.addDescendingOrder(OutfitPost.KEY_CREATED_KEY);
-//        // start an asynchronous call for posts
-//        query.findInBackground(new FindCallback<OutfitPost>() {
-//            @Override
-//            public void done(List<OutfitPost> posts, ParseException e) {
-//                // check for errors
-//                if (e != null) {
-//                    Log.e(TAG, "Issue with getting posts", e);
-//                    return;
-//                }
-//                // update adapter with posts list
-//                adapter.clear();
-//                adapter.addAll(posts);
-//            }
-//        });
-//    }
+    protected void queryPosts() {
+        // specify what type of data we want to query - OutfitPost.class
+        ParseQuery<OutfitPost> query = ParseQuery.getQuery(OutfitPost.class);
+        // include data referred by user key
+        query.include(OutfitPost.KEY_USER);
+        // limit query to latest 20 items
+        query.setLimit(20);
+        // order posts by creation date (newest first)
+        query.addDescendingOrder(OutfitPost.KEY_CREATED_KEY);
+        // start an asynchronous call for posts
+        query.findInBackground(new FindCallback<OutfitPost>() {
+            @Override
+            public void done(List<OutfitPost> posts, ParseException e) {
+                // check for errors
+                if (e != null) {
+                    Log.e(TAG, "Issue with getting posts", e);
+                    return;
+                }
+                // update adapter with posts list
+                adapter.clear();
+                adapter.addAll(posts);
+            }
+        });
+    }
 
 }

@@ -52,6 +52,7 @@
         android:layout_marginTop="60dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/username"
+        app:srcCompat="@drawable/ic_closeticon"
         tools:src="@tools:sample/avatars" />
 
     <ImageView
@@ -62,6 +63,7 @@
         android:layout_marginTop="60dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fitsIcon"
+        app:srcCompat="@drawable/ic_favicon"
         tools:src="@tools:sample/avatars" />
 
     <ImageView
@@ -72,6 +74,7 @@
         android:layout_marginTop="60dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/closetIcon"
+        app:srcCompat="@drawable/ic_clothesicon"
         tools:src="@tools:sample/avatars" />
 
     <TextView
@@ -109,15 +112,15 @@
 
     <Button
         android:id="@+id/logoutBtn"
-        android:layout_width="151dp"
-        android:layout_height="53dp"
+        android:layout_width="127dp"
+        android:layout_height="42dp"
         android:layout_marginBottom="36dp"
         android:text="log out"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fitsText"
-        app:layout_constraintVertical_bias="0.591" />
+        app:layout_constraintTop_toBottomOf="@+id/favoritesIcon"
+        app:layout_constraintVertical_bias="0.715" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
