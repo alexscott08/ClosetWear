@@ -22,11 +22,11 @@ import org.parceler.Parcels;
 
 import java.util.List;
 
-public class ClosetAdapter extends RecyclerView.Adapter<ClosetAdapter.ViewHolder> {
+public class OutfitDetailsAdapter extends RecyclerView.Adapter<OutfitDetailsAdapter.ViewHolder> {
     private Context context;
     private List<ClothingPost> posts;
 
-    public ClosetAdapter(Context context, List<ClothingPost> posts) {
+    public OutfitDetailsAdapter(Context context, List<ClothingPost> posts) {
         this.context = context;
         this.posts = posts;
     }
@@ -65,7 +65,6 @@ public class ClosetAdapter extends RecyclerView.Adapter<ClosetAdapter.ViewHolder
         private ImageView itemImg;
         private TextView brand;
         private TextView itemName;
-        private String relativeDate;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -80,24 +79,6 @@ public class ClosetAdapter extends RecyclerView.Adapter<ClosetAdapter.ViewHolder
             final ParseFile image = post.getImage();
 //            Glide.with(context).load(image.getUrl()).into(itemImg);
             Glide.with(context).load(R.drawable.ic_launcher_background).into(itemImg);
-            relativeDate = DateUtils.getRelativeTimeSpanString(post.getCreatedAt().getTime()) + "";
-
-            itemImg.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(context, OutfitsFragment.class);
-                    intent.putExtra("KEY_CREATED_KEY", relativeDate);
-                    intent.putExtra("KEY_USER", Parcels.wrap(post.getUser()));
-                    intent.putExtra("KEY_CATEGORY", post.getCategory());
-                    intent.putExtra("KEY_SUBCATEGORY", post.getSubcategory());
-                    intent.putExtra("KEY_SIZE", post.getSize());
-                    intent.putExtra("KEY_BRAND", post.getBrand());
-                    intent.putExtra("KEY_COLOR", post.getColor());
-                    intent.putExtra("KEY_NAME", post.getName());
-                    intent.putExtra("KEY_IMAGE", Parcels.wrap(image));
-                    context.startActivity(intent);
-                }
-            });
         }
     }
 }
