@@ -1,5 +1,6 @@
 package com.example.closetwear;
 
+import androidx.annotation.Dimension;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -7,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
@@ -15,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -58,12 +61,15 @@ public class OutfitDetailsActivity extends AppCompatActivity {
         // Set bottom screen RV full of outfit's items
         closetRecyclerView = findViewById(R.id.closetRecyclerView);
         allPosts = new ArrayList<>();
+
         // Create adapter
         adapter = new OutfitDetailsAdapter(this, allPosts);
+
         // set the adapter on the recycler view
         closetRecyclerView.setAdapter(adapter);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         closetRecyclerView.setLayoutManager(linearLayoutManager);
+
         try {
             getItems();
         } catch (JSONException e) {
@@ -91,18 +97,27 @@ public class OutfitDetailsActivity extends AppCompatActivity {
         final ParseFile profilePic = user.getParseFile("profilePic");
         GlideApp.with(this).load(profilePic.getUrl()).transform(new CircleCrop())
                 .into(profileImg);
+
+        outfitImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // full screen view when clicked
+            }
+        });
     }
 
+    // Converts JSONArray of items to a list to add to adapter
     protected void getItems() throws JSONException {
         JSONArray jsonItems = Parcels.unwrap(getIntent().getParcelableExtra("KEY_ITEMS"));
 
-        // Converts JSONArray to list to be added to adapter
+        // Converts JSONArray to list
         List<ClothingPost> items = new ArrayList<ClothingPost>();
         if (jsonItems != null) {
             for (int i = 0; i < jsonItems.length(); i++){
                 items.add((ClothingPost) (Object) jsonItems.getJSONObject(i));
             }
         }
+        // Update adapter
         adapter.clear();
         adapter.addAll(items);
     }
