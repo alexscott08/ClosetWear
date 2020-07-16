@@ -15,10 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.closetwear.ClothingPost;
 import com.example.closetwear.R;
-import com.example.closetwear.fragments.OutfitsFragment;
 import com.parse.ParseFile;
-
-import org.parceler.Parcels;
 
 import java.util.List;
 
@@ -77,8 +74,7 @@ public class OutfitDetailsAdapter extends RecyclerView.Adapter<OutfitDetailsAdap
             brand.setText(post.getBrand());
             itemName.setText(post.getName());
             final ParseFile image = post.getImage();
-//            Glide.with(context).load(image.getUrl()).into(itemImg);
-            Glide.with(context).load(R.drawable.ic_launcher_background).into(itemImg);
+            Glide.with(context).load(image.getUrl()).into(itemImg);
         }
     }
 }

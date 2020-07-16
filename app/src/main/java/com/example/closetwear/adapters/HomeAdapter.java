@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
+import com.example.closetwear.GlideApp;
 import com.example.closetwear.OutfitDetailsActivity;
 import com.example.closetwear.OutfitPost;
 import com.example.closetwear.R;
@@ -66,6 +67,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
 
     class ViewHolder extends RecyclerView.ViewHolder {
         private ImageView outfitImg;
+        private String relativeDate;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -74,22 +76,24 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
 
         public void bind(final OutfitPost post) {
             // Bind the post data to the view elements
-//            final ParseFile image = post.getImage();
-//            Glide.with(context).load(image.getUrl()).into(outfitImg);
-            Glide.with(context).load(R.drawable.ic_launcher_background).into(outfitImg);
-//            final ParseFile profilePic = post.getUser().getParseFile("profilePic");
-//
-//            outfitImg.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    Intent intent = new Intent(context, OutfitDetailsActivity.class);
-//                    intent.putExtra("KEY_DESCRIPTION", post.getDescription());
-//                    intent.putExtra("KEY_CREATED_KEY", relativeDate);
-//                    intent.putExtra("KEY_USER", Parcels.wrap(post.getUser()));
-//                    intent.putExtra("KEY_IMAGE", Parcels.wrap(image));
-//                    context.startActivity(intent);
-//                }
-//            });
+            final ParseFile image = post.getImage();
+            GlideApp.with(context).load(image.getUrl()).into(outfitImg);
+            relativeDate = DateUtils.getRelativeTimeSpanString(post.getCreatedAt().getTime()) + "";
+
+            outfitImg.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(context, OutfitDetailsActivity.class);
+                    intent.putExtra("KEY_CREATED_KEY", relativeDate);
+                    intent.putExtra("KEY_USER", Parcels.wrap(post.getUser()));
+                    intent.putExtra("KEY_COMMENTS", post.getCommentsCount());
+                    intent.putExtra("KEY_CAPTION", post.getCaption());
+                    intent.putExtra("KEY_LIKES", post.getLikesCount());
+                    intent.putExtra("KEY_IMAGE", Parcels.wrap(image));
+                    intent.putExtra("KEY_ITEMS", Parcels.wrap(post.getFitItems()));
+                    context.startActivity(intent);
+                }
+            });
         }
     }
 }

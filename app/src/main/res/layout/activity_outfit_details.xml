@@ -9,11 +9,12 @@
     <ImageView
         android:id="@+id/outfitImg"
         android:layout_width="match_parent"
-        android:layout_height="384dp"
+        android:layout_height="358dp"
+        android:layout_marginTop="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profileImg"
         tools:srcCompat="@tools:sample/avatars" />
 
     <View
@@ -47,6 +48,17 @@
         app:layout_constraintTop_toBottomOf="@+id/divider" />
 
     <TextView
+        android:id="@+id/date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="64dp"
+        android:layout_marginTop="4dp"
+        android:text="14 mins ago"
+        android:textSize="18sp"
+        app:layout_constraintStart_toEndOf="@+id/favoritesIcon"
+        app:layout_constraintTop_toBottomOf="@+id/divider" />
+
+    <TextView
         android:id="@+id/fitDetailsText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -61,7 +73,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/clothingRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="268dp"
+        android:layout_height="226dp"
         android:layout_marginTop="1dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fitDetailsText">
@@ -71,5 +83,26 @@
             android:layout_height="wrap_content"
             android:orientation="vertical" />
     </androidx.recyclerview.widget.RecyclerView>
+
+    <TextView
+        android:id="@+id/username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="24dp"
+        android:text="axs08"
+        android:textSize="18sp"
+        app:layout_constraintStart_toEndOf="@+id/profileImg"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/profileImg"
+        android:layout_width="61dp"
+        android:layout_height="55dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:srcCompat="@tools:sample/avatars" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
