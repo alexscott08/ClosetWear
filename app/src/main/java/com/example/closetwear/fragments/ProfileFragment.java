@@ -1,34 +1,31 @@
 package com.example.closetwear.fragments;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.StaggeredGridLayoutManager;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.fragment.app.FragmentManager;
 
-import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.closetwear.LoginActivity;
 import com.example.closetwear.R;
 import com.parse.LogOutCallback;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseUser;
-
-import org.w3c.dom.Text;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class ProfileFragment extends Fragment {
 
@@ -37,7 +34,11 @@ public class ProfileFragment extends Fragment {
     private Button logoutBtn;
     private TextView name;
     private TextView username;
-
+    private ImageView profileImg;
+    private ImageView closetIcon;
+    private ImageView fitsIcon;
+    private ImageView favoritesIcon;
+    private ParseUser user = ParseUser.getCurrentUser();
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -55,11 +56,15 @@ public class ProfileFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         name = view.findViewById(R.id.name);
         username = view.findViewById(R.id.username);
+        profileImg = view.findViewById(R.id.profileImg);
+        closetIcon = view.findViewById(R.id.closetIcon);
+        fitsIcon = view.findViewById(R.id.fitsIcon);
+        favoritesIcon = view.findViewById(R.id.favoritesIcon);
+        ParseFile img = user.getParseFile("profilePic");
+        Glide.with(getContext()).load(img.getUrl()).into(profileImg);
 
-        ParseUser user = ParseUser.getCurrentUser();
         name.setText(user.getString("name"));
         username.setText("@" + user.getUsername());
-
         logoutBtn = view.findViewById(R.id.logoutBtn);
 //        queryPosts();
         logoutBtn.setOnClickListener(new View.OnClickListener() {
@@ -68,6 +73,31 @@ public class ProfileFragment extends Fragment {
                 logOutUser();
             }
         });
+        final FragmentManager fragmentManager = getParentFragmentManager();
+        closetIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Fragment fragment = new ClosetFragment();
+                fragmentManager.beginTransaction().replace(R.id.containerFrameLayout, fragment).addToBackStack(null).commit();
+            }
+        });
+
+        fitsIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Fragment fragment = new OutfitsFragment();
+                fragmentManager.beginTransaction().replace(R.id.containerFrameLayout, fragment).addToBackStack(null).commit();
+            }
+        });
+
+        favoritesIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Fragment fragment = new OutfitsFragment();
+                fragmentManager.beginTransaction().replace(R.id.containerFrameLayout, fragment).addToBackStack(null).commit();
+            }
+        });
+
     }
 
     private void logOutUser() {
@@ -91,4 +121,5 @@ public class ProfileFragment extends Fragment {
         Intent intent = new Intent(getContext(), LoginActivity.class);
         getContext().startActivity(intent);
     }
+
 }

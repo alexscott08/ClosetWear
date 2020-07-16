@@ -16,11 +16,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.closetwear.NewItemActivity;
+import com.example.closetwear.NewOutfitActivity;
 import com.example.closetwear.R;
 
 import org.parceler.Parcels;
@@ -35,7 +36,7 @@ public class ComposeFragment extends Fragment {
     public String photoFileName = "photo.jpg";
     public static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 42;
 
-    private Button cameraBtn;
+    private ImageButton cameraBtn;
     private ImageView postImgView;
     private Button outfitBtn;
     private Button itemBtn;
@@ -85,7 +86,7 @@ public class ComposeFragment extends Fragment {
             public void onClick(View view) {
                 if (photoFile != null) {
                     Intent i = new Intent(getContext(), NewItemActivity.class);
-                    i.putExtra("photo", Parcels.wrap(photoFile));
+                    i.putExtra("photo", Parcels.wrap (photoFile));
                     getContext().startActivity(i);
                 }
             }

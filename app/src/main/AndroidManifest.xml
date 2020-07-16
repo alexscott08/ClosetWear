@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".fragments.NewOutfitActivity"></activity>
+        <activity android:name=".NewOutfitActivity"></activity>
         <activity android:name=".NewItemActivity" />
         <activity android:name=".OutfitDetailsActivity" />
         <activity android:name=".LoginActivity">

@@ -11,15 +11,14 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.parse.LogInCallback;
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 
 public class LoginActivity extends AppCompatActivity {
 
     public static final String TAG = "LoginActivity";
-    private EditText usernameEditText;
-    private EditText passwordEditText;
+    private EditText username;
+    private EditText password;
     private Button loginBtn;
     private Button signUpBtn;
 
@@ -31,8 +30,8 @@ public class LoginActivity extends AppCompatActivity {
         if (ParseUser.getCurrentUser() != null) {
             goMainActivity();
         }
-        usernameEditText = findViewById(R.id.usernameEditText);
-        passwordEditText = findViewById(R.id.passwordEditText);
+        username = findViewById(R.id.username);
+        password = findViewById(R.id.password);
         loginBtn = findViewById(R.id.loginBtn);
         signUpBtn = findViewById(R.id.signUpBtn);
 
@@ -41,8 +40,8 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Log.i(TAG, "onClick login button");
-                String username = usernameEditText.getText().toString();
-                String password = passwordEditText.getText().toString();
+                String username = LoginActivity.this.username.getText().toString();
+                String password = LoginActivity.this.password.getText().toString();
                 loginUser(username, password);
             }
         });
@@ -52,8 +51,8 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Log.i(TAG, "onClick signup button");
-                String username = usernameEditText.getText().toString();
-                String password = passwordEditText.getText().toString();
+                String username = LoginActivity.this.username.getText().toString();
+                String password = LoginActivity.this.password.getText().toString();
                 signUpUser(username, password);
             }
         });
@@ -62,10 +61,15 @@ public class LoginActivity extends AppCompatActivity {
     private void signUpUser(String username, String password) {
         Log.i(TAG, "Attempting to sign up user " + username);
         // Navigates to main activity if signup and login is successful
+        // First logs out current user (if someone is currently logged in)
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        currentUser.logOut();
+
         ParseUser newUser = new ParseUser();
         newUser.setUsername(username);
         newUser.setPassword(password);
         newUser.signUpInBackground();
+        // After setting username and password, signs in user
         ParseUser.logInInBackground(username, password, new LogInCallback() {
             @Override
             public void done(ParseUser user, ParseException e) {

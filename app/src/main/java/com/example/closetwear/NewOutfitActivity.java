@@ -1,4 +1,4 @@
-package com.example.closetwear.fragments;
+package com.example.closetwear;
 
 import androidx.appcompat.app.AppCompatActivity;
 
