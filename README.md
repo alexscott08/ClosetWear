@@ -108,7 +108,7 @@ ClothingPost
 | objectId    | String          | unique id for post           |
 | image       | File            | image user posts             |
 | caption     | String          | description to go with image |
-| owner       | Pointer to user | Post author                  |
+| user        | Pointer to user | Post author                  |
 | createdAt   | Number          | date post is created         |
 | itemName    | String          | name of clothing article     |
 | brand       | String          | brand associated with item   |
@@ -122,10 +122,10 @@ OutfitPost
 | objectId    | String          | unique id for post           |
 | image       | File            | image user posts             |
 | caption     | String          | description to go with fit   |
-| owner       | Pointer to user | Post author                  |
+| user        | Pointer to user | Post author                  |
 | likesCount  | Number          | number of likes for the post |
 | createdAt   | Number          | date post is created         |
-| fitItems      | Array of pointers to objectId | all items worn on a fit
+| fitItems      | Relation of pointers to objectId | all items worn on a fit
 | commentsCount | Number                        | number of comments that has been posted to an image 
 
 ### Networking
