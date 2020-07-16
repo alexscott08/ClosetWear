@@ -25,8 +25,11 @@ import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseQuery;
+import com.parse.ParseRelation;
 import com.parse.ParseUser;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
@@ -61,7 +64,11 @@ public class OutfitDetailsActivity extends AppCompatActivity {
         closetRecyclerView.setAdapter(adapter);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         closetRecyclerView.setLayoutManager(linearLayoutManager);
-        queryPosts();
+        try {
+            getItems();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         // Get all other info about the post from the intent and set on screen
         username = findViewById(R.id.username);
@@ -86,29 +93,17 @@ public class OutfitDetailsActivity extends AppCompatActivity {
                 .into(profileImg);
     }
 
-    protected void queryPosts() {
-        // specify what type of data we want to query - ClothingPost.class
-        ParseQuery<ClothingPost> query = ParseQuery.getQuery(ClothingPost.class);
-        // only include data referred by user key
-        query.include(ClothingPost.KEY_USER);
-        query.whereEqualTo(ClothingPost.KEY_USER, ParseUser.getCurrentUser());
-        // limit query to latest 20 items
-        query.setLimit(20);
-        // order posts by creation date (newest first)
-        query.addDescendingOrder(OutfitPost.KEY_CREATED_KEY);
-        // start an asynchronous call for posts
-        query.findInBackground(new FindCallback<ClothingPost>() {
-            @Override
-            public void done(List<ClothingPost> posts, ParseException e) {
-                // check for errors
-                if (e != null) {
-                    Log.e(TAG, "Issue with getting posts", e);
-                    return;
-                }
-                // update adapter with posts list
-                adapter.clear();
-                adapter.addAll(posts);
+    protected void getItems() throws JSONException {
+        JSONArray jsonItems = Parcels.unwrap(getIntent().getParcelableExtra("KEY_ITEMS"));
+
+        // Converts JSONArray to list to be added to adapter
+        List<ClothingPost> items = new ArrayList<ClothingPost>();
+        if (jsonItems != null) {
+            for (int i = 0; i < jsonItems.length(); i++){
+                items.add((ClothingPost) (Object) jsonItems.getJSONObject(i));
             }
-        });
+        }
+        adapter.clear();
+        adapter.addAll(items);
     }
 }

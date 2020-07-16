@@ -3,8 +3,9 @@ package com.example.closetwear;
 import com.parse.ParseClassName;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
-import com.parse.ParseRelation;
 import com.parse.ParseUser;
+
+import org.json.JSONArray;
 
 import java.util.Date;
 
@@ -62,7 +63,7 @@ public class OutfitPost extends ParseObject {
 
     public Date getCreatedAt() { return getDate(KEY_CREATED_KEY); }
 
-    public ParseRelation<ClothingPost> getFitItems() { return getRelation(KEY_ITEMS); }
+    public JSONArray getFitItems() { return getJSONArray(KEY_ITEMS); }
 
-    public void setFitItems(ClothingPost item) { add(KEY_ITEMS, item); }
+    public void setFitItems(ClothingPost item) { put(KEY_ITEMS, item); }
 }
