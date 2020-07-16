@@ -1,8 +1,6 @@
 package com.example.closetwear.fragments;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -19,7 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
+import com.example.closetwear.GlideApp;
 import com.example.closetwear.LoginActivity;
 import com.example.closetwear.R;
 import com.parse.LogOutCallback;
@@ -43,6 +41,18 @@ public class ProfileFragment extends Fragment {
     public ProfileFragment() {
         // Required empty public constructor
     }
+//    @Override
+//    public void onCreate(@Nullable Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        getChildFragmentManager().setFragmentResultListener("key", this, new FragmentResultListener() {
+//            @Override
+//            public void onFragmentResult(@NonNull String key, @NonNull Bundle bundle) {
+//                // We use a String here, but any type that can be put in a Bundle is supported
+//                String result = bundle.getString("bundleKey");
+//                // Do something with the result...
+//            }
+//        });
+//    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -60,19 +70,24 @@ public class ProfileFragment extends Fragment {
         closetIcon = view.findViewById(R.id.closetIcon);
         fitsIcon = view.findViewById(R.id.fitsIcon);
         favoritesIcon = view.findViewById(R.id.favoritesIcon);
+
+        // Upload profile pic from server to fill view
         ParseFile img = user.getParseFile("profilePic");
-        Glide.with(getContext()).load(img.getUrl()).into(profileImg);
+        GlideApp.with(view.getContext()).load(img.getUrl()).into(profileImg);
 
         name.setText(user.getString("name"));
         username.setText("@" + user.getUsername());
         logoutBtn = view.findViewById(R.id.logoutBtn);
-//        queryPosts();
+
+        // listener to log out user and start LoginActivity()
         logoutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 logOutUser();
             }
         });
+
+        // Click icons to transition to new fragments
         final FragmentManager fragmentManager = getParentFragmentManager();
         closetIcon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,6 +115,7 @@ public class ProfileFragment extends Fragment {
 
     }
 
+    // Logs out the current user and starts LoginActivity()
     private void logOutUser() {
         Log.i(TAG, "Attempting to signout user");
         // Navigates to login activity if logout is successful
@@ -117,6 +133,7 @@ public class ProfileFragment extends Fragment {
         });
     }
 
+    // Helper for logOutUser() to start LoginActivity()
     private void goLoginActivity() {
         Intent intent = new Intent(getContext(), LoginActivity.class);
         getContext().startActivity(intent);

@@ -35,7 +35,7 @@ public class ParseApplication extends Application {
                 .applicationId("alex-closetwear") // should correspond to APP_ID env variable
                 .clientKey("personalProject")  // set explicitly unless clientKey is explicitly configured on Parse server
                 .clientBuilder(builder)
-                .server("https://fbu-closet-wear.herokuapp.com/parse").build());
+                .server("https://alex-closetwear.herokuapp.com/parse").build());
     }
 }
 
