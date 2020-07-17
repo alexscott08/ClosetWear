@@ -60,6 +60,7 @@ public class LoginActivity extends AppCompatActivity {
         // Navigates to signup activity to create new account
         Intent i = new Intent(this, SignupActivity.class);
         startActivity(i);
+        finish();
     }
 
     private void loginUser(String username, String password) {

@@ -1,9 +1,13 @@
 package com.example.closetwear.fragments;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.ImageDecoder;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.core.content.FileProvider;
@@ -23,23 +27,31 @@ import android.widget.Toast;
 import com.example.closetwear.NewItemActivity;
 import com.example.closetwear.NewOutfitActivity;
 import com.example.closetwear.R;
+import com.example.closetwear.SignupActivity;
 
 import org.parceler.Parcels;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
 
 import static android.app.Activity.RESULT_OK;
 
 public class ComposeFragment extends Fragment {
     public static final String TAG = "ComposeActivity";
     private File photoFile;
-    public String photoFileName = "photo.jpg";
+    public String photoFileName = "photo.png";
     public static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 42;
-
+    private int itemSelected = 0;
+    // PICK_PHOTO_CODE is a constant integer
+    public final static int PICK_PHOTO_CODE = 1046;
+    private Bitmap selectedImage;
+    private OutputStream os;
+    private File galleryImg;
     private ImageButton cameraBtn;
     private ImageView postImgView;
-    private Button outfitBtn;
-    private Button itemBtn;
+    private String type;
+
     public ComposeFragment() {
 
     }
@@ -55,44 +67,63 @@ public class ComposeFragment extends Fragment {
     // Any view setup should occur here.  E.g., view lookups and attaching view listeners.
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+        super.onViewCreated(view, savedInstanceState);String[] singleChoiceItems = getResources().getStringArray(R.array.dialog_compose_start);
+        new AlertDialog.Builder(getContext())
+                .setTitle("Select one")
+                .setSingleChoiceItems(singleChoiceItems, itemSelected, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int selectedIndex) {
+                        itemSelected = selectedIndex;
+                    }
+                })
+                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        if (itemSelected == 0) {
+                            type = "item";
+                        } else {
+                            type = "fit";
+                        }
+                    }
+                })
+                .setNegativeButton("Cancel", null)
+                .show();
+
         cameraBtn = view.findViewById(R.id.cameraBtn);
         postImgView = view.findViewById(R.id.postImgView);
-        outfitBtn = view.findViewById(R.id.outfitBtn);
-        itemBtn = view.findViewById(R.id.itemBtn);
 
         cameraBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                launchCamera();
+                // AlertDialog to ask user to select between taking picture or opening photos gallery
+                String[] singleChoiceItems = getResources().getStringArray(R.array.dialog_photo);
+                new AlertDialog.Builder(getContext())
+                        .setTitle("Select one")
+                        .setSingleChoiceItems(singleChoiceItems, itemSelected, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int selectedIndex) {
+                                itemSelected = selectedIndex;
+                            }
+                        })
+                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                if (itemSelected == 0) {
+                                    launchCamera();
+                                } else {
+                                    // Launch photo gallery
+                                    onPickPhoto(postImgView);
+                                }
+                            }
+                        })
+                        .setNegativeButton("Cancel", null)
+                        .show();
             }
-        });
 
-        // If pic has been taken, user can then fill out details on outfit
-        outfitBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (photoFile != null) {
-                    Intent i = new Intent(getContext(), NewOutfitActivity.class);
-                    i.putExtra("photo", Parcels.wrap(photoFile));
-                    getContext().startActivity(i);
-                }
-            }
-        });
-
-        // If pic has been taken, user can then fill out details on clothing item
-        itemBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (photoFile != null) {
-                    Intent i = new Intent(getContext(), NewItemActivity.class);
-                    i.putExtra("photo", Parcels.wrap (photoFile));
-                    getContext().startActivity(i);
-                }
-            }
         });
     }
 
+    // If 1st dialog option is selected, opens camera view
     private void launchCamera() {
         // create Intent to take a picture and return control to the calling application
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -102,7 +133,7 @@ public class ComposeFragment extends Fragment {
         // wrap File object into a content provider
         // required for API >= 24
         // See https://guides.codepath.com/android/Sharing-Content-with-Intents#sharing-files-with-api-24-or-higher
-        Uri fileProvider = FileProvider.getUriForFile(getContext(), "com.codepath.fileprovider", photoFile);
+        Uri fileProvider = FileProvider.getUriForFile(getContext(), "com.codepath.fileprovider.ClosetWear", photoFile);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider);
 
         // If you call startActivityForResult() using an intent that no app can handle, your app will crash.
@@ -110,26 +141,11 @@ public class ComposeFragment extends Fragment {
         if (intent.resolveActivity(getContext().getPackageManager()) != null) {
             // Start the image capture intent to take photo
             startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
+
         }
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
-            if (resultCode == RESULT_OK) {
-                // by this point we have the camera photo on disk
-                Bitmap takenImage = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
-                // RESIZE BITMAP, see section below
-                // Load the taken image into a preview
-//                postImgView.setImageBitmap(takenImage);
-            } else { // Result was a failure
-                Toast.makeText(getContext(), "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-
-    // Returns the File for a photo stored on disk given the fileName
+    // Returns the File for a photo stored on disk given the fileName (for camera intent)
     public File getPhotoFileUri(String fileName) {
         // Get safe storage directory for photos
         // Use `getExternalFilesDir` on Context to access package-specific directories.
@@ -145,22 +161,65 @@ public class ComposeFragment extends Fragment {
         return new File(mediaStorageDir.getPath() + File.separator + fileName);
     }
 
-//    private void savePost(final String description, ParseUser currentUser, File photoFile) {
-//        Post post = new Post();
-//        post.setDescription(description);
-//        post.setImage(new ParseFile(photoFile));
-//        post.setUser(currentUser);
-//        post.saveInBackground(new SaveCallback() {
-//            @Override
-//            public void done(ParseException e) {
-//                if (e != null) {
-//                    Log.e(TAG, "Error while saving", e);
-//                    Toast.makeText(getContext(), "Error while saving!", Toast.LENGTH_SHORT).show();
-//                }
-//                Log.i(TAG, "Post save was successful!");
-//                descriptionEditText.setText("");
-//                postImgView.setImageResource(0);
-//            }
-//        });
-//    }
+    // Trigger gallery selection for a photo
+    public void onPickPhoto(View view) {
+        // Create intent for picking a photo from the gallery
+        Intent intent = new Intent(Intent.ACTION_PICK,
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+        // If you call startActivityForResult() using an intent that no app can handle, your app will crash.
+        // So as long as the result is not null, it's safe to use the intent.
+        if (intent.resolveActivity(getContext().getPackageManager()) != null) {
+            // Bring up gallery to select a photo
+            startActivityForResult(intent, PICK_PHOTO_CODE);
+        }
+    }
+
+    // Converts gallery selection from Uri to Bitmap
+    public Bitmap loadFromUri(Uri photoUri) {
+        Bitmap image = null;
+        try {
+            // check version of Android on device
+            if(Build.VERSION.SDK_INT > 27){
+                // on newer versions of Android, use the new decodeBitmap method
+                ImageDecoder.Source source = ImageDecoder.createSource(getContext().getContentResolver(), photoUri);
+                image = ImageDecoder.decodeBitmap(source);
+            } else {
+                // support older versions of Android by using getBitmap
+                image = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), photoUri);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return image;
+    }
+
+    // Sets profileImg view depending on if picture was just taken or from gallery
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (itemSelected == 0) {
+            // If photo was taken with camera
+            if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
+                if (resultCode == RESULT_OK) {
+                    // by this point we have the camera photo on disk
+                    Bitmap takenImage = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
+                    // Load the taken image into a preview
+                    postImgView.setImageBitmap(takenImage);
+                } else { // Result was a failure
+                    Toast.makeText(getContext(), "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        } else {
+            // If photo was selected from gallery
+            if ((data != null) && requestCode == PICK_PHOTO_CODE) {
+                Uri photoUri = data.getData();
+
+                // Load the image located at photoUri into selectedImage
+                selectedImage = loadFromUri(photoUri);
+                // Load the selected image into a preview
+                postImgView.setImageBitmap(selectedImage);
+            }
+        }
+    }
 }

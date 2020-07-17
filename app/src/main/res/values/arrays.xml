@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="dialog_single_choice_array">
+    <string-array name="dialog_photo">
         <item>Take Photo</item>
         <item>Choose from Gallery</item>
+    </string-array>
+    <string-array name="dialog_compose_start">
+        <item>New Item</item>
+        <item>New Fit</item>
     </string-array>
 </resources>

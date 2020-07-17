@@ -29,6 +29,7 @@ import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
+import com.parse.SignUpCallback;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -52,6 +53,9 @@ public class SignupActivity extends AppCompatActivity {
     private int itemSelected = 0;
     // PICK_PHOTO_CODE is a constant integer
     public final static int PICK_PHOTO_CODE = 1046;
+    private Bitmap selectedImage;
+    private OutputStream os;
+    private File galleryImg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +77,7 @@ public class SignupActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // AlertDialog to ask user to select between taking picture or opening photos gallery
-                String[] singleChoiceItems = getResources().getStringArray(R.array.dialog_single_choice_array);
+                String[] singleChoiceItems = getResources().getStringArray(R.array.dialog_photo);
                 new AlertDialog.Builder(SignupActivity.this)
                         .setTitle("Select one")
                         .setSingleChoiceItems(singleChoiceItems, itemSelected, new DialogInterface.OnClickListener() {
@@ -209,21 +213,21 @@ public class SignupActivity extends AppCompatActivity {
                 Uri photoUri = data.getData();
 
                 // Load the image located at photoUri into selectedImage
-                Bitmap selectedImage = loadFromUri(photoUri);
+                selectedImage = loadFromUri(photoUri);
                 // Load the selected image into a preview
                 profileImg.setImageBitmap(selectedImage);
-                OutputStream os = null;
-                try {
-                    os = new BufferedOutputStream(new FileOutputStream(photoFile));
-                } catch (FileNotFoundException e) {
-                    Log.e(TAG, "No file found when converting", e);
-                }
-                selectedImage.compress(Bitmap.CompressFormat.JPEG, 100, os);
-                try {
-                    os.close();
-                } catch (IOException e) {
-                    Log.e(TAG, "Couldn't close stream", e);
-                }
+//                OutputStream os = null;
+//                try {
+//                    os = new BufferedOutputStream(new FileOutputStream(photoFile));
+//                } catch (FileNotFoundException e) {
+//                    Log.e(TAG, "No file found when converting", e);
+//                }
+//                selectedImage.compress(Bitmap.CompressFormat.JPEG, 100, os);
+//                try {
+//                    os.close();
+//                } catch (IOException e) {
+//                    Log.e(TAG, "Couldn't close stream", e);
+//                }
             }
         }
     }
@@ -239,11 +243,17 @@ public class SignupActivity extends AppCompatActivity {
         ParseUser newUser = new ParseUser();
         newUser.setUsername(username);
         newUser.setPassword(password);
+        newUser.put("name", name);
         if (email != null) {
             newUser.setEmail(email);
         }
+        if (photoFile != null) {
+            newUser.put("profilePic", new ParseFile(photoFile));
+        } else if (selectedImage != null) {
+            persistImage(selectedImage, photoFileName);
+            newUser.put("profilePic", new ParseFile(galleryImg));
+        }
 
-        newUser.put("name", name);
         newUser.signUpInBackground();
         // After setting username and password, signs in user
         ParseUser.logInInBackground(username, password, new LogInCallback() {
@@ -259,6 +269,18 @@ public class SignupActivity extends AppCompatActivity {
                 Toast.makeText(SignupActivity.this, "Success!", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+    private void persistImage(Bitmap bitmap, String name) {
+        File filesDir = getFilesDir();
+        galleryImg = new File(filesDir, photoFileName);
+        try {
+            os = new FileOutputStream(galleryImg);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, os);
+            os.flush();
+            os.close();
+        } catch (Exception e) {
+            Log.e(TAG, "Error writing bitmap", e);
+        }
     }
 
     // Once new user account has been created, brings user to main activity

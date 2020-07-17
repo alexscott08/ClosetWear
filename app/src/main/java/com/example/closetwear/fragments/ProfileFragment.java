@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.example.closetwear.GlideApp;
 import com.example.closetwear.LoginActivity;
 import com.example.closetwear.R;
@@ -73,8 +74,11 @@ public class ProfileFragment extends Fragment {
 
         // Upload profile pic from server to fill view
         ParseFile img = user.getParseFile("profilePic");
-        GlideApp.with(view.getContext()).load(img.getUrl()).into(profileImg);
-
+//        GlideApp.with(view.getContext()).load(img.getUrl()).into(profileImg);
+        GlideApp.with(this)
+                .load(img.getUrl())
+                .transform(new CircleCrop())
+                .into(profileImg);
         name.setText(user.getString("name"));
         username.setText("@" + user.getUsername());
         logoutBtn = view.findViewById(R.id.logoutBtn);
