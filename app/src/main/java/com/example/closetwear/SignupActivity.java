@@ -21,6 +21,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.bumptech.glide.load.resource.bitmap.BitmapEncoder;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -51,6 +52,8 @@ public class SignupActivity extends AppCompatActivity {
         setContentView(R.layout.activity_signup);
         username = findViewById(R.id.username);
         password = findViewById(R.id.password);
+        name = findViewById(R.id.name);
+        email = findViewById(R.id.email);
         signUpBtn = findViewById(R.id.signUpBtn);
         profilePicBtn = findViewById(R.id.profilePicBtn);
         profileImg = findViewById(R.id.profileImg);
@@ -65,6 +68,12 @@ public class SignupActivity extends AppCompatActivity {
                         .setSingleChoiceItems(singleChoiceItems, itemSelected, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int selectedIndex) {
+                                itemSelected = selectedIndex;
+                            }
+                        })
+                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
                                 if (itemSelected == 0) {
                                     launchCamera();
                                 } else {
@@ -72,10 +81,10 @@ public class SignupActivity extends AppCompatActivity {
                                 }
                             }
                         })
-                        .setPositiveButton("Ok", null)
                         .setNegativeButton("Cancel", null)
                         .show();
             }
+
         });
         // Listener to create new account and log in user
         signUpBtn.setOnClickListener(new View.OnClickListener() {
