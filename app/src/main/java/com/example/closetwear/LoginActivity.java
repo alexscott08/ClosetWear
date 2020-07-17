@@ -51,38 +51,16 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Log.i(TAG, "onClick signup button");
-                String username = LoginActivity.this.username.getText().toString();
-                String password = LoginActivity.this.password.getText().toString();
-                signUpUser(username, password);
+                goSignupActivity();
             }
         });
     }
 
-    private void signUpUser(String username, String password) {
-        Log.i(TAG, "Attempting to sign up user " + username);
-        // Navigates to main activity if signup and login is successful
-        // First logs out current user (if someone is currently logged in)
-        ParseUser currentUser = ParseUser.getCurrentUser();
-        currentUser.logOut();
-
-        ParseUser newUser = new ParseUser();
-        newUser.setUsername(username);
-        newUser.setPassword(password);
-        newUser.signUpInBackground();
-        // After setting username and password, signs in user
-        ParseUser.logInInBackground(username, password, new LogInCallback() {
-            @Override
-            public void done(ParseUser user, ParseException e) {
-                if (e != null) {
-                    // TODO: better error handling
-                    Log.e(TAG, "Issue with login", e);
-                    Toast.makeText(LoginActivity.this, "Issue with login!", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                goMainActivity();
-                Toast.makeText(LoginActivity.this, "Success!", Toast.LENGTH_SHORT).show();
-            }
-        });
+    private void goSignupActivity() {
+        // Navigates to signup activity to create new account
+        Intent i = new Intent(this, SignupActivity.class);
+        startActivity(i);
+        finish();
     }
 
     private void loginUser(String username, String password) {
@@ -107,6 +85,5 @@ public class LoginActivity extends AppCompatActivity {
         Intent i = new Intent(this, MainActivity.class);
         startActivity(i);
         finish();
-
     }
 }
