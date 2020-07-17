@@ -11,6 +11,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.ImageDecoder;
 import android.media.Image;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -22,13 +23,19 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bumptech.glide.load.resource.bitmap.BitmapEncoder;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 
 public class SignupActivity extends AppCompatActivity {
     public static final String TAG = "SignupActivity";
@@ -40,7 +47,7 @@ public class SignupActivity extends AppCompatActivity {
     private Button profilePicBtn;
     private ImageView profileImg;
     private File photoFile;
-    public String photoFileName = "N/A";
+    public String photoFileName = "photo.png";
     public static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 42;
     private int itemSelected = 0;
     // PICK_PHOTO_CODE is a constant integer
@@ -57,11 +64,15 @@ public class SignupActivity extends AppCompatActivity {
         signUpBtn = findViewById(R.id.signUpBtn);
         profilePicBtn = findViewById(R.id.profilePicBtn);
         profileImg = findViewById(R.id.profileImg);
-
+        GlideApp.with(this)
+                .load(R.drawable.ic_profileicon)
+                .transform(new CircleCrop())
+                .into(profileImg);
         // Listener to call camera and set profile pic
         profilePicBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // AlertDialog to ask user to select between taking picture or opening photos gallery
                 String[] singleChoiceItems = getResources().getStringArray(R.array.dialog_single_choice_array);
                 new AlertDialog.Builder(SignupActivity.this)
                         .setTitle("Select one")
@@ -78,6 +89,7 @@ public class SignupActivity extends AppCompatActivity {
                                     launchCamera();
                                 } else {
                                     // Launch photo gallery
+                                    onPickPhoto(profileImg);
                                 }
                             }
                         })
@@ -104,6 +116,7 @@ public class SignupActivity extends AppCompatActivity {
         });
     }
 
+    // If 1st dialog option is selected, opens camera view
     private void launchCamera() {
         // create Intent to take a picture and return control to the calling application
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -124,29 +137,8 @@ public class SignupActivity extends AppCompatActivity {
 
         }
     }
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (itemSelected == 0) {
-            // If photo was taken with camera
-            if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
-                if (resultCode == RESULT_OK) {
-                    // by this point we have the camera photo on disk
-                    Bitmap takenImage = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
-                    // RESIZE BITMAP, see section below
-                    // Load the taken image into a preview
-                    profileImg.setImageBitmap(takenImage);
-                } else { // Result was a failure
-                    Toast.makeText(this, "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
-                }
-            }
-        } else {
-            // Launch photo gallery
-        }
 
-    }
-
-    // Returns the File for a photo stored on disk given the fileName
+    // Returns the File for a photo stored on disk given the fileName (for camera intent)
     public File getPhotoFileUri(String fileName) {
         // Get safe storage directory for photos
         // Use `getExternalFilesDir` on Context to access package-specific directories.
@@ -162,6 +154,81 @@ public class SignupActivity extends AppCompatActivity {
         return new File(mediaStorageDir.getPath() + File.separator + fileName);
     }
 
+    // Trigger gallery selection for a photo
+    public void onPickPhoto(View view) {
+        // Create intent for picking a photo from the gallery
+        Intent intent = new Intent(Intent.ACTION_PICK,
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+        // If you call startActivityForResult() using an intent that no app can handle, your app will crash.
+        // So as long as the result is not null, it's safe to use the intent.
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            // Bring up gallery to select a photo
+            startActivityForResult(intent, PICK_PHOTO_CODE);
+        }
+    }
+
+    // Converts gallery selection from Uri to Bitmap
+    public Bitmap loadFromUri(Uri photoUri) {
+        Bitmap image = null;
+        try {
+            // check version of Android on device
+            if(Build.VERSION.SDK_INT > 27){
+                // on newer versions of Android, use the new decodeBitmap method
+                ImageDecoder.Source source = ImageDecoder.createSource(this.getContentResolver(), photoUri);
+                image = ImageDecoder.decodeBitmap(source);
+            } else {
+                // support older versions of Android by using getBitmap
+                image = MediaStore.Images.Media.getBitmap(this.getContentResolver(), photoUri);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return image;
+    }
+
+    // Sets profileImg view depending on if picture was just taken or from gallery
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (itemSelected == 0) {
+            // If photo was taken with camera
+            if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
+                if (resultCode == RESULT_OK) {
+                    // by this point we have the camera photo on disk
+                    Bitmap takenImage = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
+                    // Load the taken image into a preview
+                    profileImg.setImageBitmap(takenImage);
+                } else { // Result was a failure
+                    Toast.makeText(this, "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        } else {
+            // If photo was selected from gallery
+            if ((data != null) && requestCode == PICK_PHOTO_CODE) {
+                Uri photoUri = data.getData();
+
+                // Load the image located at photoUri into selectedImage
+                Bitmap selectedImage = loadFromUri(photoUri);
+                // Load the selected image into a preview
+                profileImg.setImageBitmap(selectedImage);
+                OutputStream os = null;
+                try {
+                    os = new BufferedOutputStream(new FileOutputStream(photoFile));
+                } catch (FileNotFoundException e) {
+                    Log.e(TAG, "No file found when converting", e);
+                }
+                selectedImage.compress(Bitmap.CompressFormat.JPEG, 100, os);
+                try {
+                    os.close();
+                } catch (IOException e) {
+                    Log.e(TAG, "Couldn't close stream", e);
+                }
+            }
+        }
+    }
+
+    // Creates new user account
     private void signUpUser(String username, String password, String name, String email) {
         Log.i(TAG, "Attempting to sign up user " + username);
         // Navigates to main activity if signup and login is successful
@@ -175,6 +242,7 @@ public class SignupActivity extends AppCompatActivity {
         if (email != null) {
             newUser.setEmail(email);
         }
+
         newUser.put("name", name);
         newUser.signUpInBackground();
         // After setting username and password, signs in user
@@ -193,10 +261,10 @@ public class SignupActivity extends AppCompatActivity {
         });
     }
 
+    // Once new user account has been created, brings user to main activity
     private void goMainActivity() {
         Intent i = new Intent(this, MainActivity.class);
         startActivity(i);
         finish();
-
     }
 }
