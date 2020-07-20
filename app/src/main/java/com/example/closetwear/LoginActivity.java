@@ -28,7 +28,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         if (ParseUser.getCurrentUser() != null) {
-            goMainActivity();
+            Navigation.goMainActivity(LoginActivity.this);
         }
         username = findViewById(R.id.username);
         password = findViewById(R.id.password);
@@ -51,16 +51,9 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Log.i(TAG, "onClick signup button");
-                goSignupActivity();
+                Navigation.goSignupActivity(LoginActivity.this);
             }
         });
-    }
-
-    private void goSignupActivity() {
-        // Navigates to signup activity to create new account
-        Intent i = new Intent(this, SignupActivity.class);
-        startActivity(i);
-        finish();
     }
 
     private void loginUser(String username, String password) {
@@ -75,15 +68,9 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(LoginActivity.this, "Issue with login!", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                goMainActivity();
+                Navigation.goMainActivity(LoginActivity.this);
                 Toast.makeText(LoginActivity.this, "Success!", Toast.LENGTH_SHORT).show();
             }
         });
-    }
-
-    private void goMainActivity() {
-        Intent i = new Intent(this, MainActivity.class);
-        startActivity(i);
-        finish();
     }
 }

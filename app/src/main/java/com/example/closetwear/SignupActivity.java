@@ -268,7 +268,7 @@ public class SignupActivity extends AppCompatActivity {
                             Toast.LENGTH_SHORT).show();
                     return;
                 }
-                goLoginActivity();
+                Navigation.goLoginActivity(SignupActivity.this);
                 Toast.makeText(SignupActivity.this, "Success!", Toast.LENGTH_SHORT).show();
             }
         });
@@ -288,13 +288,4 @@ public class SignupActivity extends AppCompatActivity {
         }
     }
 
-    /**
-     * Once new user account has been created, navigates to login activity which will automatically
-     * go to main activity
-     */
-    private void goLoginActivity() {
-        Intent i = new Intent(this, MainActivity.class);
-        startActivity(i);
-        finish();
-    }
 }
