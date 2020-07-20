@@ -114,7 +114,7 @@ public class SignupActivity extends AppCompatActivity {
                 if (username == null || password == null || name == null) {
                     Toast.makeText(SignupActivity.this, "Required fields cannot be empty!", Toast.LENGTH_SHORT).show();
                 } else {
-                    signUpUser(username, password, name, email);
+                    createUser(username, password, name, email);
                 }
             }
         });
@@ -220,44 +220,61 @@ public class SignupActivity extends AppCompatActivity {
         }
     }
 
-    // Creates new user account
-    private void signUpUser(String username, String password, String name, String email) {
+    // Creates new ParseUser instance and sets username, password, email, and profile picture
+    private void createUser(final String username, final String password, String name, String email) {
         Log.i(TAG, "Attempting to sign up user " + username);
         // Navigates to main activity if signup and login is successful
         // First logs out current user (if someone is currently logged in)
         ParseUser currentUser = ParseUser.getCurrentUser();
         currentUser.logOut();
 
-        ParseUser newUser = new ParseUser();
+        final ParseUser newUser = new ParseUser();
         newUser.setUsername(username);
         newUser.setPassword(password);
         newUser.put("name", name);
         if (email != null) {
             newUser.setEmail(email);
         }
+        // Saves file to server before making call to signup user
         if (photoFile != null) {
-            newUser.put("profilePic", new ParseFile(photoFile));
+            saveParseFile(photoFile, newUser);
         } else if (selectedImage != null) {
             persistImage(selectedImage, photoFileName);
-            newUser.put("profilePic", new ParseFile(galleryImg));
+            saveParseFile(galleryImg, newUser);
         }
+        // Signs up user and navigates to main activity
+        signUpUser(newUser);
+    }
 
-        newUser.signUpInBackground();
-        // After setting username and password, signs in user
-        ParseUser.logInInBackground(username, password, new LogInCallback() {
+    // Adds profile picture to parse server in background
+    private void saveParseFile(final File file, final ParseUser newUser) {
+        final ParseFile pFile = new ParseFile(file);
+        pFile.saveInBackground(new SaveCallback() {
             @Override
-            public void done(ParseUser user, ParseException e) {
+            public void done(ParseException e) {
+                newUser.put("profilePic", pFile);
+            }
+        });
+    }
+
+    // Signs up user in background and navigates to login activity
+    private void signUpUser(ParseUser newUser) {
+        newUser.signUpInBackground(new SignUpCallback() {
+            @Override
+            public void done(ParseException e) {
                 if (e != null) {
-                    // TODO: better error handling
-                    Log.e(TAG, "Issue with login", e);
-                    Toast.makeText(SignupActivity.this, "Issue with login!", Toast.LENGTH_SHORT).show();
+                    Log.e(TAG, "Issue with signup", e);
+                    Toast.makeText(SignupActivity.this, "Issue with signup!",
+                            Toast.LENGTH_SHORT).show();
                     return;
                 }
-                goMainActivity();
+                goLoginActivity();
                 Toast.makeText(SignupActivity.this, "Success!", Toast.LENGTH_SHORT).show();
             }
         });
     }
+
+    // Converts bitmap to file instance
     private void persistImage(Bitmap bitmap, String name) {
         File filesDir = getFilesDir();
         galleryImg = new File(filesDir, photoFileName);
@@ -271,8 +288,11 @@ public class SignupActivity extends AppCompatActivity {
         }
     }
 
-    // Once new user account has been created, brings user to main activity
-    private void goMainActivity() {
+    /**
+     * Once new user account has been created, navigates to login activity which will automatically
+     * go to main activity
+     */
+    private void goLoginActivity() {
         Intent i = new Intent(this, MainActivity.class);
         startActivity(i);
         finish();
