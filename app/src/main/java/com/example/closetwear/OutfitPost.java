@@ -61,8 +61,6 @@ public class OutfitPost extends ParseObject {
         put(KEY_LIKES, (Number) likes);
     }
 
-    public Date getCreatedAt() { return getDate(KEY_CREATED_KEY); }
-
     public JSONArray getFitItems() { return getJSONArray(KEY_ITEMS); }
 
     public void setFitItems(ClothingPost item) { put(KEY_ITEMS, item); }

@@ -24,6 +24,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.closetwear.Navigation;
 import com.example.closetwear.NewItemActivity;
 import com.example.closetwear.NewOutfitActivity;
 import com.example.closetwear.R;
@@ -51,6 +52,7 @@ public class ComposeFragment extends Fragment {
     private ImageButton cameraBtn;
     private ImageView postImgView;
     private String type;
+    private Button nextBtn;
 
     public ComposeFragment() {
 
@@ -91,6 +93,7 @@ public class ComposeFragment extends Fragment {
 
         cameraBtn = view.findViewById(R.id.cameraBtn);
         postImgView = view.findViewById(R.id.postImgView);
+        nextBtn = view.findViewById(R.id.nextBtn);
 
         cameraBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -120,6 +123,18 @@ public class ComposeFragment extends Fragment {
                         .show();
             }
 
+        });
+        nextBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (selectedImage != null) {
+                    if (type == "item") {
+                        Navigation.goNewItemActivity(getActivity());
+                    } else {
+                        Navigation.goNewOutfitActivity(getActivity());
+                    }
+                }
+            }
         });
     }
 

@@ -49,7 +49,7 @@ public class OutfitDetailsActivity extends AppCompatActivity {
     private ParseUser user;
 
     public static final String TAG = "OutfitDetailsActivity";
-    private RecyclerView closetRecyclerView;
+    private RecyclerView clothingRecyclerView;
     protected OutfitDetailsAdapter adapter;
     protected List<ClothingPost> allPosts;
 
@@ -57,18 +57,21 @@ public class OutfitDetailsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_outfit_details);
-
         // Set bottom screen RV full of outfit's items
-        closetRecyclerView = findViewById(R.id.closetRecyclerView);
+        clothingRecyclerView = (RecyclerView) findViewById(R.id.clothingRecyclerView);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        clothingRecyclerView.setLayoutManager(linearLayoutManager);
+
         allPosts = new ArrayList<>();
 
         // Create adapter
         adapter = new OutfitDetailsAdapter(this, allPosts);
-
         // set the adapter on the recycler view
-        closetRecyclerView.setAdapter(adapter);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        closetRecyclerView.setLayoutManager(linearLayoutManager);
+        clothingRecyclerView.setAdapter(adapter);
+
+
+
+
 
         try {
             getItems();

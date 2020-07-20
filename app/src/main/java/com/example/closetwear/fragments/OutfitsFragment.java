@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.closetwear.ClothingPost;
 import com.example.closetwear.OutfitPost;
@@ -32,6 +33,8 @@ public class OutfitsFragment extends Fragment {
     private RecyclerView fitsRecyclerView;
     protected OutfitsAdapter adapter;
     protected List<OutfitPost> allPosts;
+    protected TextView closetText;
+
 
     public OutfitsFragment() {
         // Required empty public constructor
@@ -49,6 +52,8 @@ public class OutfitsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         fitsRecyclerView = view.findViewById(R.id.fitsRecyclerView);
+        closetText = view.findViewById(R.id.closetText);
+        closetText.setText("Your Fits");
         allPosts = new ArrayList<>();
         // Create adapter
         adapter = new OutfitsAdapter(getContext(), allPosts);

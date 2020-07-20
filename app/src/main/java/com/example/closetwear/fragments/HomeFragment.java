@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.os.Handler;
@@ -55,8 +56,9 @@ public class HomeFragment extends Fragment {
         // set the adapter on the recycler view
         homeRecyclerView.setAdapter(adapter);
         // set the layout manager on the recycler view
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-        homeRecyclerView.setLayoutManager(linearLayoutManager);
+        StaggeredGridLayoutManager gridLayoutManager =
+                new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        homeRecyclerView.setLayoutManager(gridLayoutManager);
         queryPosts();
 
         // Getting SwipeContainerLayout

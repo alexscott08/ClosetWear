@@ -3,6 +3,8 @@ package com.example.closetwear;
 import android.app.Activity;
 import android.content.Intent;
 
+import androidx.fragment.app.FragmentActivity;
+
 public class Navigation {
 
     /**
@@ -31,6 +33,18 @@ public class Navigation {
      */
     public static void goMainActivity(Activity activity) {
         Intent i = new Intent(activity, MainActivity.class);
+        activity.startActivity(i);
+        activity.finish();
+    }
+
+    public static void goNewItemActivity(Activity activity) {
+        Intent i = new Intent(activity, NewItemActivity.class);
+        activity.startActivity(i);
+        activity.finish();
+    }
+
+    public static void goNewOutfitActivity(Activity activity) {
+        Intent i = new Intent(activity, NewOutfitActivity.class);
         activity.startActivity(i);
         activity.finish();
     }

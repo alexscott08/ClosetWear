@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.closetwear.ClothingPost;
+import com.example.closetwear.GlideApp;
 import com.example.closetwear.OutfitDetailsActivity;
 import com.example.closetwear.OutfitPost;
 import com.example.closetwear.R;
@@ -70,15 +71,14 @@ public class OutfitsAdapter extends RecyclerView.Adapter<OutfitsAdapter.ViewHold
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             outfitImg = itemView.findViewById(R.id.outfitImg);
+
         }
 
         public void bind(final OutfitPost post) {
             // Bind the post data to the view elements
             final ParseFile image = post.getImage();
-//            Glide.with(context).load(image.getUrl()).into(outfitImg);
-            Glide.with(context).load(R.drawable.ic_launcher_background).into(outfitImg);
+            GlideApp.with(context).load(image.getUrl()).into(outfitImg);
             relativeDate = DateUtils.getRelativeTimeSpanString(post.getCreatedAt().getTime()) + "";
-
             outfitImg.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
