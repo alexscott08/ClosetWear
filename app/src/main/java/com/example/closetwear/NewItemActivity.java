@@ -4,12 +4,20 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 
 public class NewItemActivity extends AppCompatActivity {
 
     private ImageView itemImg;
+    private Spinner category;
+    private EditText subcategory;
+    private EditText brand;
+    private EditText itemName;
+    private EditText color;
+    private Button addBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,5 +38,11 @@ public class NewItemActivity extends AppCompatActivity {
 
         // Apply the adapter to the spinner
         staticSpinner.setAdapter(staticAdapter);
+        category = findViewById(R.id.categorySpinner);
+        subcategory = findViewById(R.id.subcat);
+        brand = findViewById(R.id.brand);
+        itemName = findViewById(R.id.itemName);
+        color = findViewById(R.id.color);
+        addBtn = findViewById(R.id.addBtn);
     }
 }

@@ -69,10 +69,6 @@ public class OutfitDetailsActivity extends AppCompatActivity {
         // set the adapter on the recycler view
         clothingRecyclerView.setAdapter(adapter);
 
-
-
-
-
         try {
             getItems();
         } catch (JSONException e) {
@@ -88,7 +84,7 @@ public class OutfitDetailsActivity extends AppCompatActivity {
         favoritesCount = findViewById(R.id.favoritesCount);
         user = Parcels.unwrap(getIntent().getParcelableExtra("KEY_USER"));
         username.setText("@" + user.getUsername());
-        favoritesCount.setText(getIntent().getIntExtra("KEY_LIKES", 0));
+        favoritesCount.setText(getIntent().getIntExtra("KEY_LIKES", 0) + "");
         date.setText(getIntent().getStringExtra("KEY_CREATED_KEY"));
         ParseFile image = Parcels.unwrap(getIntent().getParcelableExtra("KEY_IMAGE"));
         if (image != null) {
