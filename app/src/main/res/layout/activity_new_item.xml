@@ -16,102 +16,102 @@ tools:context=".NewOutfitActivity">
     tools:srcCompat="@tools:sample/avatars" />
 
 
-<Spinner
-    android:id="@+id/categorySpinner"
-    android:layout_width="229dp"
-    android:layout_height="20dp"
-    android:layout_marginStart="28dp"
-    android:layout_marginTop="28dp"
-    app:layout_constraintStart_toEndOf="@+id/categoryText"
-    app:layout_constraintTop_toBottomOf="@+id/itemImg" />
+    <Spinner
+        android:id="@+id/categorySpinner"
+        android:layout_width="226dp"
+        android:layout_height="36dp"
+        android:layout_marginStart="56dp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintStart_toEndOf="@+id/categoryText"
+        app:layout_constraintTop_toBottomOf="@+id/itemImg" />
 
-<Spinner
-    android:id="@+id/subcatSpinner"
-    android:layout_width="206dp"
-    android:layout_height="20dp"
-    android:layout_marginStart="28dp"
-    android:layout_marginTop="44dp"
-    app:layout_constraintStart_toEndOf="@+id/subcatText"
-    app:layout_constraintTop_toBottomOf="@+id/categorySpinner" />
+    <EditText
+        android:id="@+id/subcat"
+        android:layout_width="226dp"
+        android:layout_height="36dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintStart_toEndOf="@+id/subcatText"
+        app:layout_constraintTop_toBottomOf="@+id/categorySpinner" />
 
-<Spinner
-    android:id="@+id/nameSpinner"
-    android:layout_width="206dp"
-    android:layout_height="20dp"
-    android:layout_marginStart="32dp"
-    android:layout_marginTop="44dp"
-    app:layout_constraintStart_toEndOf="@+id/itemText"
-    app:layout_constraintTop_toBottomOf="@+id/brandSpinner" />
+    <EditText
+        android:id="@+id/name"
+        android:layout_width="226dp"
+        android:layout_height="36dp"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintStart_toEndOf="@+id/itemText"
+        app:layout_constraintTop_toBottomOf="@+id/brand" />
 
-<Spinner
-    android:id="@+id/brandSpinner"
-    android:layout_width="229dp"
-    android:layout_height="20dp"
-    android:layout_marginStart="28dp"
-    android:layout_marginTop="48dp"
-    app:layout_constraintStart_toEndOf="@+id/brandText"
-    app:layout_constraintTop_toBottomOf="@+id/subcatSpinner" />
+    <EditText
+        android:id="@+id/brand"
+        android:layout_width="226dp"
+        android:layout_height="36dp"
+        android:layout_marginStart="56dp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintStart_toEndOf="@+id/brandText"
+        app:layout_constraintTop_toBottomOf="@+id/subcat" />
 
-<Spinner
-    android:id="@+id/colorSpinner"
-    android:layout_width="229dp"
-    android:layout_height="20dp"
-    android:layout_marginStart="28dp"
-    android:layout_marginTop="40dp"
-    app:layout_constraintStart_toEndOf="@+id/colorText"
-    app:layout_constraintTop_toBottomOf="@+id/nameSpinner" />
+    <EditText
+        android:id="@+id/color"
+        android:layout_width="226dp"
+        android:layout_height="36dp"
+        android:layout_marginStart="56dp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintStart_toEndOf="@+id/colorText"
+        app:layout_constraintTop_toBottomOf="@+id/name" />
 
-<TextView
-    android:id="@+id/categoryText"
-    android:layout_width="61dp"
-    android:layout_height="20dp"
-    android:layout_marginStart="48dp"
-    android:layout_marginTop="29dp"
-    android:text="Category:"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/itemImg" />
+    <TextView
+        android:id="@+id/categoryText"
+        android:layout_width="61dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="40dp"
+        android:text="Category:"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/itemImg" />
 
-<TextView
-    android:id="@+id/subcatText"
-    android:layout_width="85dp"
-    android:layout_height="20dp"
-    android:layout_marginStart="48dp"
-    android:layout_marginTop="44dp"
-    android:text="Subcategory:"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/categoryText" />
+    <TextView
+        android:id="@+id/subcatText"
+        android:layout_width="85dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="48dp"
+        android:text="Subcategory:"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/categoryText" />
 
-<TextView
-    android:id="@+id/brandText"
-    android:layout_width="61dp"
-    android:layout_height="20dp"
-    android:layout_marginStart="48dp"
-    android:layout_marginTop="44dp"
-    android:text="Brand:"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/subcatText" />
+    <TextView
+        android:id="@+id/brandText"
+        android:layout_width="61dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="48dp"
+        android:text="Brand:"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/subcatText" />
 
-<TextView
-    android:id="@+id/itemText"
-    android:layout_width="81dp"
-    android:layout_height="22dp"
-    android:layout_marginStart="48dp"
-    android:layout_marginTop="44dp"
-    android:text="Item Name:"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/brandText" />
+    <TextView
+        android:id="@+id/itemText"
+        android:layout_width="81dp"
+        android:layout_height="22dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="48dp"
+        android:text="Item Name:"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/brandText" />
 
-<TextView
-    android:id="@+id/colorText"
-    android:layout_width="61dp"
-    android:layout_height="20dp"
-    android:layout_marginStart="48dp"
-    android:layout_marginTop="44dp"
-    android:text="Color:"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/itemText" />
+    <TextView
+        android:id="@+id/colorText"
+        android:layout_width="61dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="48dp"
+        android:text="Color:"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/itemText" />
 
-<Button
+    <Button
     android:id="@+id/addBtn"
     android:layout_width="148dp"
     android:layout_height="54dp"
@@ -119,5 +119,5 @@ tools:context=".NewOutfitActivity">
     android:layout_marginEnd="44dp"
     android:text="Add to closet"
     app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/colorSpinner" />
+    app:layout_constraintTop_toBottomOf="@+id/color" />
 </androidx.constraintlayout.widget.ConstraintLayout>

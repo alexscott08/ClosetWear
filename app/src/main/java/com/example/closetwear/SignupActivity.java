@@ -216,18 +216,6 @@ public class SignupActivity extends AppCompatActivity {
                 selectedImage = loadFromUri(photoUri);
                 // Load the selected image into a preview
                 profileImg.setImageBitmap(selectedImage);
-//                OutputStream os = null;
-//                try {
-//                    os = new BufferedOutputStream(new FileOutputStream(photoFile));
-//                } catch (FileNotFoundException e) {
-//                    Log.e(TAG, "No file found when converting", e);
-//                }
-//                selectedImage.compress(Bitmap.CompressFormat.JPEG, 100, os);
-//                try {
-//                    os.close();
-//                } catch (IOException e) {
-//                    Log.e(TAG, "Couldn't close stream", e);
-//                }
             }
         }
     }

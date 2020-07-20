@@ -8,4 +8,12 @@
         <item>New Item</item>
         <item>New Fit</item>
     </string-array>
+    <string-array name="category_array">
+        <item>Tops</item>
+        <item>Bottoms</item>
+        <item>Footwear</item>
+        <item>Outerwear</item>
+        <item>Tailoring</item>
+        <item>Accessories</item>
+    </string-array>
 </resources>
