@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.example.closetwear.GlideApp;
 import com.example.closetwear.LoginActivity;
+import com.example.closetwear.Navigation;
 import com.example.closetwear.R;
 import com.parse.LogOutCallback;
 import com.parse.ParseException;
@@ -31,6 +32,7 @@ public class ProfileFragment extends Fragment {
 
     public static final String TAG = "ProfileFragment";
     private Button logoutBtn;
+    private Button editProfileBtn;
     private TextView name;
     private TextView username;
     private ImageView profileImg;
@@ -59,6 +61,7 @@ public class ProfileFragment extends Fragment {
         closetIcon = view.findViewById(R.id.closetIcon);
         fitsIcon = view.findViewById(R.id.fitsIcon);
         favoritesIcon = view.findViewById(R.id.favoritesIcon);
+        editProfileBtn = view.findViewById(R.id.editProfileBtn);
 
         // Upload profile pic from server to fill view
         ParseFile img = user.getParseFile("profilePic");
@@ -104,6 +107,7 @@ public class ProfileFragment extends Fragment {
                 fragmentManager.beginTransaction().replace(R.id.containerFrameLayout, fragment).addToBackStack(null).commit();
             }
         });
+        // TODO: editProfileBtn listener
 
     }
 
@@ -119,16 +123,10 @@ public class ProfileFragment extends Fragment {
                     Toast.makeText(getContext(), "Issue with logout!", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                goLoginActivity();
+                Navigation.goLoginActivity(getActivity());
                 Toast.makeText(getContext(), "You have successfully logged out!", Toast.LENGTH_SHORT).show();
             }
         });
-    }
-
-    // Helper for logOutUser() to start LoginActivity()
-    private void goLoginActivity() {
-        Intent intent = new Intent(getContext(), LoginActivity.class);
-        getContext().startActivity(intent);
     }
 
 }

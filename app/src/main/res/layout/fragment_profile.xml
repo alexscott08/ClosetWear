@@ -7,15 +7,6 @@
     tools:context=".fragments.ProfileFragment">
 
     <ImageView
-        android:id="@+id/backgroundImg"
-        android:layout_width="match_parent"
-        android:layout_height="94dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:src="@tools:sample/backgrounds/scenic" />
-
-    <ImageView
         android:id="@+id/profileImg"
         android:layout_width="114dp"
         android:layout_height="108dp"
@@ -49,7 +40,7 @@
         android:layout_width="65dp"
         android:layout_height="60dp"
         android:layout_marginStart="12dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="55dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/username"
         app:srcCompat="@drawable/ic_closeticon"
@@ -60,7 +51,7 @@
         android:layout_width="65dp"
         android:layout_height="60dp"
         android:layout_marginStart="12dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="55dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fitsIcon"
         app:srcCompat="@drawable/ic_favicon"
@@ -71,7 +62,7 @@
         android:layout_width="65dp"
         android:layout_height="60dp"
         android:layout_marginStart="12dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="55dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/closetIcon"
         app:srcCompat="@drawable/ic_clothesicon"
@@ -82,7 +73,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="75dp"
         android:text="Your Closet"
         android:textSize="18sp"
         app:layout_constraintStart_toEndOf="@+id/closetIcon"
@@ -93,7 +84,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="96dp"
+        android:layout_marginTop="91dp"
         android:text="Your Fits"
         android:textSize="18sp"
         app:layout_constraintStart_toEndOf="@+id/fitsIcon"
@@ -104,7 +95,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="96dp"
+        android:layout_marginTop="91dp"
         android:text="Your Favorites"
         android:textSize="18sp"
         app:layout_constraintStart_toEndOf="@+id/favoritesIcon"
@@ -122,5 +113,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/favoritesIcon"
         app:layout_constraintVertical_bias="0.715" />
+
+    <Button
+        android:id="@+id/editProfileBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="84dp"
+        android:layout_marginTop="60dp"
+        android:text="Edit profile"
+        app:layout_constraintStart_toEndOf="@+id/profileImg"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

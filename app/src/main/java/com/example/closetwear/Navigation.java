@@ -6,11 +6,12 @@ import android.content.Intent;
 public class Navigation {
 
     /**
-     * Once new user account has been created, navigates to login activity which will automatically
+     * Once new user account has been created or user is logged out, navigates to login activity
+     * which will automatically
      * go to main activity
      */
-    protected static void goLoginActivity(Activity activity) {
-        Intent i = new Intent(activity, MainActivity.class);
+    public static void goLoginActivity(Activity activity) {
+        Intent i = new Intent(activity, LoginActivity.class);
         activity.startActivity(i);
         activity.finish();
     }
@@ -18,7 +19,7 @@ public class Navigation {
     /**
      * If signup button is pressed, navigates to signup activity to create new user account
      */
-    protected static void goSignupActivity(Activity activity) {
+    public static void goSignupActivity(Activity activity) {
         // Navigates to signup activity to create new account
         Intent i = new Intent(activity, SignupActivity.class);
         activity.startActivity(i);
@@ -28,7 +29,7 @@ public class Navigation {
     /**
      * After login is completed, navigates to main activity
      */
-    protected static void goMainActivity(Activity activity) {
+    public static void goMainActivity(Activity activity) {
         Intent i = new Intent(activity, MainActivity.class);
         activity.startActivity(i);
         activity.finish();
