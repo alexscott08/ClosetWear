@@ -33,6 +33,7 @@ import com.example.closetwear.SignupActivity;
 import org.parceler.Parcels;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
@@ -48,7 +49,7 @@ public class ComposeFragment extends Fragment {
     public final static int PICK_PHOTO_CODE = 1046;
     private Bitmap selectedImage;
     private OutputStream os;
-    private File galleryImg;
+    private File img;
     private ImageButton cameraBtn;
     private ImageView postImgView;
     private String type;
@@ -128,14 +129,27 @@ public class ComposeFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if (selectedImage != null) {
-                    if (type == "item") {
-                        Navigation.goNewItemActivity(getActivity());
+                    persistImage(selectedImage, photoFileName);
+                    if (type.equals("item")) {
+                        Navigation.goNewItemActivity(getActivity(), img);
                     } else {
-                        Navigation.goNewOutfitActivity(getActivity());
+                        Navigation.goNewOutfitActivity(getActivity(), img);
                     }
                 }
             }
         });
+    }
+    private void persistImage(Bitmap bitmap, String name) {
+        File filesDir = getActivity().getFilesDir();
+        img = new File(filesDir, photoFileName);
+        try {
+            os = new FileOutputStream(img);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, os);
+            os.flush();
+            os.close();
+        } catch (Exception e) {
+            Log.e(TAG, "Error writing bitmap", e);
+        }
     }
 
     // If 1st dialog option is selected, opens camera view
@@ -221,6 +235,7 @@ public class ComposeFragment extends Fragment {
                     Bitmap takenImage = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
                     // Load the taken image into a preview
                     postImgView.setImageBitmap(takenImage);
+                    selectedImage = takenImage;
                 } else { // Result was a failure
                     Toast.makeText(getContext(), "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
                 }

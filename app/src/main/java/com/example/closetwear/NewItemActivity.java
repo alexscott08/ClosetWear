@@ -9,6 +9,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 
+import org.parceler.Parcels;
+
 public class NewItemActivity extends AppCompatActivity {
 
     private ImageView itemImg;
@@ -44,5 +46,7 @@ public class NewItemActivity extends AppCompatActivity {
         itemName = findViewById(R.id.itemName);
         color = findViewById(R.id.color);
         addBtn = findViewById(R.id.addBtn);
+
+        GlideApp.with(this).load(getIntent().getSerializableExtra("image")).into(itemImg);
     }
 }

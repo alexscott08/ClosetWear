@@ -2,8 +2,13 @@ package com.example.closetwear;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 
 import androidx.fragment.app.FragmentActivity;
+
+import org.parceler.Parcels;
+
+import java.io.File;
 
 public class Navigation {
 
@@ -37,15 +42,15 @@ public class Navigation {
         activity.finish();
     }
 
-    public static void goNewItemActivity(Activity activity) {
+    public static void goNewItemActivity(Activity activity, File image) {
         Intent i = new Intent(activity, NewItemActivity.class);
+        i.putExtra("image", image);
         activity.startActivity(i);
-        activity.finish();
     }
 
-    public static void goNewOutfitActivity(Activity activity) {
+    public static void goNewOutfitActivity(Activity activity, File image) {
         Intent i = new Intent(activity, NewOutfitActivity.class);
+        i.putExtra("image", image);
         activity.startActivity(i);
-        activity.finish();
     }
 }

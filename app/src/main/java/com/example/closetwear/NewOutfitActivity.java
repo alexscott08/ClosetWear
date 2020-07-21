@@ -14,6 +14,6 @@ public class NewOutfitActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_outfit);
         outfitImg = findViewById(R.id.outfitImg);
-
+        GlideApp.with(this).load(getIntent().getSerializableExtra("image")).into(outfitImg);
     }
 }
