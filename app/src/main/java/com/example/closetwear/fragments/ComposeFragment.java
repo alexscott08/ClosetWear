@@ -123,13 +123,19 @@ public class ComposeFragment extends Fragment {
         nextBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (selectedImage != null) {
-                    persistImage(selectedImage, photoFileName);
-                    if (type.equals("item")) {
-                        Navigation.goNewItemActivity(getActivity(), img);
+                if (type != null) {
+                    if (selectedImage != null) {
+                        persistImage(selectedImage, photoFileName);
+                        if (type.equals("item")) {
+                            Navigation.goNewItemActivity(getActivity(), img);
+                        } else {
+                            Navigation.goNewOutfitActivity(getActivity(), img);
+                        }
                     } else {
-                        Navigation.goNewOutfitActivity(getActivity(), img);
+                        Toast.makeText(getContext(), "Where's the picture?", Toast.LENGTH_SHORT).show();
                     }
+                } else {
+                    Toast.makeText(getContext(), "Is this a new item or fit?", Toast.LENGTH_SHORT).show();
                 }
             }
         });
