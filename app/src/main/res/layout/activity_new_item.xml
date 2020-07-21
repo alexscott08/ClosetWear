@@ -4,7 +4,7 @@ xmlns:app="http://schemas.android.com/apk/res-auto"
 xmlns:tools="http://schemas.android.com/tools"
 android:layout_width="match_parent"
 android:layout_height="match_parent"
-tools:context=".NewOutfitActivity">
+tools:context=".newitem.NewItemActivity">
 
 <ImageView
     android:id="@+id/itemImg"
@@ -15,109 +15,49 @@ tools:context=".NewOutfitActivity">
     app:layout_constraintTop_toTopOf="parent"
     tools:srcCompat="@tools:sample/avatars" />
 
-
-    <Spinner
-        android:id="@+id/categorySpinner"
-        android:layout_width="226dp"
-        android:layout_height="36dp"
-        android:layout_marginStart="56dp"
-        android:layout_marginTop="32dp"
-        app:layout_constraintStart_toEndOf="@+id/categoryText"
-        app:layout_constraintTop_toBottomOf="@+id/itemImg" />
-
-    <EditText
-        android:id="@+id/subcat"
-        android:layout_width="226dp"
-        android:layout_height="36dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="32dp"
-        app:layout_constraintStart_toEndOf="@+id/subcatText"
-        app:layout_constraintTop_toBottomOf="@+id/categorySpinner" />
-
-    <EditText
-        android:id="@+id/itemName"
-        android:layout_width="226dp"
-        android:layout_height="36dp"
-        android:layout_marginStart="36dp"
-        android:layout_marginTop="32dp"
-        app:layout_constraintStart_toEndOf="@+id/itemText"
-        app:layout_constraintTop_toBottomOf="@+id/brand" />
-
-    <EditText
-        android:id="@+id/brand"
-        android:layout_width="226dp"
-        android:layout_height="36dp"
-        android:layout_marginStart="56dp"
-        android:layout_marginTop="32dp"
-        app:layout_constraintStart_toEndOf="@+id/brandText"
-        app:layout_constraintTop_toBottomOf="@+id/subcat" />
-
-    <EditText
-        android:id="@+id/color"
-        android:layout_width="226dp"
-        android:layout_height="36dp"
-        android:layout_marginStart="56dp"
-        android:layout_marginTop="32dp"
-        app:layout_constraintStart_toEndOf="@+id/colorText"
-        app:layout_constraintTop_toBottomOf="@+id/itemName" />
-
-    <TextView
-        android:id="@+id/categoryText"
-        android:layout_width="61dp"
-        android:layout_height="20dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="40dp"
-        android:text="Category:"
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabs"
+        android:layout_width="match_parent"
+        android:layout_height="47dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/itemImg" />
+        app:layout_constraintTop_toBottomOf="@+id/itemImg"
+        app:tabContentStart="10dp"
+        app:tabMode="scrollable">
 
-    <TextView
-        android:id="@+id/subcatText"
-        android:layout_width="85dp"
-        android:layout_height="20dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="48dp"
-        android:text="Subcategory:"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/categoryText" />
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Category" />
 
-    <TextView
-        android:id="@+id/brandText"
-        android:layout_width="61dp"
-        android:layout_height="20dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="48dp"
-        android:text="Brand:"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/subcatText" />
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Subcategory" />
 
-    <TextView
-        android:id="@+id/itemText"
-        android:layout_width="81dp"
-        android:layout_height="22dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="48dp"
-        android:text="Item Name:"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/brandText" />
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Brand" />
 
-    <TextView
-        android:id="@+id/colorText"
-        android:layout_width="61dp"
-        android:layout_height="20dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="48dp"
-        android:text="Color:"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/itemText" />
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Item Name" />
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Color" />
+    </com.google.android.material.tabs.TabLayout>
 
     <Button
-    android:id="@+id/addBtn"
-    android:layout_width="148dp"
-    android:layout_height="54dp"
-    android:layout_marginTop="92dp"
-    android:layout_marginEnd="44dp"
-    android:text="Add to closet"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/color" />
+        android:id="@+id/addBtn"
+        android:layout_width="148dp"
+        android:layout_height="54dp"
+        android:layout_marginEnd="4dp"
+        android:text="Add to closet"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

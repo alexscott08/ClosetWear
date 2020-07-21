@@ -25,12 +25,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.closetwear.Navigation;
-import com.example.closetwear.NewItemActivity;
-import com.example.closetwear.NewOutfitActivity;
 import com.example.closetwear.R;
-import com.example.closetwear.SignupActivity;
-
-import org.parceler.Parcels;
 
 import java.io.File;
 import java.io.FileOutputStream;

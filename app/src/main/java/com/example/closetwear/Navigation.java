@@ -2,11 +2,9 @@ package com.example.closetwear;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
 
-import androidx.fragment.app.FragmentActivity;
-
-import org.parceler.Parcels;
+import com.example.closetwear.newitem.NewItemActivity;
+import com.example.closetwear.newoutfit.NewOutfitActivity;
 
 import java.io.File;
 

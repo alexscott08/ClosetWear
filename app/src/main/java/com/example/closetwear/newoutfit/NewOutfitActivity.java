@@ -1,9 +1,13 @@
-package com.example.closetwear;
+package com.example.closetwear.newoutfit;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.widget.ImageView;
+
+import com.example.closetwear.GlideApp;
+import com.example.closetwear.R;
+
 public class NewOutfitActivity extends AppCompatActivity {
 
     private ImageView outfitImg;

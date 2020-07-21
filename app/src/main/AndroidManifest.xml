@@ -15,8 +15,8 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity android:name=".SignupActivity"></activity>
-        <activity android:name=".NewOutfitActivity" />
-        <activity android:name=".NewItemActivity" />
+        <activity android:name=".newoutfit.NewOutfitActivity" />
+        <activity android:name=".newitem.NewItemActivity" />
         <activity android:name=".OutfitDetailsActivity" />
         <activity android:name=".LoginActivity">
             <intent-filter>
