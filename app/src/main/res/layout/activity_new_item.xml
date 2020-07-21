@@ -6,22 +6,23 @@ android:layout_width="match_parent"
 android:layout_height="match_parent"
 tools:context=".newitem.NewItemActivity">
 
-<ImageView
-    android:id="@+id/itemImg"
-    android:layout_width="match_parent"
-    android:layout_height="221dp"
-    android:scaleType="centerInside"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent"
-    tools:srcCompat="@tools:sample/avatars" />
+    <ImageView
+        android:id="@+id/itemImg"
+        android:layout_width="match_parent"
+        android:layout_height="221dp"
+        android:scaleType="centerInside"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:srcCompat="@tools:sample/avatars" />
 
     <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tabs"
+        android:id="@+id/tabLayout"
         android:layout_width="match_parent"
         android:layout_height="47dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/itemImg"
         app:tabContentStart="10dp"
+        app:tabGravity="fill"
         app:tabMode="scrollable">
 
         <com.google.android.material.tabs.TabItem
@@ -49,6 +50,18 @@ tools:context=".newitem.NewItemActivity">
             android:layout_height="wrap_content"
             android:text="Color" />
     </com.google.android.material.tabs.TabLayout>
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/pager"
+        android:layout_width="match_parent"
+        android:layout_height="464dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tabLayout"
+        app:layout_constraintVertical_bias="1.0" />
 
     <Button
         android:id="@+id/addBtn"
