@@ -2,7 +2,6 @@ package com.example.closetwear;
 
 import android.app.Activity;
 import android.content.Intent;
-
 import com.example.closetwear.newitem.NewItemActivity;
 import com.example.closetwear.newoutfit.NewOutfitActivity;
 

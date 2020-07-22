@@ -30,8 +30,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            app:itemIconTint="@color/design_default_color_background"
-            app:itemTextColor="#FFFFFF"
+            style="@style/Widget.MaterialComponents.BottomNavigationView.Colored"
             app:menu="@menu/menu_bottom_navigation" />
     </RelativeLayout>
 </LinearLayout>

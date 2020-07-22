@@ -1,21 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".newitem.NewItemActivity">
+    tools:context=".newitem.BrandFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-
-    <TextView
-        android:id="@+id/textView"
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/brandEdit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_centerInParent="true"
-        android:layout_marginStart="142dp"
-        android:layout_marginTop="356dp"
-        android:text="Brand Fragment" />
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="32dp"
+        android:layout_marginBottom="316dp"
+        android:gravity="center_horizontal"
+        android:hint="Brand" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/brandDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/brandEdit"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="33dp"
+        android:layout_marginBottom="27dp"
+        android:text="What's the brand?"
+        android:textSize="18sp" />
 </RelativeLayout>

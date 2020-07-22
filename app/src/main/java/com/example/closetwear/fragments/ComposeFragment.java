@@ -26,6 +26,7 @@ import android.widget.Toast;
 
 import com.example.closetwear.Navigation;
 import com.example.closetwear.R;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -65,8 +66,9 @@ public class ComposeFragment extends Fragment {
     // Any view setup should occur here.  E.g., view lookups and attaching view listeners.
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);String[] singleChoiceItems = getResources().getStringArray(R.array.dialog_compose_start);
-        new AlertDialog.Builder(getContext())
+        super.onViewCreated(view, savedInstanceState);
+        String[] singleChoiceItems = getResources().getStringArray(R.array.dialog_compose_start);
+        new MaterialAlertDialogBuilder(getContext())
                 .setTitle("Select one")
                 .setSingleChoiceItems(singleChoiceItems, itemSelected, new DialogInterface.OnClickListener() {
                     @Override
@@ -96,7 +98,7 @@ public class ComposeFragment extends Fragment {
             public void onClick(View view) {
                 // AlertDialog to ask user to select between taking picture or opening photos gallery
                 String[] singleChoiceItems = getResources().getStringArray(R.array.dialog_photo);
-                new AlertDialog.Builder(getContext())
+                new MaterialAlertDialogBuilder(getContext())
                         .setTitle("Select one")
                         .setSingleChoiceItems(singleChoiceItems, itemSelected, new DialogInterface.OnClickListener() {
                             @Override

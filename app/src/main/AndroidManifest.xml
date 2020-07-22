@@ -16,7 +16,9 @@
         android:usesCleartextTraffic="true">
         <activity android:name=".SignupActivity"></activity>
         <activity android:name=".newoutfit.NewOutfitActivity" />
-        <activity android:name=".newitem.NewItemActivity" />
+        <activity android:name=".newitem.NewItemActivity"
+            android:windowSoftInputMode="adjustPan"
+            />
         <activity android:name=".OutfitDetailsActivity" />
         <activity android:name=".LoginActivity">
             <intent-filter>

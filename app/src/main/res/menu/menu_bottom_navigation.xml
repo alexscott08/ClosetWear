@@ -6,20 +6,24 @@
         android:id="@+id/action_home"
         android:icon="@android:drawable/btn_star"
         android:title="Home"
+        android:enabled="true"
         app:showAsAction="always" />
     <item
         android:id="@+id/action_compose"
         android:icon="@android:drawable/ic_menu_camera"
         android:title="Compose"
+        android:enabled="true"
         app:showAsAction="always" />
     <item
         android:id="@+id/action_outfits"
         android:icon="@android:drawable/ic_menu_myplaces"
         android:title="Outfits"
+        android:enabled="true"
         app:showAsAction="always" />
     <item
         android:id="@+id/action_profile"
         android:icon="@drawable/ic_profileicon"
         android:title="Profile"
+        android:enabled="true"
         app:showAsAction="always" />
 </menu>
