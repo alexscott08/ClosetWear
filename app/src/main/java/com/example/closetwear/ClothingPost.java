@@ -85,8 +85,6 @@ public class ClothingPost extends ParseObject {
         put(KEY_COLOR, color);
     }
 
-    public Date getCreatedAt() { return getDate(KEY_CREATED_KEY); }
-
     // Helper function to determine if all required item fields have been set
     public boolean isFilled() {
         return (getName() != null && getCategory() != null &&
