@@ -32,8 +32,11 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import static android.app.Activity.RESULT_OK;
+import static com.parse.Parse.getApplicationContext;
 
 public class ComposeFragment extends Fragment {
     public static final String TAG = "ComposeActivity";
@@ -45,7 +48,6 @@ public class ComposeFragment extends Fragment {
     public final static int PICK_PHOTO_CODE = 1046;
     private Bitmap selectedImage;
     private OutputStream os;
-    private File img;
     private ImageButton cameraBtn;
     private ImageView postImgView;
     private String type;
@@ -127,11 +129,11 @@ public class ComposeFragment extends Fragment {
             public void onClick(View view) {
                 if (type != null) {
                     if (selectedImage != null) {
-                        persistImage(selectedImage, photoFileName);
+                        File save = persistImage(selectedImage, photoFileName);
                         if (type.equals("item")) {
-                            Navigation.goNewItemActivity(getActivity(), img);
+                            Navigation.goNewItemActivity(getActivity(), save);
                         } else {
-                            Navigation.goNewOutfitActivity(getActivity(), img);
+                            Navigation.goNewOutfitActivity(getActivity(), save);
                         }
                     } else {
                         Toast.makeText(getContext(), "Where's the picture?", Toast.LENGTH_SHORT).show();
@@ -142,17 +144,47 @@ public class ComposeFragment extends Fragment {
             }
         });
     }
-    private void persistImage(Bitmap bitmap, String name) {
-        File filesDir = getActivity().getFilesDir();
-        img = new File(filesDir, photoFileName);
+    private File persistImage(Bitmap bitmap, String name) {
+        File filesDir = getOutputMediaFile();
+        if (filesDir == null) {
+            Log.d(TAG,
+                    "Error creating media file, check storage permissions: ");// e.getMessage());
+            return null;
+        }
         try {
-            os = new FileOutputStream(img);
+            os = new FileOutputStream(filesDir);
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, os);
             os.flush();
             os.close();
         } catch (Exception e) {
             Log.e(TAG, "Error writing bitmap", e);
         }
+        return filesDir;
+    }
+
+    private  File getOutputMediaFile(){
+        // To be safe, you should check that the SDCard is mounted
+        // using Environment.getExternalStorageState() before doing this.
+        File mediaStorageDir = new File(Environment.getExternalStorageDirectory()
+                + "/Android/data/"
+                + getApplicationContext().getPackageName()
+                + "/Files");
+
+        // This location works best if you want the created images to be shared
+        // between applications and persist after your app has been uninstalled.
+
+        // Create the storage directory if it does not exist
+        if (! mediaStorageDir.exists()){
+            if (! mediaStorageDir.mkdirs()){
+                return null;
+            }
+        }
+        // Create a media file name
+        String timeStamp = new SimpleDateFormat("ddMMyyyy_HHmm").format(new Date());
+        File mediaFile;
+        String mImageName="MI_"+ timeStamp +".jpg";
+        mediaFile = new File(mediaStorageDir.getPath() + File.separator + mImageName);
+        return mediaFile;
     }
 
     // If 1st dialog option is selected, opens camera view

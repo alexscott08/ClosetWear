@@ -10,10 +10,12 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.closetwear.ClothingPost;
 import com.example.closetwear.GlideApp;
 import com.example.closetwear.Navigation;
 import com.example.closetwear.R;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -30,11 +32,6 @@ public class NewItemActivity extends AppCompatActivity implements CategoryFragme
     public static final String TAG = "NewItemActivity";
     private ImageView itemImg;
     private Button addBtn;
-    private String category;
-    private String subcategory;
-    private String brand;
-    private String name;
-    private String color;
     TabLayout tabLayout;
     ViewPager2 viewPager;
     NewItemTabAdapter adapter;
@@ -60,7 +57,8 @@ public class NewItemActivity extends AppCompatActivity implements CategoryFragme
         tabLayout = findViewById(R.id.tabLayout);
         viewPager = findViewById(R.id.pager);
         image = (File) getIntent().getSerializableExtra("image");
-        GlideApp.with(this).load(image).into(itemImg);
+        GlideApp.with(this).load(image).diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true).into(itemImg);
 
         adapter = new NewItemTabAdapter(getSupportFragmentManager(),
                 getLifecycle());
@@ -99,30 +97,18 @@ public class NewItemActivity extends AppCompatActivity implements CategoryFragme
         // If all fields have been filled, uploads new ClothingPost instance to Parse
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(final View view) {
                 /**TODO: ensure all info is filled out by passing fragment info back to activity**/
                 if (item.isFilled()) {
-                    saveParseFile(image);
-                    item.setUser(ParseUser.getCurrentUser());
-                    item.saveInBackground(new SaveCallback() {
-                        @Override
-                        public void done(ParseException e) {
-                            if (e != null) {
-                                Log.e(TAG, "Error while saving", e);
-                                Toast.makeText(NewItemActivity.this, "Error while saving item!", Toast.LENGTH_SHORT).show();
-                            }
-                            Toast.makeText(NewItemActivity.this, "New item added to closet!", Toast.LENGTH_SHORT).show();
-                            Log.i(TAG, "New item added to closet!");
-                            Navigation.goMainActivity(NewItemActivity.this);
-                        }
-                    });
+                    // Converts file to ParseFile and calls savePost() to upload ClothingPost to Parse
+                    saveParseFile(image, view);
                 }
             }
         });
     }
 
     // Adds item picture to parse server in background
-    private void saveParseFile(final File file) {
+    private void saveParseFile(final File file, final View view) {
         final ParseFile img = new ParseFile(file);
         img.saveInBackground(new SaveCallback() {
             @Override
@@ -131,12 +117,40 @@ public class NewItemActivity extends AppCompatActivity implements CategoryFragme
                     Log.e(TAG, "Error saving image: ", e);
                     Toast.makeText(NewItemActivity.this, "Error with saving image.", Toast.LENGTH_SHORT).show();
                 }
+                Log.i(TAG, "Image saved");
                 item.put("image", img);
+                savePost(view);
             }
         });
     }
 
-    /** Sets information to ClothingPost obj when listener is fired with action on each fragment **/
+    // Adds current user to ClothingPost and saves post to Parse server, allowing user to cancel
+    private void savePost(final View view) {
+        item.setUser(ParseUser.getCurrentUser());
+        item.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e != null) {
+                    Log.e(TAG, "Error while saving", e);
+                    Toast.makeText(NewItemActivity.this, "Error while saving item!", Toast.LENGTH_SHORT).show();
+                }
+                Snackbar.make(view, "New item added to closet!", Snackbar.LENGTH_LONG).setAction("Cancel", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        item.deleteInBackground();
+                    }
+                }).show();
+                Log.i(TAG, "New item added to closet!");
+
+                // Navigates to MainActivity after ClothingPost has been uploaded
+                Navigation.goMainActivity(NewItemActivity.this);
+            }
+        });
+    }
+
+    /**
+     * Sets information to ClothingPost obj when listener is fired with action on each fragment
+     **/
     @Override
     public void onCategoryItemSelected(String link) {
         if (categoryFragment != null && tabLayout.getSelectedTabPosition() == 0) {
@@ -171,5 +185,4 @@ public class NewItemActivity extends AppCompatActivity implements CategoryFragme
             item.setColor(link);
         }
     }
-
 }
