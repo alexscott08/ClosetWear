@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/categoryfragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".newitem.NewItemActivity">
+    tools:context=".newitem.CategoryFragment">
 
     <com.google.android.material.button.MaterialButtonToggleGroup
         android:id="@+id/toggleButton"
@@ -76,4 +77,4 @@
 
     </com.google.android.material.button.MaterialButtonToggleGroup>
 
-</RelativeLayout>
+</FrameLayout>

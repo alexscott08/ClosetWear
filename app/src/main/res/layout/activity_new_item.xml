@@ -71,7 +71,6 @@ tools:context=".newitem.NewItemActivity">
         android:text="Add to closet"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
-
     <FrameLayout
         android:id="@+id/containerFrameLayout"
         android:layout_width="match_parent"
