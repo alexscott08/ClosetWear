@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.example.closetwear.ClothingPost;
 import com.example.closetwear.GlideApp;
+import com.example.closetwear.Navigation;
 import com.example.closetwear.R;
 import com.google.android.material.tabs.TabLayout;
 import com.parse.ParseException;
@@ -110,7 +111,9 @@ public class NewItemActivity extends AppCompatActivity implements CategoryFragme
                                 Log.e(TAG, "Error while saving", e);
                                 Toast.makeText(NewItemActivity.this, "Error while saving item!", Toast.LENGTH_SHORT).show();
                             }
+                            Toast.makeText(NewItemActivity.this, "New item added to closet!", Toast.LENGTH_SHORT).show();
                             Log.i(TAG, "New item added to closet!");
+                            Navigation.goMainActivity(NewItemActivity.this);
                         }
                     });
                 }

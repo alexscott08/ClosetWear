@@ -66,6 +66,8 @@ public class ClosetAdapter extends RecyclerView.Adapter<ClosetAdapter.ViewHolder
         private ImageView itemImg;
         private TextView brand;
         private TextView itemName;
+        private TextView dateCreated;
+        private TextView subcat;
         private String relativeDate;
 
         public ViewHolder(@NonNull View itemView) {
@@ -73,15 +75,18 @@ public class ClosetAdapter extends RecyclerView.Adapter<ClosetAdapter.ViewHolder
             itemImg = itemView.findViewById(R.id.itemImg);
             brand = itemView.findViewById(R.id.brand);
             itemName = itemView.findViewById(R.id.itemName);
+            dateCreated = itemView.findViewById(R.id.dateCreated);
+            subcat = itemView.findViewById(R.id.subcat);
         }
         public void bind(final ClothingPost post) {
             // Bind the post data to the view elements
             brand.setText(post.getBrand());
             itemName.setText(post.getName());
+            subcat.setText(post.getSubcategory());
             final ParseFile image = post.getImage();
             GlideApp.with(context).load(image.getUrl()).into(itemImg);
             relativeDate = DateUtils.getRelativeTimeSpanString(post.getCreatedAt().getTime()) + "";
-
+            dateCreated.setText("Added " + relativeDate);
             itemImg.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

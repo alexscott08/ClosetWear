@@ -1,34 +1,18 @@
 package com.example.closetwear;
 
-import androidx.annotation.Dimension;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.text.Spannable;
-import android.text.SpannableStringBuilder;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.example.closetwear.adapters.OutfitDetailsAdapter;
-import com.example.closetwear.adapters.OutfitsAdapter;
-import com.parse.FindCallback;
-import com.parse.ParseException;
 import com.parse.ParseFile;
-import com.parse.ParseQuery;
-import com.parse.ParseRelation;
 import com.parse.ParseUser;
 
 import org.json.JSONArray;
@@ -79,7 +63,7 @@ public class OutfitDetailsActivity extends AppCompatActivity {
         username = findViewById(R.id.username);
         outfitImg = findViewById(R.id.outfitImg);
 //        caption = findViewById(R.id.caption);
-        date = findViewById(R.id.date);
+        date = findViewById(R.id.dateCreated);
         profileImg = findViewById(R.id.profileImg);
         favoritesCount = findViewById(R.id.favoritesCount);
         user = Parcels.unwrap(getIntent().getParcelableExtra("KEY_USER"));
