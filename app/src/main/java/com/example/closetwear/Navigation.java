@@ -1,9 +1,13 @@
 package com.example.closetwear;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import com.example.closetwear.newitem.NewItemActivity;
 import com.example.closetwear.newoutfit.NewOutfitActivity;
+import com.example.closetwear.newoutfit.TagItemActivity;
+
+import org.parceler.Parcels;
 
 import java.io.File;
 
@@ -39,15 +43,36 @@ public class Navigation {
         activity.finish();
     }
 
+    public static void goOutfitDetailsActivity(Context context, OutfitPost outfitPost) {
+        Intent intent = new Intent(context, OutfitDetailsActivity.class);
+        intent.putExtra("post", Parcels.wrap(outfitPost));
+        context.startActivity(intent);
+    }
+
     public static void goNewItemActivity(Activity activity, File image) {
         Intent i = new Intent(activity, NewItemActivity.class);
         i.putExtra("image", image);
         activity.startActivity(i);
     }
 
-    public static void goNewOutfitActivity(Activity activity, File image) {
+    public static void goNewOutfitActivity(Activity activity, OutfitPost outfitPost) {
         Intent i = new Intent(activity, NewOutfitActivity.class);
-        i.putExtra("image", image);
+        i.putExtra("outfit", Parcels.wrap(outfitPost));
         activity.startActivity(i);
+    }
+
+    // Overloaded method to navigate from TagItemActivity back to NewOutfitActivity
+    public static void goNewOutfitActivity(Context context, ClothingPost clothingPost, OutfitPost outfitPost) {
+        Intent i = new Intent(context, NewOutfitActivity.class);
+        i.putExtra("post", Parcels.wrap(clothingPost));
+        i.putExtra("outfit",  Parcels.wrap(outfitPost));
+        context.startActivity(i);
+    }
+
+    public static void goTagItemActivity(Activity activity, OutfitPost outfitPost) {
+        Intent i = new Intent(activity, TagItemActivity.class);
+        i.putExtra("outfit",  Parcels.wrap(outfitPost));
+        activity.startActivity(i);
+        activity.finish();
     }
 }

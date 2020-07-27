@@ -9,89 +9,42 @@
     <ImageView
         android:id="@+id/outfitImg"
         android:layout_width="match_parent"
-        android:layout_height="221dp"
+        android:layout_height="360dp"
         android:scaleType="centerInside"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:srcCompat="@tools:sample/avatars" />
 
-
-    <Spinner
-        android:id="@+id/topSpinner"
-        android:layout_width="204dp"
-        android:layout_height="21dp"
-        android:layout_marginStart="28dp"
-        android:layout_marginTop="28dp"
-        app:layout_constraintStart_toEndOf="@+id/topText"
-        app:layout_constraintTop_toBottomOf="@+id/outfitImg" />
-
-    <Spinner
-        android:id="@+id/bottomSpinner"
-        android:layout_width="206dp"
-        android:layout_height="20dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="44dp"
-        app:layout_constraintStart_toEndOf="@+id/bottomText"
-        app:layout_constraintTop_toBottomOf="@+id/topSpinner" />
-
-
-    <Spinner
-        android:id="@+id/shoesSpinner"
-        android:layout_width="206dp"
-        android:layout_height="20dp"
-        android:layout_marginStart="28dp"
-        android:layout_marginTop="44dp"
-        app:layout_constraintStart_toEndOf="@+id/shoesText"
-        app:layout_constraintTop_toBottomOf="@+id/bottomSpinner" />
-
-    <TextView
-        android:id="@+id/topText"
-        android:layout_width="61dp"
-        android:layout_height="20dp"
-        android:layout_marginStart="48dp"
-        android:layout_marginTop="29dp"
-        android:text="Top:"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/taggedItemsRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="372dp"
+        android:layout_marginTop="1dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/outfitImg" />
-
-    <TextView
-        android:id="@+id/bottomText"
-        android:layout_width="58dp"
-        android:layout_height="19dp"
-        android:layout_marginStart="48dp"
-        android:layout_marginTop="44dp"
-        android:text="Bottom:"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/topText" />
-
-    <TextView
-        android:id="@+id/shoesText"
-        android:layout_width="61dp"
-        android:layout_height="20dp"
-        android:layout_marginStart="48dp"
-        android:layout_marginTop="44dp"
-        android:text="Shoes:"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/bottomText" />
-
 
     <Button
         android:id="@+id/addBtn"
-        android:layout_width="195dp"
-        android:layout_height="51dp"
-        android:layout_marginTop="64dp"
-        android:layout_marginEnd="16dp"
+        android:layout_width="213dp"
+        android:layout_height="46dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
         android:text="Add outfit to closet"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/revealMoreBtn" />
+        style="?attr/materialButtonOutlinedStyle"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <Button
-        android:id="@+id/revealMoreBtn"
+        android:id="@+id/tagBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="132dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
         android:text="tag more items to fit"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/shoesText" />
+        style="?attr/materialButtonOutlinedStyle"
+        app:layout_constraintBottom_toTopOf="@+id/addBtn"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

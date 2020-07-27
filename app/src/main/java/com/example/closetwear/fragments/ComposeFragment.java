@@ -25,8 +25,15 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.closetwear.Navigation;
+import com.example.closetwear.OutfitPost;
 import com.example.closetwear.R;
+import com.example.closetwear.newitem.NewItemActivity;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.snackbar.Snackbar;
+import com.parse.ParseException;
+import com.parse.ParseFile;
+import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -52,6 +59,8 @@ public class ComposeFragment extends Fragment {
     private ImageView postImgView;
     private String type;
     private Button nextBtn;
+    OutfitPost newOutfit = new OutfitPost();
+    File save;
 
     public ComposeFragment() {
 
@@ -129,11 +138,12 @@ public class ComposeFragment extends Fragment {
             public void onClick(View view) {
                 if (type != null) {
                     if (selectedImage != null) {
-                        File save = persistImage(selectedImage, photoFileName);
+                        save = persistImage(selectedImage, photoFileName);
                         if (type.equals("item")) {
                             Navigation.goNewItemActivity(getActivity(), save);
                         } else {
-                            Navigation.goNewOutfitActivity(getActivity(), save);
+                            // Sets user for new OutfitPost and navigates to next view
+                            saveParseFile(save, view);
                         }
                     } else {
                         Toast.makeText(getContext(), "Where's the picture?", Toast.LENGTH_SHORT).show();
@@ -286,5 +296,43 @@ public class ComposeFragment extends Fragment {
                 postImgView.setImageBitmap(selectedImage);
             }
         }
+    }
+
+    // Adds item picture to parse server in background
+    private void saveParseFile(final File file, final View view) {
+        final ParseFile img = new ParseFile(file);
+        img.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e != null) {
+                    Log.e(TAG, "Error saving image: ", e);
+                    Toast.makeText(getActivity(), "Error with saving image.", Toast.LENGTH_SHORT).show();
+                }
+                Log.i(TAG, "Image saved");
+                newOutfit.put("image", img);
+                saveOutfit(view);
+            }
+        });
+    }
+
+    private void saveOutfit(final View view) {
+        newOutfit.setUser(ParseUser.getCurrentUser());
+        newOutfit.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e != null) {
+                    Log.e(TAG, "Error while saving", e);
+                    Toast.makeText(getActivity(), "Error while saving fit!", Toast.LENGTH_SHORT).show();
+                }
+                Snackbar.make(view, "New outfit added to closet!", Snackbar.LENGTH_LONG).setAction("Cancel", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        newOutfit.deleteInBackground();
+                    }
+                }).show();
+                Log.i(TAG, "New outfit added to closet!");
+                Navigation.goNewOutfitActivity(getActivity(), newOutfit);
+            }
+        });
     }
 }

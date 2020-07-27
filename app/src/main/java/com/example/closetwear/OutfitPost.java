@@ -63,5 +63,5 @@ public class OutfitPost extends ParseObject {
 
     public JSONArray getFitItems() { return getJSONArray(KEY_ITEMS); }
 
-    public void setFitItems(ClothingPost item) { put(KEY_ITEMS, item); }
+    public void setFitItems(String objectId) { put(KEY_ITEMS, objectId); }
 }

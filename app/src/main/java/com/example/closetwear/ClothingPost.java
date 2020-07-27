@@ -5,6 +5,8 @@ import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 
+import org.json.JSONArray;
+
 import java.util.Date;
 
 @ParseClassName("ClothingPost")
@@ -18,6 +20,7 @@ public class ClothingPost extends ParseObject {
     public static final String KEY_SIZE = "size";
     public static final String KEY_COLOR = "color";
     public static final String KEY_CREATED_KEY = "createdAt";
+    public static final String KEY_IN_FIT = "inFits";
 
     public ClothingPost() { }
 
@@ -85,10 +88,19 @@ public class ClothingPost extends ParseObject {
         put(KEY_COLOR, color);
     }
 
+    public JSONArray getFit() {
+        return getJSONArray(KEY_IN_FIT);
+    }
+
+    public void setFit(String objectId) {
+        put(KEY_IN_FIT, objectId);
+    }
     // Helper function to determine if all required item fields have been set
     public boolean isFilled() {
         return (getName() != null && getCategory() != null &&
                 getSubcategory() != null && getBrand() != null && getColor() != null);
 
     }
+
+
 }
