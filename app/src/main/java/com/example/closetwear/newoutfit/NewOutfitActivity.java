@@ -87,6 +87,7 @@ public class NewOutfitActivity extends AppCompatActivity {
                 Navigation.goTagItemActivity(NewOutfitActivity.this, outfitPost);
             }
         });
+        // Updates OutfitPost in server and navigates to MainActivity
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -95,7 +96,7 @@ public class NewOutfitActivity extends AppCompatActivity {
         });
     }
 
-    // Adds current user to ClothingPost and saves post to Parse server, allowing user to cancel
+    // Updates OutfitPost on Parse server, allowing user to cancel, navigates to MainActivity
     private void savePost(final View view) {
         outfitPost.saveInBackground(new SaveCallback() {
             @Override

@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -13,7 +14,10 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.example.closetwear.adapters.OutfitDetailsAdapter;
+import com.parse.FindCallback;
+import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import org.json.JSONArray;
@@ -32,7 +36,7 @@ public class OutfitDetailsActivity extends AppCompatActivity {
     private ImageView profileImg;
     private TextView favoritesCount;
     private ParseUser user;
-    private OutfitPost post;
+    private OutfitPost post = new OutfitPost();
 
     public static final String TAG = "OutfitDetailsActivity";
     private RecyclerView clothingRecyclerView;
@@ -54,12 +58,6 @@ public class OutfitDetailsActivity extends AppCompatActivity {
         adapter = new OutfitDetailsAdapter(this, allPosts);
         // set the adapter on the recycler view
         clothingRecyclerView.setAdapter(adapter);
-
-        try {
-            getItems();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
         post = Parcels.unwrap(getIntent().getParcelableExtra("post"));
         // Get all other info about the post from the intent and set on screen
         username = findViewById(R.id.username);
@@ -84,6 +82,13 @@ public class OutfitDetailsActivity extends AppCompatActivity {
         GlideApp.with(this).load(profilePic.getUrl()).transform(new CircleCrop())
                 .into(profileImg);
 
+        // Fill Recycler View
+        try {
+            getItems();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
         outfitImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -94,17 +99,41 @@ public class OutfitDetailsActivity extends AppCompatActivity {
 
     // Converts JSONArray of items to a list to add to adapter
     protected void getItems() throws JSONException {
-        JSONArray jsonItems = Parcels.unwrap(getIntent().getParcelableExtra("KEY_ITEMS"));
-
+        JSONArray jsonItems = post.getFitItems();
         // Converts JSONArray to list
-        List<ClothingPost> items = new ArrayList<ClothingPost>();
+        List<String> itemIds = new ArrayList<>();
         if (jsonItems != null) {
-            for (int i = 0; i < jsonItems.length(); i++){
-                items.add((ClothingPost) (Object) jsonItems.getJSONObject(i));
+            for (int i = 0; i < jsonItems.length(); i++) {
+                itemIds.add(jsonItems.getString(i));
             }
+            queryTags(itemIds);
+        } else {
+            adapter.clear();
         }
-        // Update adapter
-        adapter.clear();
-        adapter.addAll(items);
+    }
+
+    // Gets all items that the outfit has tagged
+    protected void queryTags(List<String> itemIds) throws JSONException {
+        ParseQuery<ClothingPost> query = ParseQuery.getQuery(ClothingPost.class);
+        // include data that have one of the given objectIds
+        query.whereContainedIn("objectId", itemIds);
+        // limit query to latest 20 items
+        query.setLimit(20);
+        // order posts by creation date (newest first)
+        query.addDescendingOrder(ClothingPost.KEY_CREATED_KEY);
+        // start an asynchronous call for posts
+        query.findInBackground(new FindCallback<ClothingPost>() {
+            @Override
+            public void done(List<ClothingPost> clothing, ParseException e) {
+                // check for errors
+                if (e != null) {
+                    Log.e(TAG, "Issue with getting posts", e);
+                    return;
+                }
+                // update adapter with clothing list
+                adapter.clear();
+                adapter.addAll(clothing);
+            }
+        });
     }
 }
