@@ -1,56 +1,63 @@
 package com.example.closetwear.newoutfit;
 
-import android.os.Bundle;
-
-import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
 
 import com.example.closetwear.ClothingPost;
+import com.example.closetwear.GlideApp;
+import com.example.closetwear.Navigation;
+import com.example.closetwear.OutfitPost;
 import com.example.closetwear.R;
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import org.json.JSONArray;
 import org.json.JSONException;
+import org.parceler.Parcels;
+
+import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
-public class NewOutfitDialogFragment extends DialogFragment {
+public class TagItemActivity extends AppCompatActivity {
 
-    public static final String TAG = "NewOutfitDialogFragment";
-    private RecyclerView dialogRecyclerView;
+    public static final String TAG = "TagItemActivity";
+    private RecyclerView itemRecyclerView;
+    private OutfitPost outfitPost;
     protected List<ClothingPost> allPosts;
-    protected NewOutfitAdapter adapter;
-
-
-    public NewOutfitDialogFragment() {
-        // Required empty public constructor
-    }
+    protected TagItemAdapter adapter;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        //inflate layout with recycler view
-        View v = inflater.inflate(R.layout.fragment_new_outfit_dialog, container, false);
-        dialogRecyclerView = v.findViewById(R.id.dialogRecyclerView);
-        dialogRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        //setadapter
-        adapter = new NewOutfitAdapter(getContext(), allPosts);
-        dialogRecyclerView.setAdapter(adapter);
-        //get your recycler view and populate it.
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_tag_item);
+        itemRecyclerView = (RecyclerView) findViewById(R.id.itemRecyclerView);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        itemRecyclerView.setLayoutManager(linearLayoutManager);
+
+        allPosts = new ArrayList<>();
+        outfitPost = (OutfitPost) Parcels.unwrap(getIntent().getParcelableExtra("outfit"));
+        // Create adapter
+        adapter = new TagItemAdapter(this, allPosts, outfitPost);
+        // set the adapter on the recycler view
+        itemRecyclerView.setAdapter(adapter);
+
         try {
             getAllItems();
         } catch (JSONException e) {
-            Log.e(TAG, "Error getting items: ", e);
+            e.printStackTrace();
         }
-        return v;
+
     }
 
     // Converts JSONArray of items to a list to add to adapter

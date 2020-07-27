@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.text.format.DateUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -31,6 +32,7 @@ public class OutfitDetailsActivity extends AppCompatActivity {
     private ImageView profileImg;
     private TextView favoritesCount;
     private ParseUser user;
+    private OutfitPost post;
 
     public static final String TAG = "OutfitDetailsActivity";
     private RecyclerView clothingRecyclerView;
@@ -58,7 +60,7 @@ public class OutfitDetailsActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
+        post = Parcels.unwrap(getIntent().getParcelableExtra("post"));
         // Get all other info about the post from the intent and set on screen
         username = findViewById(R.id.username);
         outfitImg = findViewById(R.id.outfitImg);
@@ -66,11 +68,12 @@ public class OutfitDetailsActivity extends AppCompatActivity {
         date = findViewById(R.id.dateCreated);
         profileImg = findViewById(R.id.profileImg);
         favoritesCount = findViewById(R.id.favoritesCount);
-        user = Parcels.unwrap(getIntent().getParcelableExtra("KEY_USER"));
+
+        user = post.getUser();
         username.setText("@" + user.getUsername());
-        favoritesCount.setText(getIntent().getIntExtra("KEY_LIKES", 0) + "");
-        date.setText(getIntent().getStringExtra("KEY_CREATED_KEY"));
-        ParseFile image = Parcels.unwrap(getIntent().getParcelableExtra("KEY_IMAGE"));
+        favoritesCount.setText(post.getLikesCount() + "");
+        date.setText(DateUtils.getRelativeTimeSpanString(post.getCreatedAt().getTime()) + "");
+        ParseFile image = post.getImage();
         if (image != null) {
             Glide.with(this).load(image.getUrl()).into(outfitImg);
         } else {

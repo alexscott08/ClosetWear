@@ -12,18 +12,23 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.closetwear.ClothingPost;
 import com.example.closetwear.GlideApp;
+import com.example.closetwear.Navigation;
+import com.example.closetwear.OutfitPost;
 import com.example.closetwear.R;
+import com.parse.ParseException;
 import com.parse.ParseFile;
 
 import java.util.List;
 
-public class NewOutfitAdapter extends RecyclerView.Adapter<NewOutfitAdapter.ViewHolder> {
+public class TagItemAdapter extends RecyclerView.Adapter<TagItemAdapter.ViewHolder> {
     private Context context;
     private List<ClothingPost> posts;
+    private OutfitPost outfitPost;
 
-    public NewOutfitAdapter(Context context, List<ClothingPost> posts) {
+    public TagItemAdapter(Context context, List<ClothingPost> posts, OutfitPost outfitPost) {
         this.context = context;
         this.posts = posts;
+        this.outfitPost = outfitPost;
     }
 
     // Clean all elements of the recycler
@@ -40,13 +45,13 @@ public class NewOutfitAdapter extends RecyclerView.Adapter<NewOutfitAdapter.View
 
     @NonNull
     @Override
-    public NewOutfitAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public TagItemAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_closet, parent, false);
-        return new NewOutfitAdapter.ViewHolder(view);
+        return new TagItemAdapter.ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull NewOutfitAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull TagItemAdapter.ViewHolder holder, int position) {
         ClothingPost post = posts.get(position);
         holder.bind(post);
     }
@@ -73,6 +78,18 @@ public class NewOutfitAdapter extends RecyclerView.Adapter<NewOutfitAdapter.View
             itemName.setText(post.getName());
             final ParseFile image = post.getImage();
             GlideApp.with(context).load(image.getUrl()).into(itemImg);
+            itemImg.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    outfitPost.add("fitItems", post.getObjectId());
+                    try {
+                        outfitPost.fetch();
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    Navigation.goNewOutfitActivity(context, post, outfitPost);
+                }
+            });
         }
     }
 }
