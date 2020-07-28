@@ -10,12 +10,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.closetwear.ClothingPost;
 import com.example.closetwear.GlideApp;
 import com.example.closetwear.R;
+import com.example.closetwear.fragments.ClosetFragment;
 import com.example.closetwear.fragments.OutfitsFragment;
 import com.parse.ParseFile;
 

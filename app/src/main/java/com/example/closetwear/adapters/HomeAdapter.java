@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.example.closetwear.GlideApp;
+import com.example.closetwear.Navigation;
 import com.example.closetwear.OutfitDetailsActivity;
 import com.example.closetwear.OutfitPost;
 import com.example.closetwear.R;
@@ -80,20 +81,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
             GlideApp.with(context).load(image.getUrl()).into(outfitImg);
             relativeDate = DateUtils.getRelativeTimeSpanString(post.getCreatedAt().getTime()) + "";
 
-            outfitImg.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(context, OutfitDetailsActivity.class);
-                    intent.putExtra("KEY_CREATED_KEY", relativeDate);
-                    intent.putExtra("KEY_USER", Parcels.wrap(post.getUser()));
-                    intent.putExtra("KEY_COMMENTS", post.getCommentsCount());
-                    intent.putExtra("KEY_CAPTION", post.getCaption());
-                    intent.putExtra("KEY_LIKES", post.getLikesCount());
-                    intent.putExtra("KEY_IMAGE", Parcels.wrap(image));
-                    intent.putExtra("KEY_ITEMS", Parcels.wrap(post.getFitItems()));
-                    context.startActivity(intent);
-                }
-            });
+            outfitImg.setOnClickListener(view -> Navigation.goOutfitDetailsActivity(context, post));
         }
     }
 }

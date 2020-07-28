@@ -1,9 +1,12 @@
 package com.example.closetwear;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import com.example.closetwear.newitem.NewItemActivity;
 import com.example.closetwear.newoutfit.NewOutfitActivity;
+
+import org.parceler.Parcels;
 
 import java.io.File;
 
@@ -37,6 +40,12 @@ public class Navigation {
         Intent i = new Intent(activity, MainActivity.class);
         activity.startActivity(i);
         activity.finish();
+    }
+
+    public static void goOutfitDetailsActivity(Context context, OutfitPost outfitPost) {
+        Intent intent = new Intent(context, OutfitDetailsActivity.class);
+        intent.putExtra("post", Parcels.wrap(outfitPost));
+        context.startActivity(intent);
     }
 
     public static void goNewItemActivity(Activity activity, File image) {
