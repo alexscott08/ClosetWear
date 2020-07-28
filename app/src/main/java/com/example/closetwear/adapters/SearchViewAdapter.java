@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.closetwear.GlideApp;
+import com.example.closetwear.Navigation;
 import com.example.closetwear.OutfitDetailsActivity;
 import com.example.closetwear.OutfitPost;
 import com.example.closetwear.R;
@@ -62,7 +63,6 @@ public class SearchViewAdapter extends RecyclerView.Adapter<SearchViewAdapter.Vi
 
     class ViewHolder extends RecyclerView.ViewHolder {
         private ImageView outfitImg;
-        private String relativeDate;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -73,21 +73,7 @@ public class SearchViewAdapter extends RecyclerView.Adapter<SearchViewAdapter.Vi
             // Bind the post data to the view elements
             final ParseFile image = post.getImage();
             GlideApp.with(context).load(image.getUrl()).into(outfitImg);
-            relativeDate = DateUtils.getRelativeTimeSpanString(post.getCreatedAt().getTime()) + "";
-            outfitImg.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(context, OutfitDetailsActivity.class);
-                    intent.putExtra("KEY_CREATED_KEY", relativeDate);
-                    intent.putExtra("KEY_USER", Parcels.wrap(post.getUser()));
-                    intent.putExtra("KEY_COMMENTS", post.getCommentsCount());
-                    intent.putExtra("KEY_CAPTION", post.getCaption());
-                    intent.putExtra("KEY_LIKES", post.getLikesCount());
-                    intent.putExtra("KEY_IMAGE", Parcels.wrap(image));
-                    intent.putExtra("KEY_ITEMS", Parcels.wrap(post.getFitItems()));
-                    context.startActivity(intent);
-                }
-            });
+            outfitImg.setOnClickListener(view -> Navigation.goOutfitDetailsActivity(context, post));
         }
     }
 }

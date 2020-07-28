@@ -64,18 +64,13 @@ public class HomeFragment extends Fragment {
         // Getting SwipeContainerLayout
         swipeLayout = view.findViewById(R.id.swipeContainer);
         // Adding Listener
-        swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                queryPosts();
-                // To keep animation for 4 seconds
-                new Handler().postDelayed(new Runnable() {
-                    @Override public void run() {
-                        // Stop animation (This will be after 3 seconds)
-                        swipeLayout.setRefreshing(false);
-                    }
-                }, 4000); // Delay in millis
-            }
+        swipeLayout.setOnRefreshListener(() -> {
+            queryPosts();
+            // To keep animation for 4 seconds
+            new Handler().postDelayed(() -> {
+                // Stop animation (This will be after 3 seconds)
+                swipeLayout.setRefreshing(false);
+            }, 4000); // Delay in millis
         });
 
         // Scheme colors for animation
@@ -97,18 +92,15 @@ public class HomeFragment extends Fragment {
         // order posts by creation date (newest first)
         query.addDescendingOrder(OutfitPost.KEY_CREATED_KEY);
         // start an asynchronous call for posts
-        query.findInBackground(new FindCallback<OutfitPost>() {
-            @Override
-            public void done(List<OutfitPost> posts, ParseException e) {
-                // check for errors
-                if (e != null) {
-                    Log.e(TAG, "Issue with getting posts", e);
-                    return;
-                }
-                // update adapter with posts list
-                adapter.clear();
-                adapter.addAll(posts);
+        query.findInBackground((posts, e) -> {
+            // check for errors
+            if (e != null) {
+                Log.e(TAG, "Issue with getting posts", e);
+                return;
             }
+            // update adapter with posts list
+            adapter.clear();
+            adapter.addAll(posts);
         });
     }
 

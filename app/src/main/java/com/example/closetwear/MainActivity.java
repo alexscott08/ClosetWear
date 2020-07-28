@@ -9,7 +9,6 @@ import androidx.fragment.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 
 import com.example.closetwear.fragments.ComposeFragment;
@@ -20,8 +19,6 @@ import com.example.closetwear.fragments.SearchViewFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.parse.ParseQuery;
 import com.paulrybitskyi.persistentsearchview.PersistentSearchView;
-import com.paulrybitskyi.persistentsearchview.listeners.OnSearchConfirmedListener;
-import com.paulrybitskyi.persistentsearchview.utils.SuggestionCreationUtil;
 import com.paulrybitskyi.persistentsearchview.utils.VoiceRecognitionDelegate;
 
 import java.util.ArrayList;
@@ -48,38 +45,35 @@ public class MainActivity extends AppCompatActivity {
         // Display icon in the toolbar
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 //        getSupportActionBar().setLogo(R.drawable.nav_logo_whiteout);
-//        getSupportActionBar().setDisplayUseLogoEnabled(true);
+        getSupportActionBar().setDisplayUseLogoEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(true);
         searchResults = new ArrayList<>();
         persistentSearchView = findViewById(R.id.persistentSearchView);
         createSearchView();
         bottomNavigationView = findViewById(R.id.bottomNavigation);
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                Fragment fragment;
-                switch (menuItem.getItemId()) {
-                    case R.id.action_home:
-                        fragment = new HomeFragment();
-                        persistentSearchView.setVisibility(View.VISIBLE);
-                        break;
-                    case R.id.action_compose:
-                        fragment = new ComposeFragment();
-                        persistentSearchView.setVisibility(View.INVISIBLE);
-                        break;
-                    case R.id.action_outfits:
-                        fragment = new OutfitsFragment();
-                        persistentSearchView.setVisibility(View.INVISIBLE);
-                        break;
-                    case R.id.action_profile:
-                    default:
-                        fragment = new ProfileFragment();
-                        persistentSearchView.setVisibility(View.INVISIBLE);
-                        break;
-                }
-                fragmentManager.beginTransaction().replace(R.id.containerFrameLayout, fragment).commit();
-                return true;
+        bottomNavigationView.setOnNavigationItemSelectedListener(menuItem -> {
+            Fragment fragment;
+            switch (menuItem.getItemId()) {
+                case R.id.action_home:
+                    fragment = new HomeFragment();
+                    persistentSearchView.setVisibility(View.VISIBLE);
+                    break;
+                case R.id.action_compose:
+                    fragment = new ComposeFragment();
+                    persistentSearchView.setVisibility(View.GONE);
+                    break;
+                case R.id.action_outfits:
+                    fragment = new OutfitsFragment();
+                    persistentSearchView.setVisibility(View.GONE);
+                    break;
+                case R.id.action_profile:
+                default:
+                    fragment = new ProfileFragment();
+                    persistentSearchView.setVisibility(View.GONE);
+                    break;
             }
+            fragmentManager.beginTransaction().replace(R.id.containerFrameLayout, fragment).commit();
+            return true;
         });
         // Set default selection
         bottomNavigationView.setSelectedItemId(R.id.action_home);
@@ -87,7 +81,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void createSearchView() {
         persistentSearchView.setOnLeftBtnClickListener(view -> {
-            // Handle the left button click
+            Fragment fragment = new HomeFragment();
+            persistentSearchView.setVisibility(View.VISIBLE);
+            fragmentManager.beginTransaction().replace(R.id.containerFrameLayout, fragment).commit();
         });
 
         persistentSearchView.setOnClearInputBtnClickListener(view -> {
@@ -98,10 +94,10 @@ public class MainActivity extends AppCompatActivity {
         persistentSearchView.setVoiceRecognitionDelegate(new VoiceRecognitionDelegate(this));
 
         persistentSearchView.setOnSearchConfirmedListener((searchView, query) -> {
-            persistentSearchView.collapse();
             querySearch(query);
-            searchViewFragment = new SearchViewFragment(new ArrayList<OutfitPost>());
-            persistentSearchView.setVisibility(View.INVISIBLE);
+            persistentSearchView.collapse();
+            searchViewFragment = new SearchViewFragment(new ArrayList<>());
+            persistentSearchView.setVisibility(View.GONE);
             fragmentManager.beginTransaction().replace(R.id.containerFrameLayout, searchViewFragment).commit();
         });
 

@@ -1,4 +1,4 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,33 +7,30 @@
     android:backgroundTint="#FFFFFF"
     android:fitsSystemWindows="true"
     android:orientation="vertical">
+
     <include
         layout="@layout/toolbar_main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
+
     <com.paulrybitskyi.persistentsearchview.PersistentSearchView
         android:id="@+id/persistentSearchView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="4dp"
-        android:paddingLeft="4dp"
+        android:layout_below="@+id/toolbar"
         android:paddingStart="4dp"
-        android:paddingRight="4dp"
-        android:paddingEnd="4dp"/>
+        android:paddingLeft="4dp"
+        android:paddingTop="4dp"
+        android:paddingEnd="4dp"
+        android:paddingRight="4dp" />
 
-    <RelativeLayout
+    <FrameLayout
+        android:id="@+id/containerFrameLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#FFFFFF"
-        android:orientation="vertical"
-        tools:context=".MainActivity">
-
-        <FrameLayout
-            android:id="@+id/containerFrameLayout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_above="@id/bottomNavigation" />
+        android:layout_height="560dp"
+        android:layout_above="@id/bottomNavigation"
+        android:layout_below="@+id/persistentSearchView" />
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottomNavigation"
@@ -42,5 +39,4 @@
             android:layout_alignParentBottom="true"
             style="@style/Widget.MaterialComponents.BottomNavigationView.Colored"
             app:menu="@menu/menu_bottom_navigation" />
-    </RelativeLayout>
-</LinearLayout>
+</RelativeLayout>

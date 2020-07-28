@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import android.view.ViewGroup;
 import com.example.closetwear.OutfitPost;
 import com.example.closetwear.R;
 import com.example.closetwear.adapters.SearchViewAdapter;
+import com.parse.ParseQuery;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -58,11 +60,36 @@ public class SearchViewFragment extends Fragment {
         StaggeredGridLayoutManager gridLayoutManager =
                 new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         searchRecyclerView.setLayoutManager(gridLayoutManager);
+        queryPosts();
     }
 
     public void addToAdapter(List<OutfitPost> posts) {
         adapter.clear();
-        adapter.addAll(posts);
+        searchPosts.addAll(posts);
+        adapter.addAll(searchPosts);
+    }
+
+    protected void queryPosts() {
+        // specify what type of data we want to query - OutfitPost.class
+        ParseQuery<OutfitPost> query = ParseQuery.getQuery(OutfitPost.class);
+        // include data referred by user key
+        query.include(OutfitPost.KEY_USER);
+        // limit query to latest 20 items
+        query.setLimit(20);
+        // order posts by creation date (newest first)
+        query.addDescendingOrder(OutfitPost.KEY_CREATED_KEY);
+        // start an asynchronous call for posts
+        query.findInBackground((posts, e) -> {
+            // check for errors
+            if (e != null) {
+                Log.e(TAG, "Issue with getting posts", e);
+                return;
+            }
+            Log.i(TAG, posts.get(0).getObjectId());
+            // update adapter with posts list
+            adapter.clear();
+            adapter.addAll(posts);
+        });
     }
 
 }

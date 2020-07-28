@@ -68,7 +68,6 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
 
     class ViewHolder extends RecyclerView.ViewHolder {
         private ImageView outfitImg;
-        private String relativeDate;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -79,8 +78,6 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
             // Bind the post data to the view elements
             final ParseFile image = post.getImage();
             GlideApp.with(context).load(image.getUrl()).into(outfitImg);
-            relativeDate = DateUtils.getRelativeTimeSpanString(post.getCreatedAt().getTime()) + "";
-
             outfitImg.setOnClickListener(view -> Navigation.goOutfitDetailsActivity(context, post));
         }
     }
