@@ -1,4 +1,4 @@
-package com.example.closetwear.fragments;
+package com.example.closetwear.search;
 
 import android.os.Bundle;
 
@@ -7,9 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,13 +15,11 @@ import android.view.ViewGroup;
 
 import com.example.closetwear.OutfitPost;
 import com.example.closetwear.R;
-import com.example.closetwear.adapters.SearchViewAdapter;
 import com.parse.FindCallback;
 import com.parse.ParseQuery;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 

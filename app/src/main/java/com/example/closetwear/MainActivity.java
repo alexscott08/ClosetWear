@@ -1,13 +1,10 @@
 package com.example.closetwear;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
-import android.content.Intent;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -16,7 +13,7 @@ import com.example.closetwear.fragments.ComposeFragment;
 import com.example.closetwear.fragments.HomeFragment;
 import com.example.closetwear.fragments.OutfitsFragment;
 import com.example.closetwear.fragments.ProfileFragment;
-import com.example.closetwear.fragments.SearchViewFragment;
+import com.example.closetwear.search.SearchViewFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.parse.FindCallback;
 import com.parse.ParseQuery;
@@ -24,7 +21,6 @@ import com.parse.ParseUser;
 import com.paulrybitskyi.persistentsearchview.PersistentSearchView;
 import com.paulrybitskyi.persistentsearchview.utils.VoiceRecognitionDelegate;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -105,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
             querySearch(query);
             persistentSearchView.collapse(true);
 
-            persistentSearchView.setLeftButtonDrawable(R.drawable.ic_arrow_left);
+            persistentSearchView.setLeftButtonDrawable(R.drawable.ic_left_arrow);
             fragmentManager.beginTransaction().replace(R.id.containerFrameLayout, searchViewFragment).commit();
         });
 
@@ -114,45 +110,20 @@ public class MainActivity extends AppCompatActivity {
         persistentSearchView.setSuggestionsDisabled(true);
     }
 
-    private void querySearch(String user) {
-        ParseQuery<ParseUser> query = ParseUser.getQuery();
-        query.include(OutfitPost.KEY_USER);
-        query.whereContains("username", user);
-        query.findInBackground(new FindCallback<ParseUser>() {
+    private void querySearch(String query) {
+        ParseQuery<OutfitPost> parseQuery = ParseQuery.getQuery(OutfitPost.class);
+        parseQuery.include(OutfitPost.KEY_USER);
+        parseQuery.whereContains("username", query);
+        parseQuery.findInBackground(new FindCallback<OutfitPost>() {
             @Override
-            public void done(List<ParseUser> users, com.parse.ParseException e) {
+            public void done(List<OutfitPost> fits, com.parse.ParseException e) {
                 if (e != null) {
                     Log.e(TAG, "Problem  with querying users: ", e);
                     return;
                 }
-                for (ParseUser user : users) {
-                    queryPosts(user.getUsername());
-                }
+                searchViewFragment.addToAdapter(fits);
             }
         });
     }
 
-    private void queryPosts(String user) {
-        ParseQuery<OutfitPost> parseQuery = ParseQuery.getQuery(OutfitPost.class);
-        parseQuery.include(OutfitPost.KEY_USER);
-        parseQuery.whereContains(OutfitPost.KEY_USER, user);
-        parseQuery.findInBackground((fits, e) -> {
-            if (e != null) {
-                Log.e(TAG, "Problem  with querying fits: ", e);
-                return;
-            }
-            for (OutfitPost fit : fits) {
-                Log.i(TAG,
-                        "User: " + fit.getUser());
-            }
-            searchViewFragment.addToAdapter(fits);
-        });
-    }
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//
-//        // Calling the voice recognition delegate to properly handle voice input results
-//        VoiceRecognitionDelegate.handleResult(persistentSearchView, requestCode, resultCode, data);
-//    }
 }
