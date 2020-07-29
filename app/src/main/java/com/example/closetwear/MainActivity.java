@@ -85,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void createSearchView() {
         searchViewFragment = new SearchViewFragment(searchResults);
+        persistentSearchView.setLeftButtonDrawable(R.drawable.ic_search);
         persistentSearchView.setOnLeftBtnClickListener(view -> {
             Fragment fragment = new HomeFragment();
             persistentSearchView.setVisibility(View.VISIBLE);
@@ -133,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
             }
-            queryItem(clothingIdSet, query);
+            queryItem(clothingIdSet, query.toLowerCase());
         });
     }
 
@@ -152,9 +153,11 @@ public class MainActivity extends AppCompatActivity {
                     if (itemFits != null) {
                         for (int i = 0; i < itemFits.length(); i++) {
                             // If a field of item contains the query, add to list
-                            if (item.getName().contains(query) || item.getBrand().contains(query) ||
-                                    item.getColor().contains(query) || item.getCategory().contains(query)
-                                    || item.getSubcategory().contains(query)) {
+                            if (item.getName().toLowerCase().contains(query) ||
+                                    item.getBrand().toLowerCase().contains(query) ||
+                                    item.getColor().toLowerCase().contains(query) ||
+                                    item.getCategory().toLowerCase().contains(query) ||
+                                    item.getSubcategory().toLowerCase().contains(query)) {
                                 try {
                                     fitIdSet.add(itemFits.getString(i));
                                 } catch (JSONException ex) {
