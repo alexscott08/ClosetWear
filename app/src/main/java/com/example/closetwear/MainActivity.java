@@ -15,14 +15,14 @@ import com.example.closetwear.fragments.OutfitsFragment;
 import com.example.closetwear.fragments.ProfileFragment;
 import com.example.closetwear.search.SearchViewFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.parse.FindCallback;
 import com.parse.ParseQuery;
-import com.parse.ParseUser;
 import com.paulrybitskyi.persistentsearchview.PersistentSearchView;
 import com.paulrybitskyi.persistentsearchview.utils.VoiceRecognitionDelegate;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import java.util.*;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -32,6 +32,9 @@ public class MainActivity extends AppCompatActivity {
     private PersistentSearchView persistentSearchView;
     private SearchViewFragment searchViewFragment;
     private List<OutfitPost> searchResults;
+    private Set<ClothingPost> clothingSet = new HashSet<>();
+    private Set<String> fitIdSet = new HashSet<>();
+    private Set<String> clothingIdSet = new HashSet<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,23 +110,78 @@ public class MainActivity extends AppCompatActivity {
 
         // Disabling the suggestions since they are unused in
         // the simple implementation
-        persistentSearchView.setSuggestionsDisabled(true);
+//        persistentSearchView.setSuggestionsDisabled(true);
     }
 
     private void querySearch(String query) {
         ParseQuery<OutfitPost> parseQuery = ParseQuery.getQuery(OutfitPost.class);
         parseQuery.include(OutfitPost.KEY_USER);
-        parseQuery.whereContains("username", query);
-        parseQuery.findInBackground(new FindCallback<OutfitPost>() {
-            @Override
-            public void done(List<OutfitPost> fits, com.parse.ParseException e) {
-                if (e != null) {
-                    Log.e(TAG, "Problem  with querying users: ", e);
-                    return;
+        parseQuery.findInBackground((fits, e) -> {
+            if (e != null) {
+                Log.e(TAG, "Problem  with querying users: ", e);
+                return;
+            }
+            for (OutfitPost fit : fits) {
+                JSONArray fitItems = fit.getFitItems();
+                if (fitItems != null) {
+                    for (int i = 0; i < fitItems.length(); i++) {
+                        try {
+                            clothingIdSet.add(fitItems.getString(i));
+                        } catch (JSONException ex) {
+                            ex.printStackTrace();
+                        }
+                    }
+                }
+            }
+            queryItem(clothingIdSet, query);
+        });
+    }
+
+    // Gets all clothing posts that correlate to the set of itemIds
+    private void queryItem(Set<String> itemIds, String query) {
+        ParseQuery<ClothingPost> parseQuery = ParseQuery.getQuery(ClothingPost.class);
+        parseQuery.whereContainedIn("objectId", itemIds);
+        parseQuery.findInBackground((items, e) -> {
+            if (e != null) {
+                Log.e(TAG, "Problem  with querying item", e);
+                return;
+            } else {
+                // finds all fits the items is in for each ClothingPost instance and adds to clothingIdSet, convert from JsonObject
+                for (ClothingPost item : items) {
+                    JSONArray itemFits = item.getFit();
+                    if (itemFits != null) {
+                        for (int i = 0; i < itemFits.length(); i++) {
+                            // If a field of item contains the query, add to list
+                            if (item.getName().contains(query) || item.getBrand().contains(query) ||
+                                    item.getColor().contains(query) || item.getCategory().contains(query)
+                                    || item.getSubcategory().contains(query)) {
+                                try {
+                                    fitIdSet.add(itemFits.getString(i));
+                                } catch (JSONException ex) {
+                                    ex.printStackTrace();
+                                }
+                            }
+                        }
+                    }
+                }
+                queryFits(fitIdSet);
+            }
+        });
+    }
+
+    private void queryFits(Set<String> fitIds) {
+        ParseQuery<OutfitPost> query = ParseQuery.getQuery(OutfitPost.class);
+        query.whereContainedIn("objectId", fitIds);
+        query.findInBackground((fits, e) -> {
+            if (e != null) {
+                Log.e(TAG, "Problem  with querying item", e);
+                return;
+            } else {
+                for (OutfitPost fit : fits) {
+                    Log.i(TAG, "Fit: " + fit.getObjectId());
                 }
                 searchViewFragment.addToAdapter(fits);
             }
         });
     }
-
 }

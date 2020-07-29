@@ -144,22 +144,19 @@ public class NewOutfitActivity extends AppCompatActivity {
         // order posts by creation date (newest first)
         query.addDescendingOrder(ClothingPost.KEY_CREATED_KEY);
         // start an asynchronous call for posts
-        query.findInBackground(new FindCallback<ClothingPost>() {
-            @Override
-            public void done(List<ClothingPost> clothing, ParseException e) {
-                // check for errors
-                if (e != null) {
-                    Log.e(TAG, "Issue with getting posts", e);
-                    return;
-                }
-                //update item's list of fits it is in
-                for (ClothingPost item : clothing) {
-                    item.setFit(outfitPost.getObjectId());
-                }
-                // update adapter with clothing list
-                adapter.clear();
-                adapter.addAll(clothing);
+        query.findInBackground((clothing, e) -> {
+            // check for errors
+            if (e != null) {
+                Log.e(TAG, "Issue with getting posts", e);
+                return;
             }
+            //update item's list of fits it is in
+            for (ClothingPost item : clothing) {
+                item.setFit(outfitPost.getObjectId());
+            }
+            // update adapter with clothing list
+            adapter.clear();
+            adapter.addAll(clothing);
         });
     }
 }

@@ -88,7 +88,7 @@ public class OutfitDetailsActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
+        Log.i(TAG, "ID: " + post.getObjectId());
         outfitImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
