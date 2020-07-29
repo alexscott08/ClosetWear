@@ -67,7 +67,11 @@ public class OutfitDetailsActivity extends AppCompatActivity {
         profileImg = findViewById(R.id.profileImg);
         favoritesCount = findViewById(R.id.favoritesCount);
 
-        user = post.getUser();
+        try {
+            user = post.getUser().fetchIfNeeded();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         username.setText("@" + user.getUsername());
         favoritesCount.setText(post.getLikesCount() + "");
         date.setText(DateUtils.getRelativeTimeSpanString(post.getCreatedAt().getTime()) + "");

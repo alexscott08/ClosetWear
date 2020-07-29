@@ -74,20 +74,17 @@ public class SearchViewFragment extends Fragment {
         // specify what type of data we want to query - OutfitPost.class
         ParseQuery<OutfitPost> query = ParseQuery.getQuery(OutfitPost.class);
         query.include(OutfitPost.KEY_USER);
-        query.findInBackground(new FindCallback<OutfitPost>() {
-            @Override
-            public void done(List<OutfitPost> objects, com.parse.ParseException e) {
-                if (e != null) {
-                    Log.e(TAG, "Problem  with getting items", e);
-                    return;
-                }
-                for (OutfitPost item : searchPosts) {
-                    Log.i(TAG, "User: " + item.getUser().toString());
-                }
-                searchPosts.clear();
-                searchPosts.addAll(objects);
-                adapter.addAll(searchPosts);
+        query.findInBackground((objects, e) -> {
+            if (e != null) {
+                Log.e(TAG, "Problem  with getting items", e);
+                return;
             }
+            for (OutfitPost item : searchPosts) {
+                Log.i(TAG, "User: " + item.getUser().toString());
+            }
+            searchPosts.clear();
+            searchPosts.addAll(objects);
+            adapter.addAll(searchPosts);
         });
     }
 
