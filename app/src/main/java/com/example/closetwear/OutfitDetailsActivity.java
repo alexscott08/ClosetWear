@@ -16,18 +16,12 @@ import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.example.closetwear.adapters.OutfitDetailsAdapter;
 import com.example.closetwear.parse.ClothingPost;
 import com.example.closetwear.parse.OutfitPost;
-import com.parse.FindCallback;
-import com.parse.ParseException;
-import com.parse.ParseFile;
-import com.parse.ParseQuery;
-import com.parse.ParseUser;
+import com.parse.*;
 
-import org.json.JSONArray;
-import org.json.JSONException;
+import org.json.*;
 import org.parceler.Parcels;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class OutfitDetailsActivity extends AppCompatActivity {
 

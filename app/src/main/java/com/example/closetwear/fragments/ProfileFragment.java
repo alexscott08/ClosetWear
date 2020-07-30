@@ -1,6 +1,5 @@
 package com.example.closetwear.fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -19,7 +18,6 @@ import android.widget.Toast;
 
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.example.closetwear.GlideApp;
-import com.example.closetwear.LoginActivity;
 import com.example.closetwear.Navigation;
 import com.example.closetwear.R;
 import com.parse.LogOutCallback;

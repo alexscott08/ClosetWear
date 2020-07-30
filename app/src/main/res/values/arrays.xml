@@ -16,4 +16,11 @@
         <item>Tailoring</item>
         <item>Accessories</item>
     </string-array>
+    <string-array name="filter_array">
+        <item>Category</item>
+        <item>Subcategory</item>
+        <item>Brand</item>
+        <item>Name</item>
+        <item>Color</item>
+    </string-array>
 </resources>

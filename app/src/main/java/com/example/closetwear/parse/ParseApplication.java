@@ -2,8 +2,6 @@ package com.example.closetwear.parse;
 
 import android.app.Application;
 
-import com.example.closetwear.parse.ClothingPost;
-import com.example.closetwear.parse.OutfitPost;
 import com.parse.Parse;
 import com.parse.ParseObject;
 

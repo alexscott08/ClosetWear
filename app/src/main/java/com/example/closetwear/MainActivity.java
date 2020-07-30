@@ -9,20 +9,15 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
-import com.example.closetwear.fragments.ComposeFragment;
-import com.example.closetwear.fragments.HomeFragment;
-import com.example.closetwear.fragments.OutfitsFragment;
-import com.example.closetwear.fragments.ProfileFragment;
-import com.example.closetwear.parse.ClothingPost;
-import com.example.closetwear.parse.OutfitPost;
+import com.example.closetwear.fragments.*;
+import com.example.closetwear.parse.*;
 import com.example.closetwear.search.SearchViewFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.parse.ParseQuery;
 import com.paulrybitskyi.persistentsearchview.PersistentSearchView;
 import com.paulrybitskyi.persistentsearchview.utils.VoiceRecognitionDelegate;
 
-import org.json.JSONArray;
-import org.json.JSONException;
+import org.json.*;
 
 import java.util.*;
 
