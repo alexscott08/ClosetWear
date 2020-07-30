@@ -14,6 +14,8 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.example.closetwear.adapters.OutfitDetailsAdapter;
+import com.example.closetwear.parse.ClothingPost;
+import com.example.closetwear.parse.OutfitPost;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;

@@ -1,30 +1,20 @@
 package com.example.closetwear.adapters;
 
 import android.content.Context;
-import android.content.Intent;
-import android.os.Parcelable;
-import android.text.Spannable;
-import android.text.SpannableStringBuilder;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.example.closetwear.GlideApp;
 import com.example.closetwear.Navigation;
-import com.example.closetwear.OutfitDetailsActivity;
-import com.example.closetwear.OutfitPost;
+import com.example.closetwear.parse.OutfitPost;
 import com.example.closetwear.R;
 import com.parse.ParseFile;
-
-import org.parceler.Parcels;
 
 import java.util.List;
 

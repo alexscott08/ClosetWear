@@ -6,26 +6,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
 
-import com.example.closetwear.ClothingPost;
-import com.example.closetwear.GlideApp;
-import com.example.closetwear.Navigation;
-import com.example.closetwear.OutfitPost;
+import com.example.closetwear.parse.ClothingPost;
+import com.example.closetwear.parse.OutfitPost;
 import com.example.closetwear.R;
 import com.parse.FindCallback;
 import com.parse.ParseException;
-import com.parse.ParseFile;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.parceler.Parcels;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -6,6 +6,8 @@ import android.content.Intent;
 import com.example.closetwear.newitem.NewItemActivity;
 import com.example.closetwear.newoutfit.NewOutfitActivity;
 import com.example.closetwear.newoutfit.TagItemActivity;
+import com.example.closetwear.parse.ClothingPost;
+import com.example.closetwear.parse.OutfitPost;
 
 import org.parceler.Parcels;
 

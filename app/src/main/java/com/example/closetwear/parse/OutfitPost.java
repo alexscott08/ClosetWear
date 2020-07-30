@@ -1,4 +1,4 @@
-package com.example.closetwear;
+package com.example.closetwear.parse;
 
 import com.parse.ParseClassName;
 import com.parse.ParseFile;
@@ -6,8 +6,6 @@ import com.parse.ParseObject;
 import com.parse.ParseUser;
 
 import org.json.JSONArray;
-
-import java.util.Date;
 
 @ParseClassName("OutfitPost")
 public class OutfitPost extends ParseObject {

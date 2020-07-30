@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.example.closetwear.ClothingPost;
+import com.example.closetwear.parse.ClothingPost;
 import com.example.closetwear.GlideApp;
 import com.example.closetwear.Navigation;
 import com.example.closetwear.R;

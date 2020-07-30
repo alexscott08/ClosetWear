@@ -15,7 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.closetwear.ClothingPost;
+import com.example.closetwear.parse.ClothingPost;
 import com.example.closetwear.R;
 import com.example.closetwear.adapters.ClosetAdapter;
 import com.parse.FindCallback;

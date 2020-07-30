@@ -13,6 +13,8 @@ import com.example.closetwear.fragments.ComposeFragment;
 import com.example.closetwear.fragments.HomeFragment;
 import com.example.closetwear.fragments.OutfitsFragment;
 import com.example.closetwear.fragments.ProfileFragment;
+import com.example.closetwear.parse.ClothingPost;
+import com.example.closetwear.parse.OutfitPost;
 import com.example.closetwear.search.SearchViewFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.parse.ParseQuery;

@@ -10,7 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.closetwear.ClothingPost;
+import com.example.closetwear.parse.ClothingPost;
 import com.example.closetwear.GlideApp;
 import com.example.closetwear.R;
 import com.parse.ParseFile;

@@ -1,8 +1,6 @@
 package com.example.closetwear.search;
 
 import android.content.Context;
-import android.content.Intent;
-import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,12 +11,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.closetwear.GlideApp;
 import com.example.closetwear.Navigation;
-import com.example.closetwear.OutfitPost;
+import com.example.closetwear.parse.OutfitPost;
 import com.example.closetwear.R;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.parse.ParseFile;
-
-import org.parceler.Parcels;
 
 import java.util.List;
 

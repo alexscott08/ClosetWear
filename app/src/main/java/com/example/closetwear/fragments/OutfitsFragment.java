@@ -5,7 +5,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
@@ -15,8 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.closetwear.ClothingPost;
-import com.example.closetwear.OutfitPost;
+import com.example.closetwear.parse.OutfitPost;
 import com.example.closetwear.R;
 import com.example.closetwear.adapters.OutfitsAdapter;
 import com.parse.FindCallback;

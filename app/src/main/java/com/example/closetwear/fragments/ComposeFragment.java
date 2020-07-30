@@ -1,6 +1,5 @@
 package com.example.closetwear.fragments;
 
-import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -25,9 +24,8 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.closetwear.Navigation;
-import com.example.closetwear.OutfitPost;
+import com.example.closetwear.parse.OutfitPost;
 import com.example.closetwear.R;
-import com.example.closetwear.newitem.NewItemActivity;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 import com.parse.ParseException;
