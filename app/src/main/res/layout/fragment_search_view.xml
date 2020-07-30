@@ -14,16 +14,9 @@
         android:id="@+id/searchRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingLeft="2dp"
-        android:paddingStart="2dp"
-        android:paddingRight="2dp"
-        android:paddingEnd="2dp"
-        android:paddingTop="60dp"
-        android:paddingBottom="4dp"
+        android:padding="2dp"
         android:clipToPadding="false"
-        android:overScrollMode="never"
         android:scrollbars="none"/>
-
 
 
 </RelativeLayout>

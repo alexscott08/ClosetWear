@@ -32,7 +32,6 @@ public class MainActivity extends AppCompatActivity {
     private PersistentSearchView persistentSearchView;
     private SearchViewFragment searchViewFragment;
     private List<OutfitPost> searchResults;
-    private Set<ClothingPost> clothingSet = new HashSet<>();
     private Set<String> fitIdSet = new HashSet<>();
     private Set<String> clothingIdSet = new HashSet<>();
 
@@ -94,26 +93,25 @@ public class MainActivity extends AppCompatActivity {
 
         persistentSearchView.setOnClearInputBtnClickListener(view -> {
             // Handle the clear input button click
-            searchViewFragment.queryPosts();
+//            searchViewFragment.queryPosts();
         });
 
         // Setting a delegate for the voice recognition input
         persistentSearchView.setVoiceRecognitionDelegate(new VoiceRecognitionDelegate(this));
 
         persistentSearchView.setOnSearchConfirmedListener((searchView, query) -> {
-
+            // Reset sets on new query
+            fitIdSet.clear();
+            clothingIdSet.clear();
             querySearch(query);
             persistentSearchView.collapse(true);
 
             persistentSearchView.setLeftButtonDrawable(R.drawable.ic_left_arrow);
             fragmentManager.beginTransaction().replace(R.id.containerFrameLayout, searchViewFragment).commit();
         });
-
-        // Disabling the suggestions since they are unused in
-        // the simple implementation
-//        persistentSearchView.setSuggestionsDisabled(true);
     }
 
+    // Queries all ClothingPost IDs that are attached to some OutfitPost
     private void querySearch(String query) {
         ParseQuery<OutfitPost> parseQuery = ParseQuery.getQuery(OutfitPost.class);
         parseQuery.include(OutfitPost.KEY_USER);
@@ -172,6 +170,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    // Gets OutfitPost objects from the set of their objectIds and adds to fragment adapter
     private void queryFits(Set<String> fitIds) {
         ParseQuery<OutfitPost> query = ParseQuery.getQuery(OutfitPost.class);
         query.whereContainedIn("objectId", fitIds);

@@ -15,7 +15,6 @@ import android.view.ViewGroup;
 
 import com.example.closetwear.OutfitPost;
 import com.example.closetwear.R;
-import com.parse.FindCallback;
 import com.parse.ParseQuery;
 
 import org.jetbrains.annotations.NotNull;
@@ -29,15 +28,14 @@ public class SearchViewFragment extends Fragment {
     private RecyclerView searchRecyclerView;
     protected List<OutfitPost> searchPosts;
     protected SearchViewAdapter adapter;
-    public boolean isShowing;
 
     public SearchViewFragment() {
         // Required empty public constructor
     }
 
+    // Constructor for fragment, will be called from MainActivity
     public SearchViewFragment(List<OutfitPost> searchPosts) {
         this.searchPosts = searchPosts;
-        isShowing = true;
     }
 
     @Override
@@ -60,32 +58,13 @@ public class SearchViewFragment extends Fragment {
         StaggeredGridLayoutManager gridLayoutManager =
                 new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         searchRecyclerView.setLayoutManager(gridLayoutManager);
-        if (!isShowing) {
-            queryPosts();
-        }
+
     }
 
     public void addToAdapter(List<OutfitPost> posts) {
+        adapter.clear();
         searchPosts.addAll(posts);
         adapter.addAll(searchPosts);
-    }
-
-    public void queryPosts() {
-        // specify what type of data we want to query - OutfitPost.class
-        ParseQuery<OutfitPost> query = ParseQuery.getQuery(OutfitPost.class);
-        query.include(OutfitPost.KEY_USER);
-        query.findInBackground((objects, e) -> {
-            if (e != null) {
-                Log.e(TAG, "Problem  with getting items", e);
-                return;
-            }
-            for (OutfitPost item : searchPosts) {
-                Log.i(TAG, "User: " + item.getUser().toString());
-            }
-            searchPosts.clear();
-            searchPosts.addAll(objects);
-            adapter.addAll(searchPosts);
-        });
     }
 
 }
