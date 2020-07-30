@@ -100,6 +100,10 @@ public class MainActivity extends AppCompatActivity {
             // Reset sets on new query
             fitIdSet.clear();
             clothingIdSet.clear();
+
+            // To be used in case of filter search
+            searchViewFragment.setQuery(query);
+
             querySearch(query);
             persistentSearchView.collapse(true);
 
@@ -135,6 +139,9 @@ public class MainActivity extends AppCompatActivity {
 
     // Gets all clothing posts that correlate to the set of itemIds
     private void queryItem(Set<String> itemIds, String query) {
+        // Item IDs to be used in case of filter search
+        searchViewFragment.setItemIds(itemIds);
+
         ParseQuery<ClothingPost> parseQuery = ParseQuery.getQuery(ClothingPost.class);
         parseQuery.whereContainedIn("objectId", itemIds);
         parseQuery.findInBackground((items, e) -> {

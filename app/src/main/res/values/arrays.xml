@@ -19,8 +19,8 @@
     <string-array name="filter_array">
         <item>Category</item>
         <item>Subcategory</item>
-        <item>Brand</item>
         <item>Name</item>
+        <item>Brand</item>
         <item>Color</item>
     </string-array>
 </resources>
