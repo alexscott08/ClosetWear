@@ -43,13 +43,14 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         // Display icon in the toolbar
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-//        getSupportActionBar().setLogo(R.drawable.nav_logo_whiteout);
         getSupportActionBar().setDisplayUseLogoEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(true);
         searchResults = new ArrayList<>();
         persistentSearchView = findViewById(R.id.persistentSearchView);
         persistentSearchView.setLeftButtonDrawable(R.drawable.ic_search);
         createSearchView();
+
+        // Handles all actions done on bottom navigation menu
         bottomNavigationView = findViewById(R.id.bottomNavigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(menuItem -> {
             Fragment fragment;
@@ -90,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
 
         persistentSearchView.setOnClearInputBtnClickListener(view -> {
             // Handle the clear input button click
-//            searchViewFragment.queryPosts();
+            Navigation.goMainActivity(this);
         });
 
         // Setting a delegate for the voice recognition input
@@ -186,6 +187,7 @@ public class MainActivity extends AppCompatActivity {
                 for (OutfitPost fit : fits) {
                     Log.i(TAG, "Fit: " + fit.getObjectId());
                 }
+                // Update search adapter to bind posts to new view
                 searchViewFragment.addToAdapter(fits);
             }
         });

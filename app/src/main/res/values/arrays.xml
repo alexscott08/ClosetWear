@@ -4,10 +4,12 @@
         <item>Take Photo</item>
         <item>Choose from Gallery</item>
     </string-array>
+
     <string-array name="dialog_compose_start">
         <item>New Item</item>
         <item>New Fit</item>
     </string-array>
+
     <string-array name="category_array">
         <item>Tops</item>
         <item>Bottoms</item>
@@ -16,6 +18,7 @@
         <item>Tailoring</item>
         <item>Accessories</item>
     </string-array>
+
     <string-array name="filter_array">
         <item>Category</item>
         <item>Subcategory</item>

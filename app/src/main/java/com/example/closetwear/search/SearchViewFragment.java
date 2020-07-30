@@ -68,6 +68,8 @@ public class SearchViewFragment extends Fragment {
         StaggeredGridLayoutManager gridLayoutManager =
                 new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         searchRecyclerView.setLayoutManager(gridLayoutManager);
+
+        // Allows user to filter search for more specific results
         filter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -85,6 +87,7 @@ public class SearchViewFragment extends Fragment {
                         .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
+                                // Set options map boolean values after Ok click
                                 for (int j = 0; j < checkedItems.length; j++) {
                                     if (j == 0) {
                                         options.put("Category", checkedItems[j]);
@@ -107,20 +110,25 @@ public class SearchViewFragment extends Fragment {
         });
     }
 
+    // If Ok is clicked on dialog, filters search based on options selected
     public void startFilterSearch() {
         adapter.clear();
         queryItem(itemIdSet, query, options);
     }
+
+    // Used by MainActivity to update posts on adapter
     public void addToAdapter(List<OutfitPost> posts) {
         adapter.clear();
         searchPosts.addAll(posts);
         adapter.addAll(searchPosts);
     }
 
+    // Used by MainActivity to pass item IDs for filtered search
     public void setItemIds(Set<String> itemIdSet) {
         this.itemIdSet = itemIdSet;
     }
 
+    // Used by MainActivity to pass original query for filtered search
     public void setQuery(String query) {
         this.query = query;
     }
@@ -176,7 +184,7 @@ public class SearchViewFragment extends Fragment {
         });
     }
 
-    // After filter search finds all fits that apply, gets the object and adds to adapter
+    // After filter search, finds all fits that apply; gets the object and adds to adapter
     private void queryFits(Set<String> fitIds) {
         ParseQuery<OutfitPost> query = ParseQuery.getQuery(OutfitPost.class);
         query.whereContainedIn("objectId", fitIds);
