@@ -15,6 +15,7 @@ import com.example.closetwear.GlideApp;
 import com.example.closetwear.Navigation;
 import com.example.closetwear.OutfitPost;
 import com.example.closetwear.R;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.parse.ParseFile;
 
 import org.parceler.Parcels;
@@ -62,10 +63,12 @@ public class SearchViewAdapter extends RecyclerView.Adapter<SearchViewAdapter.Vi
 
     class ViewHolder extends RecyclerView.ViewHolder {
         private ImageView outfitImg;
+        private ExtendedFloatingActionButton filter;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             outfitImg = itemView.findViewById(R.id.outfitImg);
+            filter = itemView.findViewById(R.id.filterFAB);
         }
 
         public void bind(final OutfitPost post) {
@@ -73,6 +76,9 @@ public class SearchViewAdapter extends RecyclerView.Adapter<SearchViewAdapter.Vi
             final ParseFile image = post.getImage();
             GlideApp.with(context).load(image.getUrl()).into(outfitImg);
             outfitImg.setOnClickListener(view -> Navigation.goOutfitDetailsActivity(context, post));
+            filter.setOnClickListener(view -> {
+                // Open filters page
+            });
         }
     }
 }
