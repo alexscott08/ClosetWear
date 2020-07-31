@@ -12,7 +12,13 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        // The following argument makes the Android Test Orchestrator run its
+        // "pm clear" command after each test invocation. This command ensures
+        // that the app's state is completely cleared between tests.
+        testInstrumentationRunnerArguments clearPackageData: 'true'
     }
+
+
 
     buildTypes {
         release {
@@ -41,7 +47,15 @@ dependencies {
     implementation 'androidx.viewpager2:viewpager2:1.0.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    androidTestImplementation ('androidx.test.espresso:espresso-core:3.2.0') {
+        exclude module: 'support-annotations'
+    }
+    androidTestImplementation('com.android.support.test.espresso:espresso-contrib:3.2.0') {
+        exclude module: 'support-annotations'
+        exclude group: 'com.android.support', module: 'appcompat'
+        exclude group: 'com.android.support', module: 'support-v4'
+        exclude module: 'recyclerview-v7'
+    }
     implementation "com.github.parse-community.Parse-SDK-Android:parse:1.24.2"
     // for Google login/signup support (optional)
     implementation "com.github.parse-community.Parse-SDK-Android:google:1.24.2"
@@ -61,5 +75,12 @@ dependencies {
     implementation 'jp.co.cyberagent.android:gpuimage:2.0.4'
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation "com.paulrybitskyi.persistentsearchview:persistentsearchview:$psvVersion"
+    // Required for instrumented tests
+    androidTestImplementation 'com.android.support:support-annotations:24.0.0'
+    androidTestImplementation 'androidx.test:runner:1.1.0'
+    androidTestImplementation 'androidx.test:rules:1.1.0'
+    androidTestUtil 'androidx.test:orchestrator:1.1.0'
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    testImplementation 'org.hamcrest:hamcrest-library:1.3'
 
 }
