@@ -25,7 +25,7 @@ public class SearchViewFragment extends Fragment {
 
     private static final String TAG = "SearchFragment";
     private RecyclerView searchRecyclerView;
-    protected List<OutfitPost> searchPosts;
+    protected List<OutfitPost> searchPosts = new ArrayList<>();
     protected SearchViewAdapter adapter;
     private ExtendedFloatingActionButton filter;
     private Set<String> itemIdSet;
@@ -53,11 +53,11 @@ public class SearchViewFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         filter = view.findViewById(R.id.filterFAB);
         searchRecyclerView = view.findViewById(R.id.searchRecyclerView);
-        searchPosts = new ArrayList<>();
-        // Create adapter
         adapter = new SearchViewAdapter(getContext(), searchPosts);
+        adapter.addAll(searchPosts);
         // set the adapter on the recycler view
         searchRecyclerView.setAdapter(adapter);
+
         // set the layout manager on the recycler view
         StaggeredGridLayoutManager gridLayoutManager =
                 new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
@@ -86,7 +86,7 @@ public class SearchViewFragment extends Fragment {
                                 options.put("Color", checkedItems[j]);
                             }
                         }
-                        startFilterSearch();
+                        filterSearch();
                     })
                     .setNegativeButton("Cancel", null)
                     .show();
@@ -94,16 +94,20 @@ public class SearchViewFragment extends Fragment {
     }
 
     // If Ok is clicked on dialog, filters search based on options selected
-    public void startFilterSearch() {
+    public void filterSearch() {
+        // 1. Clear adapter and find all fits that contain items with one of the filters in their fields
         adapter.clear();
-        FilterQuery filterQuery = new FilterQuery(itemIdSet, query, options, adapter);
+        Set<String> filteredFitIds = FilterQuery.queryItem(query, itemIdSet, options);
+
+        // 2. Find the OutfitPost obj for each fit ID and update adapter
+        List<OutfitPost> filteredFits = FilterQuery.queryFits(filteredFitIds);
+        adapter.addAll(filteredFits);
+
     }
 
     // Used by MainActivity to update posts on adapter
     public void addToAdapter(List<OutfitPost> posts) {
-        adapter.clear();
         searchPosts.addAll(posts);
-        adapter.addAll(searchPosts);
     }
 
     // Used by MainActivity to pass item IDs for filtered search

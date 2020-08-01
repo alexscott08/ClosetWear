@@ -26,6 +26,8 @@ public class MainActivity extends AppCompatActivity {
     private PersistentSearchView persistentSearchView;
     private SearchViewFragment searchViewFragment;
     private List<OutfitPost> searchResults;
+    private Set<String> clothingIdSet;
+    private Set<String> fitIdSet;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +79,8 @@ public class MainActivity extends AppCompatActivity {
     private void createSearchView() {
         searchViewFragment = new SearchViewFragment(searchResults);
         persistentSearchView.setLeftButtonDrawable(R.drawable.ic_search);
+
+        // PersistentSearchView Listeners
         persistentSearchView.setOnLeftBtnClickListener(view -> {
             Navigation.goMainActivity(this);
         });
@@ -90,11 +94,24 @@ public class MainActivity extends AppCompatActivity {
         persistentSearchView.setVoiceRecognitionDelegate(new VoiceRecognitionDelegate(this));
 
         persistentSearchView.setOnSearchConfirmedListener((searchView, query) -> {
-            SearchQuery searchQuery = new SearchQuery(query, searchViewFragment);
+            query = query.toLowerCase();
+
             // To be used in case of filter search
             searchViewFragment.setQuery(query);
+
+            // 1. Find all ClothingPosts that are tagged to a fit
+            clothingIdSet = SearchQuery.querySearch();
+            searchViewFragment.setItemIds(clothingIdSet);
+
+            // 2. Find the ids of all OutfitPosts that the items of clothingIdSet are tagged to
+            fitIdSet = SearchQuery.queryItem(clothingIdSet, query);
+
+            // 3. Use the set of IDs to find the OutfitPost instances and add to SearchViewAdapter
+            SearchQuery.queryFits(fitIdSet, searchViewFragment);
+
             persistentSearchView.collapse(true);
 
+            // Change drawable and switch view to fragment
             persistentSearchView.setLeftButtonDrawable(R.drawable.ic_left_arrow);
             fragmentManager.beginTransaction().replace(R.id.containerFrameLayout, searchViewFragment).commit();
         });
