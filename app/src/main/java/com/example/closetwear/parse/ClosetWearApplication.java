@@ -8,7 +8,7 @@ import com.parse.ParseObject;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 
-public class ParseApplication extends Application {
+public class ClosetWearApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
