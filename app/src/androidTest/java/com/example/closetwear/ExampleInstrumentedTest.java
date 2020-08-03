@@ -5,8 +5,23 @@ import android.content.Context;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import com.example.closetwear.parse.ClothingPost;
+import com.example.closetwear.parse.OutfitPost;
+import com.example.closetwear.search.SearchQuery;
+import com.example.closetwear.search.SearchViewFragment;
+import com.parse.Parse;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+
+import org.json.JSONArray;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import java.util.*;
+
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 
 import static org.junit.Assert.*;
 
@@ -23,4 +38,5 @@ public class ExampleInstrumentedTest {
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
         assertEquals("com.example.closetwear", appContext.getPackageName());
     }
+
 }

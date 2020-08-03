@@ -1,5 +1,7 @@
 package com.example.closetwear;
 
+import android.util.Log;
+
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -12,6 +14,7 @@ import static org.junit.Assert.*;
 public class ExampleUnitTest {
     @Test
     public void addition_isCorrect() {
+        Log.d("xyz", "sdajs");
         assertEquals(4, 2 + 2);
     }
 }
