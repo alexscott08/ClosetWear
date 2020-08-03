@@ -50,7 +50,7 @@ public class ClosetFragment extends Fragment {
         closetRecyclerView = view.findViewById(R.id.closetRecyclerView);
         allPosts = new ArrayList<>();
         // Create adapter
-        adapter = new ClosetAdapter(getContext(), allPosts);
+        adapter = new ClosetAdapter(getContext(), allPosts, getParentFragmentManager());
         // set the adapter on the recycler view
         closetRecyclerView.setAdapter(adapter);
         // set the layout manager on the recycler view

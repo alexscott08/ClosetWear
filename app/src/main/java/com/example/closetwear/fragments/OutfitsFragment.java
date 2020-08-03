@@ -51,7 +51,7 @@ public class OutfitsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         fitsRecyclerView = view.findViewById(R.id.fitsRecyclerView);
         closetText = view.findViewById(R.id.closetText);
-        closetText.setText("Your Fits");
+
         allPosts = new ArrayList<>();
         // Create adapter
         adapter = new OutfitsAdapter(getContext(), allPosts);
@@ -62,7 +62,35 @@ public class OutfitsFragment extends Fragment {
                 new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         // Attach the layout manager to the recycler view
         fitsRecyclerView.setLayoutManager(gridLayoutManager);
-        queryPosts();
+        Bundle bundle = this.getArguments();
+        ArrayList<String> fits;
+        if (bundle == null) {
+            closetText.setText("Your Fits");
+            queryPosts();
+        } else {
+            closetText.setText("Tagged Fits");
+            fits = bundle.getStringArrayList("fits");
+            queryTaggedFits(fits);
+        }
+
+    }
+
+    private void queryTaggedFits(ArrayList<String> fits) {
+        ParseQuery<OutfitPost> query = ParseQuery.getQuery(OutfitPost.class);
+        query.whereContainedIn("objectId", fits);
+        query.whereEqualTo(OutfitPost.KEY_USER, ParseUser.getCurrentUser());
+        query.findInBackground(new FindCallback<OutfitPost>() {
+            @Override
+            public void done(List<OutfitPost> posts, ParseException e) {
+                if (e != null) {
+                    Log.e(TAG, "Issue with getting posts", e);
+                    return;
+                }
+                // update adapter with posts list
+                adapter.clear();
+                adapter.addAll(posts);
+            }
+        });
     }
 
     protected void queryPosts() {

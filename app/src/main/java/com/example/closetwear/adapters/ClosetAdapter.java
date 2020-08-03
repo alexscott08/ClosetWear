@@ -2,6 +2,7 @@ package com.example.closetwear.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,8 +11,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.closetwear.Navigation;
+import com.example.closetwear.fragments.ClosetFragment;
 import com.example.closetwear.parse.ClothingPost;
 import com.example.closetwear.GlideApp;
 import com.example.closetwear.R;
@@ -25,10 +30,12 @@ import java.util.List;
 public class ClosetAdapter extends RecyclerView.Adapter<ClosetAdapter.ViewHolder> {
     private Context context;
     private List<ClothingPost> posts;
+    private FragmentManager fragmentManager;
 
-    public ClosetAdapter(Context context, List<ClothingPost> posts) {
+    public ClosetAdapter(Context context, List<ClothingPost> posts, FragmentManager fragmentManager) {
         this.context = context;
         this.posts = posts;
+        this.fragmentManager = fragmentManager;
     }
 
     // Clean all elements of the recycler
@@ -86,22 +93,7 @@ public class ClosetAdapter extends RecyclerView.Adapter<ClosetAdapter.ViewHolder
             GlideApp.with(context).load(image.getUrl()).into(itemImg);
             relativeDate = DateUtils.getRelativeTimeSpanString(post.getCreatedAt().getTime()) + "";
             dateCreated.setText("Added " + relativeDate);
-            itemImg.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(context, OutfitsFragment.class);
-                    intent.putExtra("KEY_CREATED_KEY", relativeDate);
-                    intent.putExtra("KEY_USER", Parcels.wrap(post.getUser()));
-                    intent.putExtra("KEY_CATEGORY", post.getCategory());
-                    intent.putExtra("KEY_SUBCATEGORY", post.getSubcategory());
-                    intent.putExtra("KEY_SIZE", post.getSize());
-                    intent.putExtra("KEY_BRAND", post.getBrand());
-                    intent.putExtra("KEY_COLOR", post.getColor());
-                    intent.putExtra("KEY_NAME", post.getName());
-                    intent.putExtra("KEY_IMAGE", Parcels.wrap(image));
-                    context.startActivity(intent);
-                }
-            });
+            itemImg.setOnClickListener(view -> Navigation.goOutfitsFragment(fragmentManager, post.getFit()));
         }
     }
 }
