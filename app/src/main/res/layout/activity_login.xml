@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="16dp"
+    android:gravity="center"
     android:orientation="vertical"
     android:paddingTop="10dp"
     tools:context=".LoginActivity">
@@ -65,5 +66,10 @@
         android:background="#FF9422"
         android:text="sign up"
         android:textColor="#FFFFFF" />
+
+    <com.google.android.gms.common.SignInButton
+        android:id="@+id/googleSignInBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

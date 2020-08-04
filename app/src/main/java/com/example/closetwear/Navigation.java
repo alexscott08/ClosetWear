@@ -14,6 +14,10 @@ import com.example.closetwear.fragments.OutfitsFragment;
 import com.example.closetwear.newitem.NewItemActivity;
 import com.example.closetwear.newoutfit.*;
 import com.example.closetwear.parse.*;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.parse.FindCallback;
+import com.parse.ParseUser;
 
 import org.json.*;
 import org.parceler.Parcels;
@@ -29,8 +33,9 @@ public class Navigation {
      * which will automatically
      * go to main activity
      */
-    public static void goLoginActivity(Activity activity) {
+    public static void goLoginActivity(Activity activity, Boolean logOut) {
         Intent i = new Intent(activity, LoginActivity.class);
+        i.putExtra("logOut", logOut);
         activity.startActivity(i);
         activity.finish();
     }
@@ -40,7 +45,17 @@ public class Navigation {
      */
     public static void goSignupActivity(Activity activity) {
         // Navigates to signup activity to create new account
+        activity.startActivity(new Intent(activity, SignupActivity.class));
+        activity.finish();
+    }
+
+    /**
+     * Overloaded method if Google signup button is pressed, navigates to signup activity to
+     * create new user account using information from their Google profile
+     */
+    public static void goSignupActivity(Activity activity, GoogleSignInAccount account) {
         Intent i = new Intent(activity, SignupActivity.class);
+        i.putExtra("Google Account", Parcels.wrap(account));
         activity.startActivity(i);
         activity.finish();
     }
@@ -49,8 +64,7 @@ public class Navigation {
      * After login is completed, navigates to main activity
      */
     public static void goMainActivity(Activity activity) {
-        Intent i = new Intent(activity, MainActivity.class);
-        activity.startActivity(i);
+        activity.startActivity(new Intent(activity, MainActivity.class));
         activity.finish();
     }
 
@@ -104,4 +118,6 @@ public class Navigation {
         fragment.setArguments(bundle);
         fragmentManager.beginTransaction().replace(R.id.containerFrameLayout, fragment).addToBackStack(null).commit();
     }
+
+
 }

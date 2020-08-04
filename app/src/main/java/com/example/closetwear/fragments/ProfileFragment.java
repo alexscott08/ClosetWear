@@ -20,6 +20,7 @@ import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.example.closetwear.GlideApp;
 import com.example.closetwear.Navigation;
 import com.example.closetwear.R;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.parse.LogOutCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -37,7 +38,6 @@ public class ProfileFragment extends Fragment {
     private ImageView closetIcon;
     private ImageView fitsIcon;
     private ImageView favoritesIcon;
-    private ParseUser user = ParseUser.getCurrentUser();
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -61,15 +61,24 @@ public class ProfileFragment extends Fragment {
         favoritesIcon = view.findViewById(R.id.favoritesIcon);
         editProfileBtn = view.findViewById(R.id.editProfileBtn);
 
+        ParseUser user = ParseUser.getCurrentUser();
         // Upload profile pic from server to fill view
-        ParseFile img = user.getParseFile("profilePic");
-//        GlideApp.with(view.getContext()).load(img.getUrl()).into(profileImg);
-        GlideApp.with(this)
-                .load(img.getUrl())
-                .transform(new CircleCrop())
-                .into(profileImg);
-        name.setText(user.getString("name"));
-        username.setText("@" + user.getUsername());
+        if (user != null) {
+            ParseFile img = user.getParseFile("profilePic");
+            GlideApp.with(this)
+                    .load(img.getUrl()).placeholder(R.drawable.ic_profileicon)
+                    .transform(new CircleCrop())
+                    .into(profileImg);
+            name.setText(user.getString("name"));
+            username.setText("@" + user.getUsername());
+        } else {
+            GlideApp.with(this)
+                    .load(R.drawable.ic_profileicon)
+                    .transform(new CircleCrop())
+                    .into(profileImg);
+            name.setText("undefined");
+            username.setText("undefined");
+        }
         logoutBtn = view.findViewById(R.id.logoutBtn);
 
         // listener to log out user and start LoginActivity()
@@ -111,6 +120,10 @@ public class ProfileFragment extends Fragment {
 
     // Logs out the current user and starts LoginActivity()
     private void logOutUser() {
+        if (GoogleSignIn.getLastSignedInAccount(getContext()) != null) {
+            Navigation.goLoginActivity(getActivity(), true);
+            return;
+        }
         Log.i(TAG, "Attempting to signout user");
         // Navigates to login activity if logout is successful
         ParseUser.logOutInBackground(new LogOutCallback() {
@@ -121,7 +134,7 @@ public class ProfileFragment extends Fragment {
                     Toast.makeText(getContext(), "Issue with logout!", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                Navigation.goLoginActivity(getActivity());
+                Navigation.goLoginActivity(getActivity(), false);
                 Toast.makeText(getContext(), "You have successfully logged out!", Toast.LENGTH_SHORT).show();
             }
         });

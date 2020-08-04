@@ -27,7 +27,6 @@ public class OutfitDetailsActivity extends AppCompatActivity {
 
     private TextView username;
     private ImageView outfitImg;
-//    private TextView caption;
     private TextView date;
     private ImageView profileImg;
     private TextView favoritesCount;
@@ -58,7 +57,6 @@ public class OutfitDetailsActivity extends AppCompatActivity {
         // Get all other info about the post from the intent and set on screen
         username = findViewById(R.id.username);
         outfitImg = findViewById(R.id.outfitImg);
-//        caption = findViewById(R.id.caption);
         date = findViewById(R.id.dateCreated);
         profileImg = findViewById(R.id.profileImg);
         favoritesCount = findViewById(R.id.favoritesCount);

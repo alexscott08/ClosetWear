@@ -22,9 +22,15 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.parse.*;
 
+import org.parceler.Parcels;
+
 import java.io.*;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
 
 public class SignupActivity extends AppCompatActivity {
     public static final String TAG = "SignupActivity";
@@ -60,6 +66,21 @@ public class SignupActivity extends AppCompatActivity {
                 .load(R.drawable.ic_profileicon)
                 .transform(new CircleCrop())
                 .into(profileImg);
+        setOnClickListeners();
+        fillGoogleUserInfo();
+    }
+
+    // Auto-fills certain fields if user is signing up using a Google Account
+    private void fillGoogleUserInfo() {
+        GoogleSignInAccount account = Parcels.unwrap(getIntent().getParcelableExtra("Google Account"));
+        if (account != null) {
+            name.setText(account.getDisplayName());
+            email.setText(account.getEmail());
+            // Get profile pic
+        }
+    }
+
+    private void setOnClickListeners() {
         // Listener to call camera and set profile pic
         profilePicBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,14 +121,13 @@ public class SignupActivity extends AppCompatActivity {
                 String name = SignupActivity.this.name.getText().toString();
                 String email = SignupActivity.this.email.getText().toString();
                 if (username == null || password == null || name == null) {
-                    Toast.makeText(SignupActivity.this, "Required fields cannot be empty!", Toast.LENGTH_SHORT).show();
+                    makeToast("Required fields cannot be empty!");
                 } else {
                     createUser(username, password, name, email);
                 }
             }
         });
     }
-
     // If 1st dialog option is selected, opens camera view
     private void launchCamera() {
         // create Intent to take a picture and return control to the calling application
@@ -192,7 +212,7 @@ public class SignupActivity extends AppCompatActivity {
                     // Load the taken image into a preview
                     profileImg.setImageBitmap(takenImage);
                 } else { // Result was a failure
-                    Toast.makeText(this, "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
+                    makeToast("Picture wasn't taken!");
                 }
             }
         } else {
@@ -252,12 +272,11 @@ public class SignupActivity extends AppCompatActivity {
             public void done(ParseException e) {
                 if (e != null) {
                     Log.e(TAG, "Issue with signup", e);
-                    Toast.makeText(SignupActivity.this, "Issue with signup!",
-                            Toast.LENGTH_SHORT).show();
+                    makeToast("Issue with signup!");
                     return;
                 }
-                Navigation.goLoginActivity(SignupActivity.this);
-                Toast.makeText(SignupActivity.this, "Success!", Toast.LENGTH_SHORT).show();
+                Navigation.goLoginActivity(SignupActivity.this, false);
+                makeToast("Success!");
             }
         });
     }
@@ -274,6 +293,11 @@ public class SignupActivity extends AppCompatActivity {
         } catch (Exception e) {
             Log.e(TAG, "Error writing bitmap", e);
         }
+    }
+
+    // Sends out toast to user with message parameter
+    public void makeToast(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
 }
