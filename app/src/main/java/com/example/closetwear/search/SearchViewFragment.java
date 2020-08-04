@@ -69,7 +69,7 @@ public class SearchViewFragment extends Fragment {
             String[] multiChoiceItems = getResources().getStringArray(R.array.filter_array);
             options = new HashMap<>();
             new MaterialAlertDialogBuilder(getContext())
-                    .setTitle("Filter Your Search")
+                    .setTitle("Filter your search for: " + query)
                     .setMultiChoiceItems(multiChoiceItems, checkedItems, (dialogInterface, i, b) -> checkedItems[i] = b)
                     .setPositiveButton("Ok", (dialogInterface, i) -> {
                         // Set options map boolean values after Ok click
