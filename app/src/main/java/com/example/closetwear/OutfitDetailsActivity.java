@@ -63,11 +63,8 @@ public class OutfitDetailsActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        outfitImg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // full screen view when clicked
-            }
+        outfitImg.setOnClickListener(view -> {
+            // full screen view when clicked
         });
         setOnTouchListener();
 
@@ -75,7 +72,7 @@ public class OutfitDetailsActivity extends AppCompatActivity {
 
     private void bindViews() {
         clothingRecyclerView = (RecyclerView) findViewById(R.id.clothingRecyclerView);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         clothingRecyclerView.setLayoutManager(linearLayoutManager);
         username = findViewById(R.id.username);
         outfitImg = findViewById(R.id.outfitImg);
