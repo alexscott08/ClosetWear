@@ -26,6 +26,8 @@ import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
 
+import org.json.JSONArray;
+
 public class ProfileFragment extends Fragment {
 
 
@@ -53,6 +55,13 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        bindViews(view);
+        bindData();
+        setOnClickListeners();
+
+    }
+
+    private void bindViews(View view) {
         name = view.findViewById(R.id.name);
         username = view.findViewById(R.id.username);
         profileImg = view.findViewById(R.id.profileImg);
@@ -60,7 +69,10 @@ public class ProfileFragment extends Fragment {
         fitsIcon = view.findViewById(R.id.fitsIcon);
         favoritesIcon = view.findViewById(R.id.favoritesIcon);
         editProfileBtn = view.findViewById(R.id.editProfileBtn);
+        logoutBtn = view.findViewById(R.id.logoutBtn);
+    }
 
+    private void bindData() {
         ParseUser user = ParseUser.getCurrentUser();
         // Upload profile pic from server to fill view
         if (user != null) {
@@ -79,8 +91,9 @@ public class ProfileFragment extends Fragment {
             name.setText("undefined");
             username.setText("undefined");
         }
-        logoutBtn = view.findViewById(R.id.logoutBtn);
+    }
 
+    private void setOnClickListeners() {
         // listener to log out user and start LoginActivity()
         logoutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,12 +123,10 @@ public class ProfileFragment extends Fragment {
         favoritesIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Fragment fragment = new OutfitsFragment();
-                fragmentManager.beginTransaction().replace(R.id.containerFrameLayout, fragment).addToBackStack(null).commit();
+                Navigation.goOutfitsFragment(fragmentManager, ParseUser.getCurrentUser().getJSONArray("likes"), "likes");
             }
         });
         // TODO: editProfileBtn listener
-
     }
 
     // Logs out the current user and starts LoginActivity()

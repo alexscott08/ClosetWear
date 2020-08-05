@@ -93,7 +93,7 @@ public class ClosetAdapter extends RecyclerView.Adapter<ClosetAdapter.ViewHolder
             GlideApp.with(context).load(image.getUrl()).into(itemImg);
             relativeDate = DateUtils.getRelativeTimeSpanString(post.getCreatedAt().getTime()) + "";
             dateCreated.setText("Added " + relativeDate);
-            itemImg.setOnClickListener(view -> Navigation.goOutfitsFragment(fragmentManager, post.getFit()));
+            itemImg.setOnClickListener(view -> Navigation.goOutfitsFragment(fragmentManager, post.getFit(), "taggedFits"));
         }
     }
 }

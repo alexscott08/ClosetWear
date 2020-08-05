@@ -67,12 +67,34 @@ public class OutfitsFragment extends Fragment {
         if (bundle == null) {
             closetText.setText("Your Fits");
             queryPosts();
-        } else {
+        } else if (bundle.get("view").equals("taggedFits")) {
             closetText.setText("Tagged Fits");
             fits = bundle.getStringArrayList("fits");
             queryTaggedFits(fits);
+        } else {
+            closetText.setText("Your Favorites");
+            fits = bundle.getStringArrayList("fits");
+            queryLikedFits(fits);
         }
 
+    }
+
+    private void queryLikedFits(ArrayList<String> fits) {
+        ParseQuery<OutfitPost> query = ParseQuery.getQuery(OutfitPost.class);
+        query.whereContainedIn("objectId", fits);
+        query.include(OutfitPost.KEY_USER);
+        query.findInBackground(new FindCallback<OutfitPost>() {
+            @Override
+            public void done(List<OutfitPost> posts, ParseException e) {
+                if (e != null) {
+                    Log.e(TAG, "Issue with getting posts", e);
+                    return;
+                }
+                // update adapter with posts list
+                adapter.clear();
+                adapter.addAll(posts);
+            }
+        });
     }
 
     private void queryTaggedFits(ArrayList<String> fits) {

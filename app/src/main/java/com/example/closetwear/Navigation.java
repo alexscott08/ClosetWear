@@ -101,7 +101,7 @@ public class Navigation {
         activity.finish();
     }
 
-    public static void goOutfitsFragment(FragmentManager fragmentManager, JSONArray fitsArray) {
+    public static void goOutfitsFragment(FragmentManager fragmentManager, JSONArray fitsArray, String view) {
         ArrayList<String> fitIds = new ArrayList<>();
         if (fitsArray != null) {
             for (int i = 0; i < fitsArray.length(); i++) {
@@ -114,6 +114,7 @@ public class Navigation {
         }
         Bundle bundle = new Bundle();
         bundle.putStringArrayList("fits", fitIds);
+        bundle.putString("view", view);
         Fragment fragment = new OutfitsFragment();
         fragment.setArguments(bundle);
         fragmentManager.beginTransaction().replace(R.id.containerFrameLayout, fragment).addToBackStack(null).commit();
