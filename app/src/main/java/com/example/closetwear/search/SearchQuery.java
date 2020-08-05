@@ -18,19 +18,19 @@ public class SearchQuery {
         Set<String> clothingIdSet = new HashSet<>();
         try {
             ParseQuery<OutfitPost> parseQuery = ParseQuery.getQuery(OutfitPost.class);
-            parseQuery.include(OutfitPost.KEY_USER);
-            List<OutfitPost> fits = parseQuery.find();
-            for (OutfitPost fit : fits) {
-                JSONArray fitItems = fit.getFitItems();
-                if (fitItems != null) {
-                    for (int i = 0; i < fitItems.length(); i++) {
-                        try {
-                            clothingIdSet.add(fitItems.getString(i));
-                        } catch (JSONException ex) {
-                            ex.printStackTrace();
+                parseQuery.include(OutfitPost.KEY_USER);
+                List<OutfitPost> fits = parseQuery.find();
+                for (OutfitPost fit : fits) {
+                    JSONArray fitItems = fit.getFitItems();
+                    if (fitItems != null) {
+                        for (int i = 0; i < fitItems.length(); i++) {
+                            try {
+                                clothingIdSet.add(fitItems.getString(i));
+                            } catch (JSONException ex) {
+                                ex.printStackTrace();
+                            }
                         }
                     }
-                }
             }
         } catch (ParseException e) {
             Log.e(TAG, "Problem  with querying users: ", e);

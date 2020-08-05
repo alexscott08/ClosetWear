@@ -16,6 +16,7 @@ public class OutfitPost extends ParseObject {
     public static final String KEY_LIKES = "likesCount";
     public static final String KEY_CREATED_KEY = "createdAt";
     public static final String KEY_ITEMS = "fitItems";
+    public static final String KEY_LIKED_BY = "likedBy";
 
     public OutfitPost() { }
 
@@ -62,4 +63,8 @@ public class OutfitPost extends ParseObject {
     public JSONArray getFitItems() { return getJSONArray(KEY_ITEMS); }
 
     public void setFitItems(String objectId) { put(KEY_ITEMS, objectId); }
+
+    public JSONArray getLikedBy() { return getJSONArray(KEY_LIKED_BY); }
+
+    public void setLikedBy(String objectId) { put(KEY_LIKED_BY, objectId); }
 }

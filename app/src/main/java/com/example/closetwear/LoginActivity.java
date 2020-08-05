@@ -1,6 +1,5 @@
 package com.example.closetwear;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -11,23 +10,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.closetwear.parse.OutfitPost;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.parse.*;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -50,7 +40,7 @@ public class LoginActivity extends AppCompatActivity {
         // Build a GoogleSignInClient with the options specified by gso.
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         if (getIntent().getBooleanExtra("logOut", false)) {
-            googleLogOutUser();
+            logOutGoogleAccount();
         }
         // If a user is already signed in, skip Login and go to MainActivity
         if (ParseUser.getCurrentUser() != null || GoogleSignIn.getLastSignedInAccount(this) != null) {
@@ -161,6 +151,7 @@ public class LoginActivity extends AppCompatActivity {
                     if (user.getEmail().equals(email)) {
                         try {
                             ParseUser.become(user.getSessionToken());
+                            Navigation.goMainActivity(this);
                             return;
                         } catch (ParseException ex) {
                             Log.e(TAG, "Issue changing user session/ getting token: " + ex);
@@ -171,9 +162,11 @@ public class LoginActivity extends AppCompatActivity {
             Navigation.goSignupActivity(LoginActivity.this, account);
         });
     }
-    private void googleLogOutUser() {
+    private void logOutGoogleAccount() {
         mGoogleSignInClient.signOut()
-                .addOnCompleteListener(this, task -> { });
+                .addOnCompleteListener(this, task -> {
+                    ParseUser.logOut();
+                });
     }
     // Sends out toast to user with message parameter
     private void makeToast(String message) {

@@ -82,8 +82,11 @@ public class TagItemAdapter extends RecyclerView.Adapter<TagItemAdapter.ViewHold
                 @Override
                 public void onClick(View view) {
                     outfitPost.add("fitItems", post.getObjectId());
+                    post.setFit(outfitPost.getObjectId());
                     try {
+                        outfitPost.save();
                         outfitPost.fetch();
+                        post.save();
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }

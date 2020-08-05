@@ -29,12 +29,12 @@
 
     <ImageView
         android:id="@+id/favoritesIcon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="31dp"
+        android:layout_height="35dp"
         android:layout_marginStart="16dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider"
-        app:srcCompat="@android:drawable/btn_star" />
+        app:srcCompat="@drawable/ic_favorite_border" />
 
     <TextView
         android:id="@+id/favoritesCount"
@@ -42,10 +42,10 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="4dp"
-        android:text="1,000"
         android:textSize="18sp"
         app:layout_constraintStart_toEndOf="@+id/favoritesIcon"
-        app:layout_constraintTop_toBottomOf="@+id/divider" />
+        app:layout_constraintTop_toBottomOf="@+id/divider"
+        tools:text="1,000" />
 
     <TextView
         android:id="@+id/dateCreated"
