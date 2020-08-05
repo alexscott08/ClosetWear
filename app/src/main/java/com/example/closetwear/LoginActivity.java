@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -18,6 +17,8 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 import com.parse.*;
+
+import java.io.IOException;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -39,24 +40,25 @@ public class LoginActivity extends AppCompatActivity {
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
         // Build a GoogleSignInClient with the options specified by gso.
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-        if (getIntent().getBooleanExtra("logOut", false)) {
-            logOutGoogleAccount();
-        }
+
         // If a user is already signed in, skip Login and go to MainActivity
-        if (ParseUser.getCurrentUser() != null || GoogleSignIn.getLastSignedInAccount(this) != null) {
+        if (ParseUser.getCurrentUser() != null) {
             Navigation.goMainActivity(LoginActivity.this);
         }
+        bindViews();
+        setOnClickListeners();
+    }
 
+    private void bindViews() {
         username = findViewById(R.id.username);
         password = findViewById(R.id.password);
         loginBtn = findViewById(R.id.loginBtn);
         signUpBtn = findViewById(R.id.signUpBtn);
         googleSignInBtn = findViewById(R.id.googleSignInBtn);
-        setOnClickListeners();
-
     }
 
     private void setOnClickListeners() {
+        // Listener to log in/sign up with Google account
         googleSignInBtn.setOnClickListener(view -> {
             switch (view.getId()) {
                 case R.id.googleSignInBtn:
@@ -66,41 +68,32 @@ public class LoginActivity extends AppCompatActivity {
                     break;
             }
         });
+
         // Listener to log in user
-        loginBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.i(TAG, "onClick login button");
-                loginUser(LoginActivity.this.username.getText().toString(),
-                        LoginActivity.this.password.getText().toString());
-            }
+        loginBtn.setOnClickListener(view -> {
+            Log.i(TAG, "onClick login button");
+            loginUser(LoginActivity.this.username.getText().toString(),
+                    LoginActivity.this.password.getText().toString());
         });
 
         // Listener to create new account and log in user
-        signUpBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.i(TAG, "onClick signup button");
-                Navigation.goSignupActivity(LoginActivity.this);
-            }
+        signUpBtn.setOnClickListener(view -> {
+            Log.i(TAG, "onClick signup button");
+            Navigation.goSignupActivity(LoginActivity.this);
         });
     }
 
     private void loginUser(String username, String password) {
         Log.i(TAG, "Attempting to login user " + username);
         // Navigates to main activity if login is successful
-        ParseUser.logInInBackground(username, password, new LogInCallback() {
-            @Override
-            public void done(ParseUser user, ParseException e) {
-                if (e != null) {
-                    // TODO: better error handling
-                    Log.e(TAG, "Issue with login", e);
-                    makeToast("Issue with login!");
-                    return;
-                }
-                Navigation.goMainActivity(LoginActivity.this);
-                makeToast("Success!");
+        ParseUser.logInInBackground(username, password, (user, e) -> {
+            if (e != null) {
+                Log.e(TAG, "Issue with login", e);
+                makeToast("Issue with login!");
+                return;
             }
+            Navigation.goMainActivity(LoginActivity.this);
+            makeToast("Hello!");
         });
     }
 
@@ -147,27 +140,36 @@ public class LoginActivity extends AppCompatActivity {
             // If user already exists start that user's session, else navigate to signup to create account
             for (ParseUser user : users) {
                 // Emails are guaranteed to be unique throughout accounts
-                if (user.getEmail() != null) {
-                    if (user.getEmail().equals(email)) {
-                        try {
-                            ParseUser.become(user.getSessionToken());
-                            Navigation.goMainActivity(this);
-                            return;
-                        } catch (ParseException ex) {
-                            Log.e(TAG, "Issue changing user session/ getting token: " + ex);
-                        }
-                    }
+                if (user.getUsername().equals(email)) {
+                    Log.i(TAG, "found google user");
+                    loginUser(user.getUsername(), account.getId());
+                    return;
                 }
+
             }
-            Navigation.goSignupActivity(LoginActivity.this, account);
+            try {
+                createGoogleUser(account);
+            } catch (IOException ex) {
+                Log.e(TAG, "Error in createGoogleUser(): " + ex);
+            }
         });
     }
-    private void logOutGoogleAccount() {
-        mGoogleSignInClient.signOut()
-                .addOnCompleteListener(this, task -> {
-                    ParseUser.logOut();
-                });
+
+    private void createGoogleUser(GoogleSignInAccount account) throws IOException {
+        Log.i(TAG, "Creating new Google User");
+        ParseUser newUser = new ParseUser();
+        newUser.setEmail(account.getEmail());
+        newUser.setUsername(account.getEmail());
+        newUser.put("name", account.getDisplayName());
+        newUser.setPassword(account.getId());
+        newUser.signUpInBackground(e -> {
+            if (e != null) {
+                Log.e(TAG, "Couldn't sign up new user");
+            }
+            loginUser(newUser.getUsername(), account.getId());
+        });
     }
+
     // Sends out toast to user with message parameter
     private void makeToast(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();

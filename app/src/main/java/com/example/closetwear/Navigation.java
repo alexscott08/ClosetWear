@@ -9,15 +9,11 @@ import android.util.Log;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
-import com.example.closetwear.fragments.ClosetFragment;
 import com.example.closetwear.fragments.OutfitsFragment;
 import com.example.closetwear.newitem.NewItemActivity;
 import com.example.closetwear.newoutfit.*;
 import com.example.closetwear.parse.*;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.parse.FindCallback;
-import com.parse.ParseUser;
 
 import org.json.*;
 import org.parceler.Parcels;
@@ -33,10 +29,8 @@ public class Navigation {
      * which will automatically
      * go to main activity
      */
-    public static void goLoginActivity(Activity activity, Boolean logOut) {
-        Intent i = new Intent(activity, LoginActivity.class);
-        i.putExtra("logOut", logOut);
-        activity.startActivity(i);
+    public static void goLoginActivity(Activity activity) {
+        activity.startActivity(new Intent(activity, LoginActivity.class));
         activity.finish();
     }
 

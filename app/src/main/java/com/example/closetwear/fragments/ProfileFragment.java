@@ -20,13 +20,10 @@ import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.example.closetwear.GlideApp;
 import com.example.closetwear.Navigation;
 import com.example.closetwear.R;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.parse.LogOutCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
-
-import org.json.JSONArray;
 
 public class ProfileFragment extends Fragment {
 
@@ -131,10 +128,6 @@ public class ProfileFragment extends Fragment {
 
     // Logs out the current user and starts LoginActivity()
     private void logOutUser() {
-        if (GoogleSignIn.getLastSignedInAccount(getContext()) != null) {
-            Navigation.goLoginActivity(getActivity(), true);
-            return;
-        }
         Log.i(TAG, "Attempting to signout user");
         // Navigates to login activity if logout is successful
         ParseUser.logOutInBackground(new LogOutCallback() {
@@ -145,7 +138,7 @@ public class ProfileFragment extends Fragment {
                     Toast.makeText(getContext(), "Issue with logout!", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                Navigation.goLoginActivity(getActivity(), false);
+                Navigation.goLoginActivity(getActivity());
                 Toast.makeText(getContext(), "You have successfully logged out!", Toast.LENGTH_SHORT).show();
             }
         });

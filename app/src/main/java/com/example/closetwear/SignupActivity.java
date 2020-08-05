@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -22,15 +21,9 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.parse.*;
 
-import org.parceler.Parcels;
-
 import java.io.*;
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
-import java.net.URL;
 
 public class SignupActivity extends AppCompatActivity {
     public static final String TAG = "SignupActivity";
@@ -55,6 +48,12 @@ public class SignupActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
+        bindViews();
+        bindData();
+        setOnClickListeners();
+    }
+
+    private void bindViews() {
         username = findViewById(R.id.username);
         password = findViewById(R.id.password);
         name = findViewById(R.id.name);
@@ -62,69 +61,46 @@ public class SignupActivity extends AppCompatActivity {
         signUpBtn = findViewById(R.id.signUpBtn);
         profilePicBtn = findViewById(R.id.profilePicBtn);
         profileImg = findViewById(R.id.profileImg);
+    }
+
+    private void bindData() {
         GlideApp.with(this)
                 .load(R.drawable.ic_profileicon)
                 .transform(new CircleCrop())
                 .into(profileImg);
-        setOnClickListeners();
-        fillGoogleUserInfo();
-    }
-
-    // Auto-fills certain fields if user is signing up using a Google Account
-    private void fillGoogleUserInfo() {
-        GoogleSignInAccount account = Parcels.unwrap(getIntent().getParcelableExtra("Google Account"));
-        if (account != null) {
-            name.setText(account.getDisplayName());
-            email.setText(account.getEmail());
-            // Get profile pic
-        }
     }
 
     private void setOnClickListeners() {
         // Listener to call camera and set profile pic
-        profilePicBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // AlertDialog to ask user to select between taking picture or opening photos gallery
-                String[] singleChoiceItems = getResources().getStringArray(R.array.dialog_photo);
-                new AlertDialog.Builder(SignupActivity.this)
-                        .setTitle("Select one")
-                        .setSingleChoiceItems(singleChoiceItems, itemSelected, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int selectedIndex) {
-                                itemSelected = selectedIndex;
-                            }
-                        })
-                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                if (itemSelected == 0) {
-                                    launchCamera();
-                                } else {
-                                    // Launch photo gallery
-                                    onPickPhoto(profileImg);
-                                }
-                            }
-                        })
-                        .setNegativeButton("Cancel", null)
-                        .show();
-            }
-
+        profilePicBtn.setOnClickListener(view -> {
+            // AlertDialog to ask user to select between taking picture or opening photos gallery
+            String[] singleChoiceItems = getResources().getStringArray(R.array.dialog_photo);
+            new AlertDialog.Builder(SignupActivity.this)
+                    .setTitle("Select one")
+                    .setSingleChoiceItems(singleChoiceItems, itemSelected, (dialogInterface,
+                                                                            selectedIndex) -> itemSelected = selectedIndex)
+                    .setPositiveButton("Ok", (dialogInterface, i) -> {
+                        if (itemSelected == 0) {
+                            launchCamera();
+                        } else {
+                            // Launch photo gallery
+                            onPickPhoto(profileImg);
+                        }
+                    })
+                    .setNegativeButton("Cancel", null)
+                    .show();
         });
         // Listener to create new account and log in user
-        signUpBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.i(TAG, "onClick signup button");
-                String username = SignupActivity.this.username.getText().toString();
-                String password = SignupActivity.this.password.getText().toString();
-                String name = SignupActivity.this.name.getText().toString();
-                String email = SignupActivity.this.email.getText().toString();
-                if (username == null || password == null || name == null) {
-                    makeToast("Required fields cannot be empty!");
-                } else {
-                    createUser(username, password, name, email);
-                }
+        signUpBtn.setOnClickListener(view -> {
+            Log.i(TAG, "onClick signup button");
+            String username = SignupActivity.this.username.getText().toString();
+            String password = SignupActivity.this.password.getText().toString();
+            String name = SignupActivity.this.name.getText().toString();
+            String email = SignupActivity.this.email.getText().toString();
+            if (username == null || password == null || name == null) {
+                makeToast("Required fields cannot be empty!");
+            } else {
+                createUser(username, password, name, email);
             }
         });
     }
@@ -257,27 +233,19 @@ public class SignupActivity extends AppCompatActivity {
     // Adds profile picture to parse server in background
     private void saveParseFile(final File file, final ParseUser newUser) {
         final ParseFile pFile = new ParseFile(file);
-        pFile.saveInBackground(new SaveCallback() {
-            @Override
-            public void done(ParseException e) {
-                newUser.put("profilePic", pFile);
-            }
-        });
+        pFile.saveInBackground((SaveCallback) e -> newUser.put("profilePic", pFile));
     }
 
     // Signs up user in background and navigates to login activity
     private void signUpUser(ParseUser newUser) {
-        newUser.signUpInBackground(new SignUpCallback() {
-            @Override
-            public void done(ParseException e) {
-                if (e != null) {
-                    Log.e(TAG, "Issue with signup", e);
-                    makeToast("Issue with signup!");
-                    return;
-                }
-                Navigation.goLoginActivity(SignupActivity.this, false);
-                makeToast("Success!");
+        newUser.signUpInBackground(e -> {
+            if (e != null) {
+                Log.e(TAG, "Issue with signup", e);
+                makeToast("Issue with signup!");
+                return;
             }
+            Navigation.goLoginActivity(SignupActivity.this);
+            makeToast("Success!");
         });
     }
 
@@ -299,5 +267,4 @@ public class SignupActivity extends AppCompatActivity {
     public void makeToast(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
-
 }
