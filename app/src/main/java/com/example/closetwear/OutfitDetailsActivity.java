@@ -28,6 +28,8 @@ import java.util.*;
 
 public class OutfitDetailsActivity extends AppCompatActivity {
 
+    public static final String TAG = "OutfitDetailsActivity";
+
     private TextView username;
     private ImageView outfitImg;
     private TextView date;
@@ -35,98 +37,41 @@ public class OutfitDetailsActivity extends AppCompatActivity {
     private TextView favoritesCount;
     private ImageView favoritesIcon;
     private ParseUser postUser;
-    private ParseUser currentUser = ParseUser.getCurrentUser();
-    private OutfitPost post = new OutfitPost();
-
-    public static final String TAG = "OutfitDetailsActivity";
     private RecyclerView clothingRecyclerView;
+
     protected OutfitDetailsAdapter adapter;
     protected List<ClothingPost> allPosts;
 
-    @SuppressLint("ClickableViewAccessibility")
+    private ParseUser currentUser = ParseUser.getCurrentUser();
+    private OutfitPost post = new OutfitPost();
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_outfit_details);
         post = Parcels.unwrap(getIntent().getParcelableExtra("post"));
-
-       bindViews();
+        try {
+            post = post.fetch();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        bindViews();
        bindData();
-        // Fill Recycler View
+
         try {
             getItems();
         } catch (JSONException e) {
             e.printStackTrace();
         }
-//        Log.i(TAG, "ID: " + post.getObjectId());
         outfitImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // full screen view when clicked
             }
         });
-        favoritesIcon.setOnTouchListener(new View.OnTouchListener() {
-            private GestureDetector gestureDetector = new GestureDetector(OutfitDetailsActivity.this, new GestureDetector.SimpleOnGestureListener() {
-                @Override
-                public boolean onDoubleTap(MotionEvent e) {
-                    Log.d(TAG, "Double tapped");
-                    if (!doesLikesContainId(post.getObjectId())) {
-                        // Updates user array with post's object ID
-                        currentUser.addUnique("likes", post.getObjectId());
-                        post.setLikedBy(currentUser.getObjectId());
-                        // Adds one to the post's like count and updates states
-                        post.setLikesCount(post.getLikesCount() + 1);
-                        favoritesIcon.setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite));
-                        updateParse();
-                    } else {
+        setOnTouchListener();
 
-                        // Removes post's object ID from user's array of liked posts
-                        removeLike();
-//                        currentUser.getParseObject("likes").remove(post.getObjectId());
-                        // Decrements post's like count by one and updates states
-                        post.setLikesCount(post.getLikesCount() - 1);
-                        favoritesIcon.setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite_border));
-                        updateParse();
-                    }
-                    return super.onDoubleTap(e);
-                }
-                @Override
-                public boolean onSingleTapConfirmed(MotionEvent event) {
-                    Log.d(TAG, "onSingleTap");
-                    return false;
-                }
-            });
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                gestureDetector.onTouchEvent(event);
-                return true;
-            }
-        });
-    }
-
-    private void removeLike() {
-        JSONArray likesJsonArray = currentUser.getJSONArray("likes");
-        if (likesJsonArray != null) {
-            for (int i = 0; i < likesJsonArray.length(); i++) {
-                try {
-                    if (likesJsonArray.get(i).equals(currentUser.getObjectId())) {
-                        likesJsonArray.remove(i);
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-
-    // Saves new states to Parse server
-    private void updateParse() {
-        try {
-            currentUser.save();
-            post.save();
-        } catch (ParseException ex) {
-            Log.e(TAG, "Error saving to Parse server: " + ex);
-        }
     }
 
     private void bindViews() {
@@ -156,7 +101,6 @@ public class OutfitDetailsActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         username.setText("@" + postUser.getUsername());
-        favoritesCount.setText(post.getLikesCount() + "");
         date.setText(DateUtils.getRelativeTimeSpanString(post.getCreatedAt().getTime()) + "");
 
         ParseFile image = post.getImage();
@@ -170,11 +114,52 @@ public class OutfitDetailsActivity extends AppCompatActivity {
         GlideApp.with(this).load(profilePic.getUrl()).transform(new CircleCrop())
                 .into(profileImg);
         updateParse();
+        favoritesCount.setText("" + post.get("likesCount"));
         if (doesLikesContainId(post.getObjectId())) {
             favoritesIcon.setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite));
         } else {
             favoritesIcon.setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite_border));
         }
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private void setOnTouchListener() {
+        favoritesIcon.setOnTouchListener(new View.OnTouchListener() {
+            private GestureDetector gestureDetector = new GestureDetector(OutfitDetailsActivity.this, new GestureDetector.SimpleOnGestureListener() {
+                @Override
+                public boolean onDoubleTap(MotionEvent e) {
+                    Log.d(TAG, "Double tapped");
+                    if (!doesLikesContainId(post.getObjectId())) {
+                        // Updates user array with post's object ID
+                        currentUser.addUnique("likes", post.getObjectId());
+                        // Adds one to the post's like count and updates states
+                        post.increment("likesCount", 1);
+                        favoritesIcon.setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite));
+
+                    } else {
+                        // Removes post's object ID from user's array of liked posts
+                        currentUser.removeAll("likes", Arrays.asList(post.getObjectId()));
+                        // Decrements post's like count by one and updates states
+                        if ((int) post.get("likesCount") > 0) {
+                            post.increment("likesCount", -1);
+                        }
+                        favoritesIcon.setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite_border));
+                    }
+                    updateParse();
+                    return super.onDoubleTap(e);
+                }
+                @Override
+                public boolean onSingleTapConfirmed(MotionEvent event) {
+                    Log.d(TAG, "onSingleTap");
+                    return false;
+                }
+            });
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                gestureDetector.onTouchEvent(event);
+                return true;
+            }
+        });
     }
 
     private boolean doesLikesContainId(String objectId) {
@@ -184,6 +169,17 @@ public class OutfitDetailsActivity extends AppCompatActivity {
         }
         return false;
     }
+
+    // Saves new states to Parse server
+    private void updateParse() {
+        try {
+            currentUser.save();
+            post.save();
+        } catch (ParseException ex) {
+            Log.e(TAG, "Error saving to Parse server: " + ex);
+        }
+    }
+
     // Converts JSONArray of items to a list to add to adapter
     protected void getItems() throws JSONException {
         JSONArray jsonItems = post.getFitItems();
