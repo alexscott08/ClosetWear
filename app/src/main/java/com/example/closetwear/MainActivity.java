@@ -69,7 +69,8 @@ public class MainActivity extends AppCompatActivity {
                     persistentSearchView.setVisibility(View.GONE);
                     break;
             }
-            fragmentManager.beginTransaction().replace(R.id.containerFrameLayout, fragment).commit();
+            fragmentManager.beginTransaction().setCustomAnimations(R.anim.slide_in_left,
+                    R.anim.slide_out_right).replace(R.id.containerFrameLayout, fragment).commit();
             return true;
         });
         // Set default selection
@@ -113,7 +114,8 @@ public class MainActivity extends AppCompatActivity {
 
             // Change drawable and switch view to fragment
             persistentSearchView.setLeftButtonDrawable(R.drawable.ic_left_arrow);
-            fragmentManager.beginTransaction().replace(R.id.containerFrameLayout, searchViewFragment).commit();
+            fragmentManager.beginTransaction().setCustomAnimations(R.anim.slide_in_left,
+                    R.anim.slide_out_right).replace(R.id.containerFrameLayout, searchViewFragment).commit();
         });
     }
 

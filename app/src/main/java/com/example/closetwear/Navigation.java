@@ -111,7 +111,8 @@ public class Navigation {
         bundle.putString("view", view);
         Fragment fragment = new OutfitsFragment();
         fragment.setArguments(bundle);
-        fragmentManager.beginTransaction().replace(R.id.containerFrameLayout, fragment).addToBackStack(null).commit();
+        fragmentManager.beginTransaction().setCustomAnimations(R.anim.slide_in_left,
+                R.anim.slide_out_right).replace(R.id.containerFrameLayout, fragment).addToBackStack(null).commit();
     }
 
 
