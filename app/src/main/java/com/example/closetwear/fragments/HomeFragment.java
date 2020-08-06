@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.closetwear.EndlessRecyclerViewScrollListener;
 import com.example.closetwear.parse.OutfitPost;
 import com.example.closetwear.R;
 import com.example.closetwear.adapters.HomeAdapter;
@@ -23,6 +24,7 @@ import com.parse.ParseException;
 import com.parse.ParseQuery;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -30,9 +32,11 @@ public class HomeFragment extends Fragment {
 
     public static final String TAG = "PostsFragment";
     private RecyclerView homeRecyclerView;
-    protected HomeAdapter adapter;
-    protected List<OutfitPost> allPosts;
-    SwipeRefreshLayout swipeLayout;
+    private HomeAdapter adapter;
+    private List<OutfitPost> allPosts;
+    private SwipeRefreshLayout swipeContainer;
+    private EndlessRecyclerViewScrollListener scrollListener;
+    private Date oldestPost;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -58,33 +62,35 @@ public class HomeFragment extends Fragment {
         StaggeredGridLayoutManager gridLayoutManager =
                 new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         homeRecyclerView.setLayoutManager(gridLayoutManager);
-        queryPosts();
 
         // Getting SwipeContainerLayout
-        swipeLayout = view.findViewById(R.id.swipeContainer);
-        // Adding Listener
-        swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                queryPosts();
-                // To keep animation for 4 seconds
-                new Handler().postDelayed(new Runnable() {
-                    @Override public void run() {
-                        // Stop animation (This will be after 3 seconds)
-                        swipeLayout.setRefreshing(false);
-                    }
-                }, 4000); // Delay in millis
-            }
-        });
+        swipeContainer = view.findViewById(R.id.swipeContainer);
 
         // Scheme colors for animation
-        swipeLayout.setColorSchemeColors(
-                getResources().getColor(android.R.color.holo_blue_bright),
-                getResources().getColor(android.R.color.holo_green_light),
-                getResources().getColor(android.R.color.holo_orange_light),
-                getResources().getColor(android.R.color.holo_red_light)
+        swipeContainer.setColorSchemeResources(
+                android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light
         );
+        // Adding Listener
+        swipeContainer.setOnRefreshListener(() -> {
+            Log.i(TAG, "Fetching more data!");
+            queryPosts();
+        });
+
+        scrollListener = new EndlessRecyclerViewScrollListener(gridLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                Log.i(TAG, "onLoadMore: " + page);
+                loadMoreData();
+            }
+        };
+        // Adds the scroll listener to RecyclerView
+        homeRecyclerView.addOnScrollListener(scrollListener);
+        queryPosts();
     }
+
 
     protected void queryPosts() {
         // specify what type of data we want to query - OutfitPost.class
@@ -92,23 +98,53 @@ public class HomeFragment extends Fragment {
         // include data referred by user key
         query.include(OutfitPost.KEY_USER);
         // limit query to latest 20 items
-        query.setLimit(20);
+        query.setLimit(10);
         // order posts by creation date (newest first)
         query.addDescendingOrder(OutfitPost.KEY_CREATED_KEY);
         // start an asynchronous call for posts
-        query.findInBackground(new FindCallback<OutfitPost>() {
-            @Override
-            public void done(List<OutfitPost> posts, ParseException e) {
-                // check for errors
-                if (e != null) {
-                    Log.e(TAG, "Issue with getting posts", e);
-                    return;
-                }
-                // update adapter with posts list
-                adapter.clear();
-                adapter.addAll(posts);
+        query.findInBackground((posts, e) -> {
+            // check for errors
+            if (e != null) {
+                Log.e(TAG, "Issue with getting posts", e);
+                return;
             }
+            // Save oldest post in query for loading more posts
+            if (posts.size () > 0) {
+                oldestPost = posts.get(posts.size() - 1).getCreatedAt();
+            }
+            // update adapter with posts list
+            adapter.clear();
+            adapter.addAll(posts);
         });
+        // If used swipe to refresh, turns off animation when done querying
+        swipeContainer.setRefreshing(false);
     }
 
+    private void loadMoreData() {
+        ParseQuery<OutfitPost> query = ParseQuery.getQuery(OutfitPost.class);
+        // include data referred by user key
+        query.include(OutfitPost.KEY_USER);
+        //  Limit query to posts older than previous query
+        if (oldestPost != null) {
+            query.whereLessThan("createdAt", oldestPost);
+        }
+        // limit query to latest 20 items
+        query.setLimit(10);
+        // order posts by creation date (newest first)
+        query.addDescendingOrder(OutfitPost.KEY_CREATED_KEY);
+        // start an asynchronous call for posts
+        query.findInBackground((posts, e) -> {
+            // check for errors
+            if (e != null) {
+                Log.e(TAG, "Issue with getting posts", e);
+                return;
+            }
+            // Save oldest post in query for loading more posts
+            if (posts.size() > 0) {
+                oldestPost = posts.get(posts.size() - 1).getCreatedAt();
+            }
+            // update adapter with posts list
+            adapter.addAll(posts);
+        });
+    }
 }

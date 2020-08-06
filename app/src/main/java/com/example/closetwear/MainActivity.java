@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.view.View;
@@ -22,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = "MainActivity";
     private BottomNavigationView bottomNavigationView;
-    final FragmentManager fragmentManager = getSupportFragmentManager();
+    final private FragmentManager fragmentManager = getSupportFragmentManager();
     private PersistentSearchView persistentSearchView;
     private SearchViewFragment searchViewFragment;
     private List<OutfitPost> searchResults;
@@ -42,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayUseLogoEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(true);
+
         searchResults = new ArrayList<>();
         persistentSearchView = findViewById(R.id.persistentSearchView);
         persistentSearchView.setLeftButtonDrawable(R.drawable.ic_search);

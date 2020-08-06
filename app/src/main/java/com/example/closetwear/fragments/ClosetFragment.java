@@ -15,15 +15,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.closetwear.EndlessRecyclerViewScrollListener;
 import com.example.closetwear.parse.ClothingPost;
 import com.example.closetwear.R;
 import com.example.closetwear.adapters.ClosetAdapter;
+import com.example.closetwear.parse.OutfitPost;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class ClosetFragment extends Fragment {
@@ -31,7 +34,8 @@ public class ClosetFragment extends Fragment {
     private RecyclerView closetRecyclerView;
     protected ClosetAdapter adapter;
     protected List<ClothingPost> allPosts;
-    SwipeRefreshLayout swipeLayout;
+    private EndlessRecyclerViewScrollListener scrollListener;
+    private Date oldestPost;
 
     public ClosetFragment() {
         // Required empty public constructor
@@ -56,32 +60,16 @@ public class ClosetFragment extends Fragment {
         // set the layout manager on the recycler view
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         closetRecyclerView.setLayoutManager(linearLayoutManager);
-        queryPosts();
-
-        // Getting SwipeContainerLayout
-        swipeLayout = view.findViewById(R.id.swipeContainer);
-        // Adding Listener
-        swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
             @Override
-            public void onRefresh() {
-                queryPosts();
-                // To keep animation for 4 seconds
-                new Handler().postDelayed(new Runnable() {
-                    @Override public void run() {
-                        // Stop animation (This will be after 3 seconds)
-                        swipeLayout.setRefreshing(false);
-                    }
-                }, 4000); // Delay in millis
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                Log.i(TAG, "onLoadMore: " + page);
+                loadMoreData();
             }
-        });
-
-        // Scheme colors for animation
-        swipeLayout.setColorSchemeColors(
-                getResources().getColor(android.R.color.holo_blue_bright),
-                getResources().getColor(android.R.color.holo_green_light),
-                getResources().getColor(android.R.color.holo_orange_light),
-                getResources().getColor(android.R.color.holo_red_light)
-        );
+        };
+        // Adds the scroll listener to RecyclerView
+        closetRecyclerView.addOnScrollListener(scrollListener);
+        queryPosts();
     }
 
     protected void queryPosts() {
@@ -95,18 +83,48 @@ public class ClosetFragment extends Fragment {
         // order posts by creation date (newest first)
         query.addDescendingOrder(ClothingPost.KEY_CREATED_KEY);
         // start an asynchronous call for posts
-        query.findInBackground(new FindCallback<ClothingPost>() {
-            @Override
-            public void done(List<ClothingPost> posts, ParseException e) {
-                // check for errors
-                if (e != null) {
-                    Log.e(TAG, "Issue with getting posts", e);
-                    return;
-                }
-                // update adapter with posts list
-                adapter.clear();
-                adapter.addAll(posts);
+        query.findInBackground((posts, e) -> {
+            // check for errors
+            if (e != null) {
+                Log.e(TAG, "Issue with getting posts", e);
+                return;
             }
+            // Save oldest post in query for loading more posts
+            if (posts.size () > 0) {
+                oldestPost = posts.get(posts.size() - 1).getCreatedAt();
+            }
+            // update adapter with posts list
+            adapter.clear();
+            adapter.addAll(posts);
+        });
+    }
+
+    private void loadMoreData() {
+        ParseQuery<ClothingPost> query = ParseQuery.getQuery(ClothingPost.class);
+        // include data referred by user key
+        query.include(ClothingPost.KEY_USER);
+        query.whereEqualTo(ClothingPost.KEY_USER, ParseUser.getCurrentUser());
+        //  Limit query to posts older than previous query
+        if (oldestPost != null) {
+            query.whereLessThan("createdAt", oldestPost);
+        }
+        // limit query to latest 20 items
+        query.setLimit(10);
+        // order posts by creation date (newest first)
+        query.addDescendingOrder(ClothingPost.KEY_CREATED_KEY);
+        // start an asynchronous call for posts
+        query.findInBackground((posts, e) -> {
+            // check for errors
+            if (e != null) {
+                Log.e(TAG, "Issue with getting posts", e);
+                return;
+            }
+            // Save oldest post in query for loading more posts
+            if (posts.size() > 0) {
+                oldestPost = posts.get(posts.size() - 1).getCreatedAt();
+            }
+            // update adapter with posts list
+            adapter.addAll(posts);
         });
     }
 }

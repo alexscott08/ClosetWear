@@ -47,15 +47,15 @@
     <FrameLayout
         android:id="@+id/containerFrameLayout"
         android:layout_width="match_parent"
-        android:layout_height="560dp"
+        android:layout_height="match_parent"
         android:layout_above="@id/bottomNavigation"
         android:layout_below="@+id/persistentSearchView" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigation"
+        style="@style/Widget.MaterialComponents.BottomNavigationView.Colored"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        style="@style/Widget.MaterialComponents.BottomNavigationView.Colored"
         app:menu="@menu/menu_bottom_navigation" />
 </RelativeLayout>

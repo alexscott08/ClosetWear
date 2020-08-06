@@ -74,6 +74,13 @@ public class OutfitDetailsActivity extends AppCompatActivity {
         clothingRecyclerView = (RecyclerView) findViewById(R.id.clothingRecyclerView);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         clothingRecyclerView.setLayoutManager(linearLayoutManager);
+        // Set bottom screen RV full of outfit's items
+        allPosts = new ArrayList<>();
+        // Create adapter
+        adapter = new OutfitDetailsAdapter(this, allPosts);
+        // set the adapter on the recycler view
+        clothingRecyclerView.setAdapter(adapter);
+
         username = findViewById(R.id.username);
         outfitImg = findViewById(R.id.outfitImg);
         date = findViewById(R.id.dateCreated);
@@ -83,12 +90,6 @@ public class OutfitDetailsActivity extends AppCompatActivity {
     }
 
     private void bindData() {
-        // Set bottom screen RV full of outfit's items
-        allPosts = new ArrayList<>();
-        // Create adapter
-        adapter = new OutfitDetailsAdapter(this, allPosts);
-        // set the adapter on the recycler view
-        clothingRecyclerView.setAdapter(adapter);
 
         // Get all other info about the post from the intent and set on screen
         try {
@@ -215,4 +216,5 @@ public class OutfitDetailsActivity extends AppCompatActivity {
             }
         });
     }
+
 }
