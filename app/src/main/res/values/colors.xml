@@ -11,7 +11,7 @@
 
     <color name="blue">#529ecc</color>
     <color name="blue_dark">#4986bc</color>
-
+    <color name ="purple">#621CDF</color>
     <color name="contentContainerColor">#eeeeee</color>
     <color name="cardBackgroundColor">#ffffff</color>
     <color name="primaryTextColor">#212121</color>

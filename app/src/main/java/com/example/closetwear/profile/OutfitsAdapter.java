@@ -1,4 +1,4 @@
-package com.example.closetwear.adapters;
+package com.example.closetwear.profile;
 
 import android.content.Context;
 import android.view.LayoutInflater;

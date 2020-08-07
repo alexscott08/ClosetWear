@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.ProfileFragment">
+    tools:context=".profile.ProfileFragment">
 
     <ImageView
         android:id="@+id/profileImg"
@@ -23,6 +23,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:text="Alex Scott"
+        android:textColor="@color/white"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profileImg" />
 
@@ -32,86 +33,64 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:text="axs08"
+        android:textColor="@color/white"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/name" />
 
-    <ImageView
-        android:id="@+id/closetIcon"
-        android:layout_width="65dp"
-        android:layout_height="60dp"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="55dp"
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="47dp"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="@color/purple"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/username"
-        app:srcCompat="@drawable/ic_closeticon"
-        tools:src="@tools:sample/avatars" />
+        app:tabContentStart="10dp"
+        app:tabGravity="fill"
+        app:tabIndicatorColor="#FFFFFF"
+        app:tabTextColor="@color/white">
 
-    <ImageView
-        android:id="@+id/favoritesIcon"
-        android:layout_width="65dp"
-        android:layout_height="60dp"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="55dp"
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Closet" />
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Fits" />
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Favorites" />
+
+    </com.google.android.material.tabs.TabLayout>
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/pager"
+        android:layout_width="match_parent"
+        android:layout_height="501dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fitsIcon"
-        app:srcCompat="@drawable/ic_favicon"
-        tools:src="@tools:sample/avatars" />
+        app:layout_constraintTop_toBottomOf="@+id/tabLayout"
+        app:layout_constraintVertical_bias="1.0" />
 
-    <ImageView
-        android:id="@+id/fitsIcon"
-        android:layout_width="65dp"
-        android:layout_height="60dp"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="55dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/closetIcon"
-        app:srcCompat="@drawable/ic_clothesicon"
-        tools:src="@tools:sample/avatars" />
-
-    <TextView
-        android:id="@+id/closetText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="75dp"
-        android:text="Your Closet"
-        android:textSize="18sp"
-        app:layout_constraintStart_toEndOf="@+id/closetIcon"
-        app:layout_constraintTop_toBottomOf="@+id/username" />
-
-    <TextView
-        android:id="@+id/favoritesText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="91dp"
-        android:text="Your Fits"
-        android:textSize="18sp"
-        app:layout_constraintStart_toEndOf="@+id/fitsIcon"
-        app:layout_constraintTop_toBottomOf="@+id/closetText" />
-
-    <TextView
-        android:id="@+id/fitsText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="91dp"
-        android:text="Your Favorites"
-        android:textSize="18sp"
-        app:layout_constraintStart_toEndOf="@+id/favoritesIcon"
-        app:layout_constraintTop_toBottomOf="@+id/favoritesText" />
 
     <Button
         android:id="@+id/logoutBtn"
         android:layout_width="127dp"
         android:layout_height="42dp"
-        android:layout_marginBottom="36dp"
         android:text="log out"
+        android:textColor="@color/black"
         android:textSize="18sp"
+        app:backgroundTint="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/favoritesIcon"
         app:layout_constraintVertical_bias="0.715" />
 
     <Button
@@ -121,7 +100,10 @@
         android:layout_marginStart="84dp"
         android:layout_marginTop="60dp"
         android:text="Edit profile"
+        android:textColor="@color/black"
+        app:backgroundTint="@color/white"
         app:layout_constraintStart_toEndOf="@+id/profileImg"
         app:layout_constraintTop_toTopOf="parent" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

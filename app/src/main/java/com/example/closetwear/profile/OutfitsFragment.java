@@ -1,4 +1,4 @@
-package com.example.closetwear.fragments;
+package com.example.closetwear.profile;
 
 import android.os.Bundle;
 
@@ -17,7 +17,6 @@ import android.widget.TextView;
 import com.example.closetwear.EndlessRecyclerViewScrollListener;
 import com.example.closetwear.parse.OutfitPost;
 import com.example.closetwear.R;
-import com.example.closetwear.adapters.OutfitsAdapter;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -33,7 +32,6 @@ public class OutfitsFragment extends Fragment {
     private RecyclerView fitsRecyclerView;
     protected OutfitsAdapter adapter;
     protected List<OutfitPost> allPosts;
-    protected TextView closetText;
     private StaggeredGridLayoutManager gridLayoutManager;
     private EndlessRecyclerViewScrollListener scrollListener;
     private Date oldestPost;
@@ -60,7 +58,6 @@ public class OutfitsFragment extends Fragment {
 
     private void bindViews(View view) {
         fitsRecyclerView = view.findViewById(R.id.fitsRecyclerView);
-        closetText = view.findViewById(R.id.closetText);
 
         allPosts = new ArrayList<>();
         // Create adapter
@@ -81,18 +78,11 @@ public class OutfitsFragment extends Fragment {
         ArrayList<String> fits = new ArrayList<>();
         String type = "yours";
         if (bundle == null) {
-            closetText.setText("Your Fits");
             queryPosts();
         } else if (bundle.get("view").equals("taggedFits")) {
-            closetText.setText("Tagged Fits");
             fits = bundle.getStringArrayList("fits");
             type = "tagged";
             queryTaggedFits(fits);
-        } else {
-            closetText.setText("Your Favorites");
-            fits = bundle.getStringArrayList("fits");
-            type = "likes";
-            queryLikedFits(fits);
         }
         ArrayList<String> finalFits = fits;
         String finalType = type;
@@ -105,29 +95,6 @@ public class OutfitsFragment extends Fragment {
         };
         // Adds the scroll listener to RecyclerView
         fitsRecyclerView.addOnScrollListener(scrollListener);
-    }
-
-    private void queryLikedFits(ArrayList<String> fits) {
-        ParseQuery<OutfitPost> query = ParseQuery.getQuery(OutfitPost.class);
-        query.whereContainedIn("objectId", fits);
-        query.include(OutfitPost.KEY_USER);
-        query.addDescendingOrder(OutfitPost.KEY_CREATED_KEY);
-        query.findInBackground(new FindCallback<OutfitPost>() {
-            @Override
-            public void done(List<OutfitPost> posts, ParseException e) {
-                if (e != null) {
-                    Log.e(TAG, "Issue with getting posts", e);
-                    return;
-                }
-                // Save oldest post in query for loading more posts
-                if (posts.size () > 0) {
-                    oldestPost = posts.get(posts.size() - 1).getCreatedAt();
-                }
-                // update adapter with posts list
-                adapter.clear();
-                adapter.addAll(posts);
-            }
-        });
     }
 
     private void queryPosts() {
@@ -150,7 +117,7 @@ public class OutfitsFragment extends Fragment {
                     return;
                 }
                 // Save oldest post in query for loading more posts
-                if (posts.size () > 0) {
+                if (posts.size() > 0) {
                     oldestPost = posts.get(posts.size() - 1).getCreatedAt();
                 }
                 // update adapter with posts list
@@ -175,7 +142,7 @@ public class OutfitsFragment extends Fragment {
                     return;
                 }
                 // Save oldest post in query for loading more posts
-                if (posts.size () > 0) {
+                if (posts.size() > 0) {
                     oldestPost = posts.get(posts.size() - 1).getCreatedAt();
                 }
                 // update adapter with posts list
@@ -195,16 +162,13 @@ public class OutfitsFragment extends Fragment {
         // Limit query based on specific view (tags, likes, your fits)
         if (!type.equals("tagged")) {
             query.include(OutfitPost.KEY_USER);
-        }
-        if (!type.equals("yours")) {
-            query.whereContainedIn("objectId", fits);
-        } else {
             // order posts by creation date (newest first)
             query.addDescendingOrder(OutfitPost.KEY_CREATED_KEY);
         }
-        if (!type.equals("likes")) {
-            query.whereEqualTo(OutfitPost.KEY_USER, ParseUser.getCurrentUser());
+        if (!type.equals("yours")) {
+            query.whereContainedIn("objectId", fits);
         }
+        query.whereEqualTo(OutfitPost.KEY_USER, ParseUser.getCurrentUser());
         // limit query to latest 20 items
         query.setLimit(20);
         query.findInBackground((posts, e) -> {

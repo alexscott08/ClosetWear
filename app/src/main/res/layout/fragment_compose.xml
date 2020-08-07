@@ -22,6 +22,8 @@
 
     <Button
         android:id="@+id/nextBtn"
+        style="?attr/materialButtonOutlinedStyle"
+        app:backgroundTint="@color/white"
         android:layout_width="228dp"
         android:layout_height="wrap_content"
         android:layout_gravity="right"

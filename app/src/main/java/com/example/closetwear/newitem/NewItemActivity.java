@@ -32,16 +32,16 @@ public class NewItemActivity extends AppCompatActivity implements CategoryFragme
     public static final String TAG = "NewItemActivity";
     private ImageView itemImg;
     private Button addBtn;
-    TabLayout tabLayout;
-    ViewPager2 viewPager;
-    NewItemTabAdapter adapter;
-    CategoryFragment categoryFragment;
-    SubcategoryFragment subcategoryFragment;
-    BrandFragment brandFragment;
-    NameFragment nameFragment;
-    ColorFragment colorFragment;
-    File image;
-    ClothingPost item = new ClothingPost();
+    private TabLayout tabLayout;
+    private ViewPager2 viewPager;
+    private NewItemTabAdapter adapter;
+    private CategoryFragment categoryFragment;
+    private SubcategoryFragment subcategoryFragment;
+    private BrandFragment brandFragment;
+    private NameFragment nameFragment;
+    private ColorFragment colorFragment;
+    private File image;
+    private ClothingPost item = new ClothingPost();
 
     public NewItemActivity() {
 
@@ -53,7 +53,7 @@ public class NewItemActivity extends AppCompatActivity implements CategoryFragme
         setContentView(R.layout.activity_new_item);
 
         itemImg = findViewById(R.id.itemImg);
-        addBtn = findViewById(R.id.addBtn);
+        addBtn = findViewById(R.id.finishBtn);
         tabLayout = findViewById(R.id.tabLayout);
         viewPager = findViewById(R.id.pager);
         image = (File) getIntent().getSerializableExtra("image");

@@ -1,4 +1,4 @@
-package com.example.closetwear.fragments;
+package com.example.closetwear.profile;
 
 import android.os.Bundle;
 
@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.viewpager2.widget.ViewPager2;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,6 +21,13 @@ import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.example.closetwear.GlideApp;
 import com.example.closetwear.Navigation;
 import com.example.closetwear.R;
+import com.example.closetwear.newitem.BrandFragment;
+import com.example.closetwear.newitem.CategoryFragment;
+import com.example.closetwear.newitem.ColorFragment;
+import com.example.closetwear.newitem.NameFragment;
+import com.example.closetwear.newitem.NewItemTabAdapter;
+import com.example.closetwear.newitem.SubcategoryFragment;
+import com.google.android.material.tabs.TabLayout;
 import com.parse.LogOutCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -34,9 +42,9 @@ public class ProfileFragment extends Fragment {
     private TextView name;
     private TextView username;
     private ImageView profileImg;
-    private ImageView closetIcon;
-    private ImageView fitsIcon;
-    private ImageView favoritesIcon;
+    private ProfileTabAdapter adapter;
+    private TabLayout tabLayout;
+    private ViewPager2 viewPager;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -54,7 +62,34 @@ public class ProfileFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         bindViews(view);
         bindData();
-        setOnClickListeners();
+        adapter = new ProfileTabAdapter(getActivity().getSupportFragmentManager(),
+                getLifecycle());
+        viewPager.setAdapter(adapter);
+
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                viewPager.setCurrentItem(tab.getPosition());
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+
+        viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                tabLayout.selectTab(tabLayout.getTabAt(position));
+            }
+        });
+        setOnClickListener();
 
     }
 
@@ -62,11 +97,10 @@ public class ProfileFragment extends Fragment {
         name = view.findViewById(R.id.name);
         username = view.findViewById(R.id.username);
         profileImg = view.findViewById(R.id.profileImg);
-        closetIcon = view.findViewById(R.id.closetIcon);
-        fitsIcon = view.findViewById(R.id.fitsIcon);
-        favoritesIcon = view.findViewById(R.id.favoritesIcon);
         editProfileBtn = view.findViewById(R.id.editProfileBtn);
         logoutBtn = view.findViewById(R.id.logoutBtn);
+        tabLayout = view.findViewById(R.id.tabLayout);
+        viewPager = view.findViewById(R.id.pager);
     }
 
     private void bindData() {
@@ -90,37 +124,12 @@ public class ProfileFragment extends Fragment {
         }
     }
 
-    private void setOnClickListeners() {
+    private void setOnClickListener() {
         // listener to log out user and start LoginActivity()
         logoutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 logOutUser();
-            }
-        });
-
-        // Click icons to transition to new fragments
-        final FragmentManager fragmentManager = getParentFragmentManager();
-        closetIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Fragment fragment = new ClosetFragment();
-                fragmentManager.beginTransaction().replace(R.id.containerFrameLayout, fragment).addToBackStack(null).commit();
-            }
-        });
-
-        fitsIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Fragment fragment = new OutfitsFragment();
-                fragmentManager.beginTransaction().replace(R.id.containerFrameLayout, fragment).addToBackStack(null).commit();
-            }
-        });
-
-        favoritesIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Navigation.goOutfitsFragment(fragmentManager, ParseUser.getCurrentUser().getJSONArray("likes"), "likes");
             }
         });
         // TODO: editProfileBtn listener

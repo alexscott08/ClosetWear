@@ -66,6 +66,12 @@ public class HomeFragment extends Fragment {
         // Getting SwipeContainerLayout
         swipeContainer = view.findViewById(R.id.swipeContainer);
 
+        // Adding Listener
+        swipeContainer.setOnRefreshListener(() -> {
+            Log.i(TAG, "Fetching more data!");
+            queryPosts();
+        });
+
         // Scheme colors for animation
         swipeContainer.setColorSchemeResources(
                 android.R.color.holo_blue_bright,
@@ -73,11 +79,6 @@ public class HomeFragment extends Fragment {
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light
         );
-        // Adding Listener
-        swipeContainer.setOnRefreshListener(() -> {
-            Log.i(TAG, "Fetching more data!");
-            queryPosts();
-        });
 
         scrollListener = new EndlessRecyclerViewScrollListener(gridLayoutManager) {
             @Override
@@ -98,7 +99,7 @@ public class HomeFragment extends Fragment {
         // include data referred by user key
         query.include(OutfitPost.KEY_USER);
         // limit query to latest 20 items
-        query.setLimit(10);
+        query.setLimit(20);
         // order posts by creation date (newest first)
         query.addDescendingOrder(OutfitPost.KEY_CREATED_KEY);
         // start an asynchronous call for posts
@@ -115,9 +116,8 @@ public class HomeFragment extends Fragment {
             // update adapter with posts list
             adapter.clear();
             adapter.addAll(posts);
+            swipeContainer.setRefreshing(false);
         });
-        // If used swipe to refresh, turns off animation when done querying
-        swipeContainer.setRefreshing(false);
     }
 
     private void loadMoreData() {
@@ -129,7 +129,7 @@ public class HomeFragment extends Fragment {
             query.whereLessThan("createdAt", oldestPost);
         }
         // limit query to latest 20 items
-        query.setLimit(10);
+        query.setLimit(20);
         // order posts by creation date (newest first)
         query.addDescendingOrder(OutfitPost.KEY_CREATED_KEY);
         // start an asynchronous call for posts

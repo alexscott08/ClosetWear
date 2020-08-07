@@ -15,7 +15,7 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginStart="33dp"
+        android:layout_marginStart="130dp"
         android:layout_marginTop="90dp"
         android:orientation="vertical"
         app:singleSelection="true">
@@ -28,7 +28,8 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:text="tops" />
+            android:text="tops"
+            android:textColor="@color/white" />
 
         <Button
             android:id="@+id/bottomsBtn"
@@ -37,7 +38,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
-            android:text="bottoms" />
+            android:text="bottoms"
+            android:textColor="@color/white" />
 
         <Button
             android:id="@+id/outerwearBtn"
@@ -46,7 +48,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/bottomsBtn"
             android:layout_alignParentEnd="true"
-            android:text="outerwear" />
+            android:text="outerwear"
+            android:textColor="@color/white" />
 
         <Button
             android:id="@+id/footwearBtn"
@@ -55,7 +58,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/topsBtn"
             android:layout_alignParentStart="true"
-            android:text="Footwear" />
+            android:text="Footwear"
+            android:textColor="@color/white" />
 
         <Button
             android:id="@+id/formalwearBtn"
@@ -64,7 +68,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/outerwearBtn"
             android:layout_alignParentEnd="true"
-            android:text="formalwear" />
+            android:text="formalwear"
+            android:textColor="@color/white" />
 
         <Button
             android:id="@+id/accessoriesBtn"
@@ -73,7 +78,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/footwearBtn"
             android:layout_alignParentStart="true"
-            android:text="accessories" />
+            android:text="accessories"
+            android:textColor="@color/white" />
 
     </com.google.android.material.button.MaterialButtonToggleGroup>
 

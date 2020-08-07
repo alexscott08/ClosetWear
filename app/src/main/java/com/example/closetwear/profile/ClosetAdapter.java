@@ -1,8 +1,6 @@
-package com.example.closetwear.adapters;
+package com.example.closetwear.profile;
 
 import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,19 +9,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.closetwear.Navigation;
-import com.example.closetwear.fragments.ClosetFragment;
 import com.example.closetwear.parse.ClothingPost;
 import com.example.closetwear.GlideApp;
 import com.example.closetwear.R;
-import com.example.closetwear.fragments.OutfitsFragment;
 import com.parse.ParseFile;
-
-import org.parceler.Parcels;
 
 import java.util.List;
 

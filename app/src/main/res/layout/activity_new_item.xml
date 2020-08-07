@@ -23,6 +23,9 @@ tools:context=".newitem.NewItemActivity">
         app:layout_constraintTop_toBottomOf="@+id/itemImg"
         app:tabContentStart="10dp"
         app:tabGravity="fill"
+        android:backgroundTint="@color/purple"
+        app:tabIndicatorColor="#FFFFFF"
+        app:tabTextColor="@color/white"
         app:tabMode="scrollable">
 
         <com.google.android.material.tabs.TabItem
@@ -64,7 +67,7 @@ tools:context=".newitem.NewItemActivity">
         app:layout_constraintVertical_bias="1.0" />
 
     <Button
-        android:id="@+id/addBtn"
+        android:id="@+id/finishBtn"
         android:layout_width="148dp"
         android:layout_height="54dp"
         android:layout_marginEnd="4dp"

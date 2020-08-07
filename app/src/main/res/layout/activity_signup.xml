@@ -17,6 +17,7 @@
         android:layout_weight="1"
         android:text="ClosetWear"
         android:textAlignment="center"
+        android:textColor="@color/white"
         android:textSize="30sp"
         android:textStyle="bold" />
 
@@ -24,10 +25,11 @@
         android:id="@+id/newAccText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="30dp"
+        android:layout_margin="10dp"
         android:layout_weight="1"
         android:text="Create a New Account"
         android:textAlignment="center"
+        android:textColor="@color/white"
         android:textSize="24sp"
         android:textStyle="bold" />
 
@@ -47,41 +49,95 @@
         android:layout_marginBottom="15dp"
         android:layout_weight="1"
         android:background="#2E44AA"
+        android:backgroundTint="@color/white"
         android:text="Set profile picture"
-        android:textColor="#FFFFFF" />
+        android:textColor="@color/black" />
 
-    <EditText
-        android:id="@+id/username"
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:ems="10"
-        android:hint="Username" />
+        android:hint="Username"
+        android:textColor="@color/white"
+        android:textColorHint="@color/white"
+        app:boxStrokeColor="@color/white"
+        app:hintTextColor="@color/white">
 
-    <EditText
-        android:id="@+id/password"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/username"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:textColor="@color/white"
+            android:textColorHighlight="@color/purple"
+            android:textCursorDrawable="@color/white" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:ems="10"
+        android:layout_marginTop="10dp"
         android:hint="Password"
-        android:inputType="textPassword" />
+        android:textColor="@color/white"
+        android:textColorHint="@color/white"
+        app:boxStrokeColor="@color/white"
+        app:hintTextColor="@color/white"
+        app:passwordToggleEnabled="true"
+        app:passwordToggleTint="@color/white">
 
-    <EditText
-        android:id="@+id/name"
+        <EditText
+            android:id="@+id/password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:inputType="textPassword"
+            android:textColor="@color/white"
+            android:textColorHighlight="@color/purple"
+            android:textCursorDrawable="@color/white" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:ems="10"
-        android:hint="Name" />
+        android:layout_marginTop="10dp"
+        android:hint="Name"
+        android:textColor="@color/white"
+        android:textColorHint="#FFFFFF"
+        app:boxStrokeColor="#FFFFFF"
+        app:hintTextColor="#FFFFFF">
 
-    <EditText
-        android:id="@+id/email"
+        <EditText
+            android:id="@+id/name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:textColor="@color/white"
+            android:textColorHighlight="@color/purple"
+            android:textCursorDrawable="@color/white" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:ems="10"
-        android:hint="Email" />
+        android:layout_marginTop="10dp"
+        android:hint="Email"
+        android:textColor="@color/white"
+        android:textColorHint="#FFFFFF"
+        app:boxStrokeColor="#FFFFFF"
+        app:hintTextColor="#FFFFFF">
+
+        <EditText
+            android:id="@+id/email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:textColor="@color/white"
+            android:textColorHighlight="@color/purple"
+            android:textCursorDrawable="@color/white" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <Button
         android:id="@+id/signUpBtn"
@@ -90,6 +146,7 @@
         android:layout_marginTop="10dp"
         android:layout_weight="1"
         android:background="#FF9422"
+        android:backgroundTint="@color/white"
         android:text="sign up"
-        android:textColor="#FFFFFF" />
+        android:textColor="@color/black" />
 </LinearLayout>

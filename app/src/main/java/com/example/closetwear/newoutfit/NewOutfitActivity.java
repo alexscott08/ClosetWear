@@ -35,7 +35,7 @@ public class NewOutfitActivity extends AppCompatActivity {
     private ImageView outfitImg;
     private RecyclerView taggedItemsRecyclerView;
     private Button tagBtn;
-    private Button addBtn;
+    private Button finishBtn;
     private OutfitPost outfitPost;
     protected NewOutfitAdapter adapter;
     protected List<ClothingPost> allPosts;
@@ -44,7 +44,7 @@ public class NewOutfitActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_outfit);
-        addBtn = findViewById(R.id.addBtn);
+        finishBtn = findViewById(R.id.finishBtn);
         tagBtn = findViewById(R.id.tagBtn);
         outfitImg = findViewById(R.id.outfitImg);
         outfitPost = (OutfitPost) Parcels.unwrap(getIntent().getParcelableExtra("outfit"));
@@ -87,7 +87,7 @@ public class NewOutfitActivity extends AppCompatActivity {
             }
         });
         // Updates OutfitPost in server and navigates to MainActivity
-        addBtn.setOnClickListener(new View.OnClickListener() {
+        finishBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 savePost(view);

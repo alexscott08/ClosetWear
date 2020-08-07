@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.example.closetwear.GlideApp;
 import com.example.closetwear.Navigation;
 import com.example.closetwear.parse.OutfitPost;
@@ -17,6 +18,8 @@ import com.example.closetwear.R;
 import com.parse.ParseFile;
 
 import java.util.List;
+
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
     private Context context;
@@ -68,7 +71,11 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
         public void bind(final OutfitPost post) {
             // Bind the post data to the view elements
             final ParseFile image = post.getImage();
-            GlideApp.with(context).load(image.getUrl()).into(outfitImg);
+            int radius = 10;
+            int margin = 30;
+            GlideApp.with(context).load(image.getUrl()).transform(
+                    new RoundedCornersTransformation(radius, margin))
+                    .into(outfitImg);
 
             outfitImg.setOnClickListener(new View.OnClickListener() {
                 @Override

@@ -8,15 +8,18 @@
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/subcatEdit"
-        android:layout_width="wrap_content"
+        android:layout_width="346dp"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginStart="32dp"
-        android:layout_marginBottom="316dp"
-        android:gravity="center_horizontal"
-        android:hint="Subcategrory" />
+        android:layout_marginBottom="250dp"
+        android:gravity="start"
+        android:hint="Subcategory"
+        android:textAlignment="textStart"
+        android:textColor="@color/white"
+        android:textColorHint="@color/white" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/subcatDescription"
@@ -29,5 +32,6 @@
         android:layout_marginEnd="33dp"
         android:layout_marginBottom="27dp"
         android:text="Let's be more specific. What kind of piece is this (ex: t-shirt, jeans)?"
+        android:textColor="@color/white"
         android:textSize="18sp" />
 </RelativeLayout>

@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".profile.ClosetFragment">
+    tools:context=".profile.FavoritesFragment">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/closetRecyclerView"
+        android:id="@+id/favsRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="320dp"
         app:layout_constraintBottom_toTopOf="@+id/space"
@@ -18,4 +18,5 @@
         android:layout_height="42dp"
         app:layout_constraintBottom_toBottomOf="parent"
         tools:layout_editor_absoluteX="221dp" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

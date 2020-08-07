@@ -1,16 +1,16 @@
 package com.example.closetwear;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.view.View;
 
 import com.example.closetwear.fragments.*;
 import com.example.closetwear.parse.*;
+import com.example.closetwear.profile.OutfitsFragment;
+import com.example.closetwear.profile.ProfileFragment;
 import com.example.closetwear.search.SearchQuery;
 import com.example.closetwear.search.SearchViewFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -35,14 +35,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 //         Find the toolbar view inside the activity layout
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        // Sets the Toolbar to act as the ActionBar for this Activity window.
-        // Make sure the toolbar exists in the activity and is not null
-        setSupportActionBar(toolbar);
-        // Display icon in the toolbar
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setDisplayUseLogoEnabled(true);
-        getSupportActionBar().setDisplayShowTitleEnabled(true);
+//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+//        // Sets the Toolbar to act as the ActionBar for this Activity window.
+//        // Make sure the toolbar exists in the activity and is not null
+//        setSupportActionBar(toolbar);
+//        // Display icon in the toolbar
+//        getSupportActionBar().setDisplayShowHomeEnabled(true);
+//        getSupportActionBar().setDisplayUseLogoEnabled(true);
+//        getSupportActionBar().setDisplayShowTitleEnabled(true);
 
         searchResults = new ArrayList<>();
         persistentSearchView = findViewById(R.id.persistentSearchView);
@@ -59,10 +59,6 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case R.id.action_compose:
                     fragment = new ComposeFragment();
-                    persistentSearchView.setVisibility(View.GONE);
-                    break;
-                case R.id.action_outfits:
-                    fragment = new OutfitsFragment();
                     persistentSearchView.setVisibility(View.GONE);
                     break;
                 case R.id.action_profile:

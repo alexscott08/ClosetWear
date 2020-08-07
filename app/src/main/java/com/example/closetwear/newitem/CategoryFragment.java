@@ -73,7 +73,7 @@ public class CategoryFragment extends Fragment {
         toggleButton.addOnButtonCheckedListener(new MaterialButtonToggleGroup.OnButtonCheckedListener() {
             @Override
             public void onButtonChecked(MaterialButtonToggleGroup group, int checkedId, boolean isChecked) {
-                Toast.makeText(getContext(), checkedId + "", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getContext(), checkedId + "", Toast.LENGTH_SHORT).show();
                 for (int i = 0; i < group.getChildCount(); i++) {
                     if (group.getChildAt(i).getId() == group.getCheckedButtonId()) {
                         getButtonDescription(i);

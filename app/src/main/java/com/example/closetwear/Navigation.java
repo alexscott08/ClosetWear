@@ -9,7 +9,7 @@ import android.util.Log;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
-import com.example.closetwear.fragments.OutfitsFragment;
+import com.example.closetwear.profile.OutfitsFragment;
 import com.example.closetwear.newitem.NewItemActivity;
 import com.example.closetwear.newoutfit.*;
 import com.example.closetwear.parse.*;
@@ -59,7 +59,7 @@ public class Navigation {
      */
     public static void goMainActivity(Activity activity) {
         activity.startActivity(new Intent(activity, MainActivity.class));
-        activity.finish();
+//        activity.finish();
     }
 
     public static void goOutfitDetailsActivity(Context context, OutfitPost outfitPost) {

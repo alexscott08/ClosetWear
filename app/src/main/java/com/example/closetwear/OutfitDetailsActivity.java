@@ -114,8 +114,10 @@ public class OutfitDetailsActivity extends AppCompatActivity {
         favoritesCount.setText("" + post.get("likesCount"));
         if (doesLikesContainId(post.getObjectId())) {
             favoritesIcon.setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite));
+            favoritesCount.setTextColor(getResources().getColor(R.color.purple));
         } else {
             favoritesIcon.setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite_border));
+            favoritesCount.setTextColor(getResources().getColor(R.color.white));
         }
     }
 
@@ -130,14 +132,18 @@ public class OutfitDetailsActivity extends AppCompatActivity {
                         // Updates user array with post's object ID
                         currentUser.addUnique("likes", post.getObjectId());
                         // Adds one to the post's like count and updates states
+                        favoritesCount.setText("" + (post.getLikesCount() + 1));
                         post.increment("likesCount", 1);
                         favoritesIcon.setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite));
+                        favoritesCount.setTextColor(getResources().getColor(R.color.purple));
 
                     } else {
                         // Removes post's object ID from user's array of liked posts
                         currentUser.removeAll("likes", Arrays.asList(post.getObjectId()));
                         // Decrements post's like count by one and updates states
                         if ((int) post.get("likesCount") > 0) {
+                            favoritesCount.setText("" + (post.getLikesCount() - 1));
+                            favoritesCount.setTextColor(getResources().getColor(R.color.white));
                             post.increment("likesCount", -1);
                         }
                         favoritesIcon.setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite_border));

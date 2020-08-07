@@ -279,6 +279,7 @@ public class ComposeFragment extends Fragment {
                     // Load the taken image into a preview
                     postImgView.setImageBitmap(takenImage);
                     selectedImage = takenImage;
+                    saveParseFile(persistImage(selectedImage, photoFileName), getView());
                 } else { // Result was a failure
                     Toast.makeText(getContext(), "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
                 }
@@ -292,6 +293,7 @@ public class ComposeFragment extends Fragment {
                 selectedImage = loadFromUri(photoUri);
                 // Load the selected image into a preview
                 postImgView.setImageBitmap(selectedImage);
+//                saveParseFile(persistImage(selectedImage, photoFileName), getView());
             }
         }
     }
@@ -329,7 +331,7 @@ public class ComposeFragment extends Fragment {
                     }
                 }).show();
                 Log.i(TAG, "New outfit added to closet!");
-                Navigation.goNewOutfitActivity(getActivity(), newOutfit);
+                Navigation.goNewItemActivity(getActivity(), save);
             }
         });
     }

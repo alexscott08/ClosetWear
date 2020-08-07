@@ -1,4 +1,4 @@
-package com.example.closetwear.fragments;
+package com.example.closetwear.profile;
 
 import android.os.Bundle;
 
@@ -7,9 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,10 +16,6 @@ import android.view.ViewGroup;
 import com.example.closetwear.EndlessRecyclerViewScrollListener;
 import com.example.closetwear.parse.ClothingPost;
 import com.example.closetwear.R;
-import com.example.closetwear.adapters.ClosetAdapter;
-import com.example.closetwear.parse.OutfitPost;
-import com.parse.FindCallback;
-import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
@@ -52,6 +46,7 @@ public class ClosetFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         closetRecyclerView = view.findViewById(R.id.closetRecyclerView);
+        closetRecyclerView.setPadding(120, 0, 0, 0);
         allPosts = new ArrayList<>();
         // Create adapter
         adapter = new ClosetAdapter(getContext(), allPosts, getParentFragmentManager());
@@ -90,7 +85,7 @@ public class ClosetFragment extends Fragment {
                 return;
             }
             // Save oldest post in query for loading more posts
-            if (posts.size () > 0) {
+            if (posts.size() > 0) {
                 oldestPost = posts.get(posts.size() - 1).getCreatedAt();
             }
             // update adapter with posts list
