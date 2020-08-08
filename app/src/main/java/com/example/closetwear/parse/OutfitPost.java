@@ -12,7 +12,7 @@ public class OutfitPost extends ParseObject {
     public static final String  KEY_USER = "user";
     public static final String KEY_IMAGE = "image";
     public static final String KEY_COMMENTS = "commentsCount";
-    public static final String KEY_CAPTION = "caption";
+    public static final String KEY_TITLE = "title";
     public static final String KEY_LIKES = "likesCount";
     public static final String KEY_CREATED_KEY = "createdAt";
     public static final String KEY_ITEMS = "fitItems";
@@ -44,12 +44,12 @@ public class OutfitPost extends ParseObject {
         put(KEY_COMMENTS, comments);
     }
 
-    public String getCaption() {
-        return getString(KEY_CAPTION);
+    public String getTitle() {
+        return getString(KEY_TITLE);
     }
 
-    public void setCaption(String caption) {
-        put(KEY_CAPTION, caption);
+    public void setTitle(String title) {
+        put(KEY_TITLE, title);
     }
 
     public int getLikesCount() {

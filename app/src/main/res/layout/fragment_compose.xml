@@ -8,26 +8,35 @@
     android:layout_height="match_parent"
     tools:context=".fragments.ComposeFragment">
 
-    <ImageView
-        android:id="@+id/postImgView"
-        android:layout_width="match_parent"
-        android:layout_height="482dp"
-        tools:srcCompat="@tools:sample/avatars" />
-
-    <ImageButton
-        android:id="@+id/cameraBtn"
+    <TextView
+        android:id="@+id/composeTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:src="@android:drawable/ic_menu_camera" />
+        android:layout_marginTop="30dp"
+        android:text="What do you want to add?"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="36sp"
+        android:textStyle="bold" />
 
     <Button
-        android:id="@+id/nextBtn"
+        android:id="@+id/newItemBtn"
         style="?attr/materialButtonOutlinedStyle"
         app:backgroundTint="@color/white"
-        android:layout_width="228dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:layout_marginTop="20dp"
-        android:text="next step" />
+        android:layout_width="200dp"
+        android:layout_height="70dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="110dp"
+        android:text="add new item" />
+
+    <Button
+        android:id="@+id/newFitBtn"
+        style="?attr/materialButtonOutlinedStyle"
+        app:backgroundTint="@color/white"
+        android:layout_width="200dp"
+        android:layout_height="70dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="140dp"
+        android:text="add new fit" />
 
 </LinearLayout>

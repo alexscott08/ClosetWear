@@ -10,8 +10,8 @@
         app:showAsAction="always" />
     <item
         android:id="@+id/action_compose"
-        android:icon="@android:drawable/ic_menu_camera"
-        android:title="Compose"
+        android:icon="@android:drawable/ic_input_add"
+        android:title="Add"
         android:enabled="true"
         app:showAsAction="always" />
     <item

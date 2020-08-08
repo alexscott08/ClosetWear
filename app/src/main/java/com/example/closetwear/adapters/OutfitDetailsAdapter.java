@@ -10,8 +10,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.example.closetwear.GlideApp;
 import com.example.closetwear.parse.ClothingPost;
 import com.example.closetwear.R;
@@ -70,6 +68,7 @@ public class OutfitDetailsAdapter extends RecyclerView.Adapter<OutfitDetailsAdap
             itemImg = itemView.findViewById(R.id.itemImg);
             brand = itemView.findViewById(R.id.brand);
             itemName = itemView.findViewById(R.id.itemName);
+
         }
         public void bind(final ClothingPost post) {
             // Bind the post data to the view elements

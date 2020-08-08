@@ -1,5 +1,6 @@
 package com.example.closetwear.fragments;
 
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -14,13 +15,13 @@ import androidx.fragment.app.Fragment;
 
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.text.Editable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.ImageView;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.closetwear.Navigation;
@@ -53,16 +54,16 @@ public class ComposeFragment extends Fragment {
     public final static int PICK_PHOTO_CODE = 1046;
     private Bitmap selectedImage;
     private OutputStream os;
-    private ImageButton cameraBtn;
-    private ImageView postImgView;
     private String type;
-    private Button nextBtn;
-    OutfitPost newOutfit = new OutfitPost();
-    File save;
+    private Button newItemBtn;
+    private Button newFitBtn;
+    private OutfitPost newOutfit = new OutfitPost();
+    private File save;
 
     public ComposeFragment() {
 
     }
+
     // The onCreateView method is called when Fragment should create its View object hierarchy,
     // either dynamically or via XML layout inflation.
     @Override
@@ -76,7 +77,31 @@ public class ComposeFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        String[] singleChoiceItems = getResources().getStringArray(R.array.dialog_compose_start);
+        bindViews(view);
+        setOnClickListeners();
+    }
+
+    private void bindViews(View view) {
+        newItemBtn = view.findViewById(R.id.newItemBtn);
+        newFitBtn = view.findViewById(R.id.newFitBtn);
+    }
+
+    private void setOnClickListeners() {
+        newItemBtn.setOnClickListener(view -> {
+            // AlertDialog to ask user to select between taking picture or opening photos gallery
+            type = "item";
+            createDialog(view);
+        });
+
+        newFitBtn.setOnClickListener(view -> {
+            // AlertDialog to ask user to select between taking picture or opening photos gallery
+            type = "fit";
+            createDialog(view);
+        });
+    }
+
+    private void createDialog(View view) {
+        String[] singleChoiceItems = getResources().getStringArray(R.array.dialog_photo);
         new MaterialAlertDialogBuilder(getContext())
                 .setTitle("Select one")
                 .setSingleChoiceItems(singleChoiceItems, itemSelected, new DialogInterface.OnClickListener() {
@@ -85,78 +110,23 @@ public class ComposeFragment extends Fragment {
                         itemSelected = selectedIndex;
                     }
                 })
-                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        if (itemSelected == 0) {
-                            type = "item";
-                        } else {
-                            type = "fit";
-                        }
+                .setPositiveButton("Ok", (dialogInterface, i) -> {
+                    if (itemSelected == 0) {
+                        launchCamera();
+                    } else {
+                        // Launch photo gallery
+                        onPickPhoto(view);
                     }
                 })
                 .setNegativeButton("Cancel", null)
                 .show();
-
-        cameraBtn = view.findViewById(R.id.cameraBtn);
-        postImgView = view.findViewById(R.id.postImgView);
-        nextBtn = view.findViewById(R.id.nextBtn);
-
-        cameraBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // AlertDialog to ask user to select between taking picture or opening photos gallery
-                String[] singleChoiceItems = getResources().getStringArray(R.array.dialog_photo);
-                new MaterialAlertDialogBuilder(getContext())
-                        .setTitle("Select one")
-                        .setSingleChoiceItems(singleChoiceItems, itemSelected, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int selectedIndex) {
-                                itemSelected = selectedIndex;
-                            }
-                        })
-                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                if (itemSelected == 0) {
-                                    launchCamera();
-                                } else {
-                                    // Launch photo gallery
-                                    onPickPhoto(postImgView);
-                                }
-                            }
-                        })
-                        .setNegativeButton("Cancel", null)
-                        .show();
-            }
-
-        });
-        nextBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (type != null) {
-                    if (selectedImage != null) {
-                        save = persistImage(selectedImage, photoFileName);
-                        if (type.equals("item")) {
-                            Navigation.goNewItemActivity(getActivity(), save);
-                        } else {
-                            // Sets user for new OutfitPost and navigates to next view
-                            saveParseFile(save, view);
-                        }
-                    } else {
-                        Toast.makeText(getContext(), "Where's the picture?", Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    Toast.makeText(getContext(), "Is this a new item or fit?", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
     }
+
     private File persistImage(Bitmap bitmap, String name) {
         File filesDir = getOutputMediaFile();
         if (filesDir == null) {
-            Log.d(TAG,
-                    "Error creating media file, check storage permissions: ");// e.getMessage());
+            Log.d(TAG, "Error creating media file, check storage permissions");
+            makeToast("Error creating media file, check storage permissions");
             return null;
         }
         try {
@@ -166,11 +136,12 @@ public class ComposeFragment extends Fragment {
             os.close();
         } catch (Exception e) {
             Log.e(TAG, "Error writing bitmap", e);
+            makeToast("Couldn't convert file to ready format");
         }
         return filesDir;
     }
 
-    private  File getOutputMediaFile(){
+    private File getOutputMediaFile() {
         // To be safe, you should check that the SDCard is mounted
         // using Environment.getExternalStorageState() before doing this.
         File mediaStorageDir = new File(Environment.getExternalStorageDirectory()
@@ -182,15 +153,15 @@ public class ComposeFragment extends Fragment {
         // between applications and persist after your app has been uninstalled.
 
         // Create the storage directory if it does not exist
-        if (! mediaStorageDir.exists()){
-            if (! mediaStorageDir.mkdirs()){
+        if (!mediaStorageDir.exists()) {
+            if (!mediaStorageDir.mkdirs()) {
                 return null;
             }
         }
         // Create a media file name
         String timeStamp = new SimpleDateFormat("ddMMyyyy_HHmm").format(new Date());
         File mediaFile;
-        String mImageName="MI_"+ timeStamp +".jpg";
+        String mImageName = "MI_" + timeStamp + ".jpg";
         mediaFile = new File(mediaStorageDir.getPath() + File.separator + mImageName);
         return mediaFile;
     }
@@ -252,7 +223,7 @@ public class ComposeFragment extends Fragment {
         Bitmap image = null;
         try {
             // check version of Android on device
-            if(Build.VERSION.SDK_INT > 27){
+            if (Build.VERSION.SDK_INT > 27) {
                 // on newer versions of Android, use the new decodeBitmap method
                 ImageDecoder.Source source = ImageDecoder.createSource(getContext().getContentResolver(), photoUri);
                 image = ImageDecoder.decodeBitmap(source);
@@ -277,23 +248,19 @@ public class ComposeFragment extends Fragment {
                     // by this point we have the camera photo on disk
                     Bitmap takenImage = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
                     // Load the taken image into a preview
-                    postImgView.setImageBitmap(takenImage);
                     selectedImage = takenImage;
-                    saveParseFile(persistImage(selectedImage, photoFileName), getView());
+                    nextStep();
                 } else { // Result was a failure
-                    Toast.makeText(getContext(), "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
+                    makeToast("Picture wasn't taken!");
                 }
             }
         } else {
             // If photo was selected from gallery
             if ((data != null) && requestCode == PICK_PHOTO_CODE) {
                 Uri photoUri = data.getData();
-
                 // Load the image located at photoUri into selectedImage
                 selectedImage = loadFromUri(photoUri);
-                // Load the selected image into a preview
-                postImgView.setImageBitmap(selectedImage);
-//                saveParseFile(persistImage(selectedImage, photoFileName), getView());
+                nextStep();
             }
         }
     }
@@ -301,38 +268,72 @@ public class ComposeFragment extends Fragment {
     // Adds item picture to parse server in background
     private void saveParseFile(final File file, final View view) {
         final ParseFile img = new ParseFile(file);
-        img.saveInBackground(new SaveCallback() {
-            @Override
-            public void done(ParseException e) {
-                if (e != null) {
-                    Log.e(TAG, "Error saving image: ", e);
-                    Toast.makeText(getActivity(), "Error with saving image.", Toast.LENGTH_SHORT).show();
-                }
-                Log.i(TAG, "Image saved");
-                newOutfit.put("image", img);
-                saveOutfit(view);
+        img.saveInBackground((SaveCallback) e -> {
+            if (e != null) {
+                Log.e(TAG, "Error saving image: ", e);
+                makeToast("Error saving image.");
             }
+            Log.i(TAG, "Image saved");
+            newOutfit.put("image", img);
+            saveOutfit(view);
         });
     }
 
     private void saveOutfit(final View view) {
-        newOutfit.setUser(ParseUser.getCurrentUser());
-        newOutfit.saveInBackground(new SaveCallback() {
-            @Override
-            public void done(ParseException e) {
-                if (e != null) {
-                    Log.e(TAG, "Error while saving", e);
-                    Toast.makeText(getActivity(), "Error while saving fit!", Toast.LENGTH_SHORT).show();
-                }
-                Snackbar.make(view, "New outfit added to closet!", Snackbar.LENGTH_LONG).setAction("Cancel", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        newOutfit.deleteInBackground();
+        MaterialAlertDialogBuilder fitTitleDialog = new MaterialAlertDialogBuilder(getContext()).setTitle("Title the fit");
+        final EditText editText = new EditText(getContext());
+        editText.setHint("Title");
+
+        fitTitleDialog.setView(editText);
+
+        fitTitleDialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                //What ever you want to do with the value
+                newOutfit.setTitle(editText.getText().toString());
+                newOutfit.setUser(ParseUser.getCurrentUser());
+                newOutfit.saveInBackground(e -> {
+                    if (e != null) {
+                        Log.e(TAG, "Error while saving", e);
+                        makeToast("Error while saving fit!");
                     }
-                }).show();
-                Log.i(TAG, "New outfit added to closet!");
-                Navigation.goNewItemActivity(getActivity(), save);
+                    Snackbar.make(view, "New outfit added to closet!", Snackbar.LENGTH_LONG)
+                            .setAction("Cancel", view1 -> newOutfit.deleteInBackground()).show();
+                    Log.i(TAG, "New outfit added to closet!");
+                    Navigation.goNewOutfitActivity(getActivity(), newOutfit);
+                });
             }
         });
+
+        fitTitleDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                // what ever you want to do with No option.
+            }
+        });
+
+        fitTitleDialog.show();
+
+    }
+
+    private void nextStep() {
+        if (type != null) {
+            if (selectedImage != null) {
+                save = persistImage(selectedImage, photoFileName);
+                if (type.equals("item")) {
+                    Navigation.goNewItemActivity(getActivity(), save);
+                } else {
+                    // Sets user for new OutfitPost and navigates to next view
+                    saveParseFile(save, getView());
+                }
+            } else {
+                makeToast("Where's the picture?");
+            }
+        } else {
+           makeToast("Is this a new item or fit?");
+        }
+    }
+
+    // Helper function to create toasts for user
+    private void makeToast(String message) {
+        Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
     }
 }

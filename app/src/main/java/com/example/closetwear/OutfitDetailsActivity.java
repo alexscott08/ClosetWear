@@ -33,6 +33,7 @@ public class OutfitDetailsActivity extends AppCompatActivity {
     private ImageView outfitImg;
     private TextView date;
     private ImageView profileImg;
+    private TextView title;
     private TextView favoritesCount;
     private ImageView favoritesIcon;
     private ParseUser postUser;
@@ -87,6 +88,7 @@ public class OutfitDetailsActivity extends AppCompatActivity {
         profileImg = findViewById(R.id.profileImg);
         favoritesCount = findViewById(R.id.favoritesCount);
         favoritesIcon = findViewById(R.id.favoritesIcon);
+        title = findViewById(R.id.title);
     }
 
     private void bindData() {
@@ -99,7 +101,9 @@ public class OutfitDetailsActivity extends AppCompatActivity {
         }
         username.setText("@" + postUser.getUsername());
         date.setText(DateUtils.getRelativeTimeSpanString(post.getCreatedAt().getTime()) + "");
-
+        if (post.getTitle() != null) {
+            title.setText(post.getTitle());
+        }
         ParseFile image = post.getImage();
         if (image != null) {
             GlideApp.with(this).load(image.getUrl()).placeholder(R.drawable.ic_profileicon).into(outfitImg);
