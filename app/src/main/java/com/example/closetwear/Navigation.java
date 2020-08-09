@@ -13,6 +13,7 @@ import com.example.closetwear.profile.OutfitsFragment;
 import com.example.closetwear.newitem.NewItemActivity;
 import com.example.closetwear.newoutfit.*;
 import com.example.closetwear.parse.*;
+import com.example.closetwear.profile.TaggedFragment;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 
 import org.json.*;
@@ -96,7 +97,7 @@ public class Navigation {
         activity.finish();
     }
 
-    public static void goOutfitsFragment(FragmentManager fragmentManager, JSONArray fitsArray, String view) {
+    public static void goTaggedFragment(FragmentManager fragmentManager, JSONArray fitsArray) {
         ArrayList<String> fitIds = new ArrayList<>();
         if (fitsArray != null) {
             for (int i = 0; i < fitsArray.length(); i++) {
@@ -109,8 +110,7 @@ public class Navigation {
         }
         Bundle bundle = new Bundle();
         bundle.putStringArrayList("fits", fitIds);
-        bundle.putString("view", view);
-        Fragment fragment = new OutfitsFragment();
+        Fragment fragment = new TaggedFragment();
         fragment.setArguments(bundle);
         fragmentManager.beginTransaction().setCustomAnimations(R.anim.slide_in_left,
                 R.anim.slide_out_right).replace(R.id.containerFrameLayout, fragment).addToBackStack(null).commit();
