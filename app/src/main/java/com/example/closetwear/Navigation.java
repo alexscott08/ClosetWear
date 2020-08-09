@@ -59,12 +59,13 @@ public class Navigation {
      */
     public static void goMainActivity(Activity activity) {
         activity.startActivity(new Intent(activity, MainActivity.class));
-//        activity.finish();
+        activity.finish();
     }
 
     public static void goOutfitDetailsActivity(Context context, OutfitPost outfitPost) {
         Intent intent = new Intent(context, OutfitDetailsActivity.class);
         intent.putExtra("post", Parcels.wrap(outfitPost));
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
 
@@ -115,5 +116,9 @@ public class Navigation {
                 R.anim.slide_out_right).replace(R.id.containerFrameLayout, fragment).addToBackStack(null).commit();
     }
 
-
+    public static void goFullOutfitActivity(Activity activity, OutfitPost outfitPost) {
+        Intent i = new Intent(activity, FullOutfitActivity.class);
+        i.putExtra("outfit", Parcels.wrap(outfitPost));
+        activity.startActivity(i);
+    }
 }

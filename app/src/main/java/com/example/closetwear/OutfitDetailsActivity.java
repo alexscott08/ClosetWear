@@ -167,6 +167,8 @@ public class OutfitDetailsActivity extends AppCompatActivity {
                 return true;
             }
         });
+        outfitImg.setOnClickListener(view ->
+                Navigation.goFullOutfitActivity(OutfitDetailsActivity.this, post));
     }
 
     private boolean doesLikesContainId(String objectId) {
