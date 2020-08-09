@@ -6,14 +6,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-
-import com.example.closetwear.profile.OutfitsFragment;
 import com.example.closetwear.newitem.NewItemActivity;
 import com.example.closetwear.newoutfit.*;
 import com.example.closetwear.parse.*;
-import com.example.closetwear.profile.TaggedFragment;
+import com.example.closetwear.profile.TaggedActivity;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 
 import org.json.*;
@@ -97,7 +93,7 @@ public class Navigation {
         activity.finish();
     }
 
-    public static void goTaggedFragment(FragmentManager fragmentManager, JSONArray fitsArray) {
+    public static void goTaggedActivity(Context context, JSONArray fitsArray) {
         ArrayList<String> fitIds = new ArrayList<>();
         if (fitsArray != null) {
             for (int i = 0; i < fitsArray.length(); i++) {
@@ -108,12 +104,9 @@ public class Navigation {
                 }
             }
         }
-        Bundle bundle = new Bundle();
-        bundle.putStringArrayList("fits", fitIds);
-        Fragment fragment = new TaggedFragment();
-        fragment.setArguments(bundle);
-        fragmentManager.beginTransaction().setCustomAnimations(R.anim.slide_in_left,
-                R.anim.slide_out_right).replace(R.id.containerFrameLayout, fragment).addToBackStack(null).commit();
+        Intent i = new Intent(context, TaggedActivity.class);
+        i.putExtra("fits", fitIds);
+        context.startActivity(i);
     }
 
     public static void goFullOutfitActivity(Activity activity, OutfitPost outfitPost) {

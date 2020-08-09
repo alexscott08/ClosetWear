@@ -14,7 +14,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".FullOutfitActivity"></activity>
+        <activity android:name=".profile.TaggedActivity"></activity>
+        <activity android:name=".FullOutfitActivity" />
         <activity android:name=".newoutfit.TagItemActivity" />
         <activity android:name=".SignupActivity" />
         <activity android:name=".newoutfit.NewOutfitActivity" />

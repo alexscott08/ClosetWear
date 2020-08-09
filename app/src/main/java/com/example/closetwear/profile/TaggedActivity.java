@@ -1,37 +1,28 @@
 package com.example.closetwear.profile;
 
-import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
+import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.example.closetwear.EndlessRecyclerViewScrollListener;
-import com.example.closetwear.parse.OutfitPost;
 import com.example.closetwear.R;
+import com.example.closetwear.parse.OutfitPost;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class TaggedFragment extends Fragment {
+public class TaggedActivity extends AppCompatActivity {
 
-    public static final String TAG = "OutfitsFragment";
+    public static final String TAG = "TaggedActivity";
     private RecyclerView tagsRecyclerView;
     protected OutfitsAdapter adapter;
     protected List<OutfitPost> allPosts;
@@ -39,32 +30,20 @@ public class TaggedFragment extends Fragment {
     private EndlessRecyclerViewScrollListener scrollListener;
     private Date oldestPost;
 
-
-    public TaggedFragment() {
-        // Required empty public constructor
-    }
-
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_tagged, container, false);
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        bindViews(view);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_tagged);
+        bindViews();
         bindData();
     }
 
-    private void bindViews(View view) {
-        tagsRecyclerView = view.findViewById(R.id.tagsRecyclerView);
+    private void bindViews() {
+        tagsRecyclerView = findViewById(R.id.tagsRecyclerView);
 
         allPosts = new ArrayList<>();
         // Create adapter
-        adapter = new OutfitsAdapter(getContext(), allPosts);
+        adapter = new OutfitsAdapter(this, allPosts);
         // set the adapter on the recycler view
         tagsRecyclerView.setAdapter(adapter);
         // First param is number of columns and second param is orientation i.e Vertical or Horizontal
@@ -77,8 +56,7 @@ public class TaggedFragment extends Fragment {
     }
 
     private void bindData() {
-        Bundle bundle = this.getArguments();
-        ArrayList<String> fits = bundle.getStringArrayList("fits");
+        ArrayList<String> fits = getIntent().getStringArrayListExtra("fits");
         if (fits != null) {
             queryTaggedFits(fits);
         }
