@@ -54,7 +54,6 @@ public class SearchViewFragment extends Fragment {
         filter = view.findViewById(R.id.filterFAB);
         searchRecyclerView = view.findViewById(R.id.searchRecyclerView);
         adapter = new SearchViewAdapter(getContext(), searchPosts);
-        adapter.addAll(searchPosts);
         // set the adapter on the recycler view
         searchRecyclerView.setAdapter(adapter);
 
