@@ -11,11 +11,13 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.closetwear.OutfitDetailsActivity;
 import com.example.closetwear.parse.ClothingPost;
 import com.example.closetwear.GlideApp;
 import com.example.closetwear.Navigation;
 import com.example.closetwear.parse.OutfitPost;
 import com.example.closetwear.R;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -77,7 +79,7 @@ public class NewOutfitActivity extends AppCompatActivity {
         outfitImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // full screen view when clicked
+                Navigation.goFullOutfitActivity(NewOutfitActivity.this, outfitPost);
             }
         });
         tagBtn.setOnClickListener(new View.OnClickListener() {
@@ -92,29 +94,46 @@ public class NewOutfitActivity extends AppCompatActivity {
             public void onClick(View view) {
                 savePost(view);
             }
+//                MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(NewOutfitActivity.this, R.style.ThemeOverlay_App_MaterialAlertDialog)
+//                        .setTitle("Confirm")
+//                        .setMessage("Do you want to post?")
+//                        .setNeutralButton("Cancel", null);
+//        builder.setNegativeButton("Delete", new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                try {
+//                    outfitPost.delete();
+//                    Navigation.goMainActivity(NewOutfitActivity.this);
+//                } catch (ParseException e) {
+//                    e.printStackTrace();
+//                }
+//            };
+//        builder.setPositiveButton("Post", new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        savePost(view);
+//                    }
+//                };
         });
     }
 
     // Updates OutfitPost on Parse server, allowing user to cancel, navigates to MainActivity
     private void savePost(final View view) {
-        outfitPost.saveInBackground(new SaveCallback() {
-            @Override
-            public void done(ParseException e) {
-                if (e != null) {
-                    Log.e(TAG, "Error while saving", e);
-                    Toast.makeText(NewOutfitActivity.this, "Error while saving fit!", Toast.LENGTH_SHORT).show();
-                }
-                Snackbar.make(view, "New fit added to closet!", Snackbar.LENGTH_LONG).setAction("Cancel", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        outfitPost.deleteInBackground();
-                    }
-                }).show();
-                Log.i(TAG, "New fit added to closet!");
-
-                // Navigates to MainActivity after OutfitPost has been uploaded
-                Navigation.goMainActivity(NewOutfitActivity.this);
+        outfitPost.saveInBackground(e -> {
+            if (e != null) {
+                Log.e(TAG, "Error while saving", e);
+                Toast.makeText(NewOutfitActivity.this, "Error while saving fit!", Toast.LENGTH_SHORT).show();
             }
+            Snackbar.make(view, "New fit added to closet!", Snackbar.LENGTH_LONG).setAction("Cancel", new View.OnClickListener() {
+                @Override
+                public void onClick(View view1) {
+                    outfitPost.deleteInBackground();
+                }
+            }).show();
+            Log.i(TAG, "New fit added to closet!");
+
+            // Navigates to MainActivity after OutfitPost has been uploaded
+            Navigation.goMainActivity(NewOutfitActivity.this);
         });
     }
 

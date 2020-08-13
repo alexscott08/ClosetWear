@@ -68,10 +68,13 @@ tools:context=".newitem.NewItemActivity">
 
     <Button
         android:id="@+id/finishBtn"
+        style="?attr/materialButtonStyle"
         android:layout_width="148dp"
         android:layout_height="54dp"
         android:layout_marginEnd="4dp"
         android:text="Add to closet"
+        android:textColor="@color/black"
+        android:backgroundTint="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
     <FrameLayout

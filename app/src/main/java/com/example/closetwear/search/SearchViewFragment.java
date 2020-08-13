@@ -67,7 +67,7 @@ public class SearchViewFragment extends Fragment {
             boolean[] checkedItems = new boolean[5];
             String[] multiChoiceItems = getResources().getStringArray(R.array.filter_array);
             options = new HashMap<>();
-            new MaterialAlertDialogBuilder(getContext())
+            new MaterialAlertDialogBuilder(getContext(), R.style.ThemeOverlay_App_MaterialAlertDialog)
                     .setTitle("Filter your search for: " + query)
                     .setMultiChoiceItems(multiChoiceItems, checkedItems, (dialogInterface, i, b) -> checkedItems[i] = b)
                     .setPositiveButton("Ok", (dialogInterface, i) -> {
@@ -106,6 +106,7 @@ public class SearchViewFragment extends Fragment {
 
     // Used by MainActivity to update posts on adapter
     public void addToAdapter(List<OutfitPost> posts) {
+        searchPosts.clear();
         searchPosts.addAll(posts);
     }
 

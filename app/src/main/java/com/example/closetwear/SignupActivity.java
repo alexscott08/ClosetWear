@@ -21,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.parse.*;
 
 import java.io.*;
@@ -75,7 +76,7 @@ public class SignupActivity extends AppCompatActivity {
         profilePicBtn.setOnClickListener(view -> {
             // AlertDialog to ask user to select between taking picture or opening photos gallery
             String[] singleChoiceItems = getResources().getStringArray(R.array.dialog_photo);
-            new AlertDialog.Builder(SignupActivity.this)
+            new MaterialAlertDialogBuilder(SignupActivity.this, R.style.ThemeOverlay_App_MaterialAlertDialog)
                     .setTitle("Select one")
                     .setSingleChoiceItems(singleChoiceItems, itemSelected, (dialogInterface,
                                                                             selectedIndex) -> itemSelected = selectedIndex)

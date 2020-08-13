@@ -110,41 +110,35 @@ public class NewItemActivity extends AppCompatActivity implements CategoryFragme
     // Adds item picture to parse server in background
     private void saveParseFile(final File file, final View view) {
         final ParseFile img = new ParseFile(file);
-        img.saveInBackground(new SaveCallback() {
-            @Override
-            public void done(ParseException e) {
-                if (e != null) {
-                    Log.e(TAG, "Error saving image: ", e);
-                    Toast.makeText(NewItemActivity.this, "Error with saving image.", Toast.LENGTH_SHORT).show();
-                }
-                Log.i(TAG, "Image saved");
-                item.put("image", img);
-                savePost(view);
+        img.saveInBackground((SaveCallback) e -> {
+            if (e != null) {
+                Log.e(TAG, "Error saving image: ", e);
+                Toast.makeText(NewItemActivity.this, "Error with saving image.", Toast.LENGTH_SHORT).show();
             }
+            Log.i(TAG, "Image saved");
+            item.put("image", img);
+            savePost(view);
         });
     }
 
     // Adds current user to ClothingPost and saves post to Parse server, allowing user to cancel
     private void savePost(final View view) {
         item.setUser(ParseUser.getCurrentUser());
-        item.saveInBackground(new SaveCallback() {
-            @Override
-            public void done(ParseException e) {
-                if (e != null) {
-                    Log.e(TAG, "Error while saving", e);
-                    Toast.makeText(NewItemActivity.this, "Error while saving item!", Toast.LENGTH_SHORT).show();
-                }
-                Snackbar.make(view, "New item added to closet!", Snackbar.LENGTH_LONG).setAction("Cancel", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        item.deleteInBackground();
-                    }
-                }).show();
-                Log.i(TAG, "New item added to closet!");
-
-                // Navigates to MainActivity after ClothingPost has been uploaded
-                Navigation.goMainActivity(NewItemActivity.this);
+        item.saveInBackground(e -> {
+            if (e != null) {
+                Log.e(TAG, "Error while saving", e);
+                Toast.makeText(NewItemActivity.this, "Error while saving item!", Toast.LENGTH_SHORT).show();
             }
+            Snackbar.make(view, "New item added to closet!", Snackbar.LENGTH_LONG).setAction("Cancel", new View.OnClickListener() {
+                @Override
+                public void onClick(View view1) {
+                    item.deleteInBackground();
+                }
+            }).show();
+            Log.i(TAG, "New item added to closet!");
+
+            // Navigates to MainActivity after ClothingPost has been uploaded
+            Navigation.goMainActivity(NewItemActivity.this);
         });
     }
 

@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,15 +18,16 @@ import com.example.closetwear.EndlessRecyclerViewScrollListener;
 import com.example.closetwear.parse.OutfitPost;
 import com.example.closetwear.R;
 import com.example.closetwear.adapters.HomeAdapter;
-import com.parse.FindCallback;
-import com.parse.ParseException;
 import com.parse.ParseQuery;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-
+/**
+ * This class is the adapter to handle the content from {@link com.example.closetwear.fragments.HomeFragment}
+ * to bind onto the app's home page.
+ */
 public class HomeFragment extends Fragment {
 
     public static final String TAG = "PostsFragment";

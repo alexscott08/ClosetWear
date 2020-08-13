@@ -102,7 +102,7 @@ public class ComposeFragment extends Fragment {
 
     private void createDialog(View view) {
         String[] singleChoiceItems = getResources().getStringArray(R.array.dialog_photo);
-        new MaterialAlertDialogBuilder(getContext())
+        new MaterialAlertDialogBuilder(getContext(), R.style.ThemeOverlay_App_MaterialAlertDialog)
                 .setTitle("Select one")
                 .setSingleChoiceItems(singleChoiceItems, itemSelected, new DialogInterface.OnClickListener() {
                     @Override
@@ -280,28 +280,26 @@ public class ComposeFragment extends Fragment {
     }
 
     private void saveOutfit(final View view) {
-        MaterialAlertDialogBuilder fitTitleDialog = new MaterialAlertDialogBuilder(getContext()).setTitle("Title the fit");
+        MaterialAlertDialogBuilder fitTitleDialog = new MaterialAlertDialogBuilder(getContext(), R.style.ThemeOverlay_App_MaterialAlertDialog).setTitle("Title the fit");
         final EditText editText = new EditText(getContext());
         editText.setHint("Title");
 
         fitTitleDialog.setView(editText);
 
-        fitTitleDialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                //What ever you want to do with the value
-                newOutfit.setTitle(editText.getText().toString());
-                newOutfit.setUser(ParseUser.getCurrentUser());
-                newOutfit.saveInBackground(e -> {
-                    if (e != null) {
-                        Log.e(TAG, "Error while saving", e);
-                        makeToast("Error while saving fit!");
-                    }
-                    Snackbar.make(view, "New outfit added to closet!", Snackbar.LENGTH_LONG)
-                            .setAction("Cancel", view1 -> newOutfit.deleteInBackground()).show();
-                    Log.i(TAG, "New outfit added to closet!");
-                    Navigation.goNewOutfitActivity(getActivity(), newOutfit);
-                });
-            }
+        fitTitleDialog.setPositiveButton("Ok", (dialog, whichButton) -> {
+            //What ever you want to do with the value
+            newOutfit.setTitle(editText.getText().toString());
+            newOutfit.setUser(ParseUser.getCurrentUser());
+            newOutfit.saveInBackground(e -> {
+                if (e != null) {
+                    Log.e(TAG, "Error while saving", e);
+                    makeToast("Error while saving fit!");
+                }
+                Snackbar.make(view, "New outfit added to closet!", Snackbar.LENGTH_LONG)
+                        .setAction("Cancel", view1 -> newOutfit.deleteInBackground()).show();
+                Log.i(TAG, "New outfit added to closet!");
+                Navigation.goNewOutfitActivity(getActivity(), newOutfit);
+            });
         });
 
         fitTitleDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {

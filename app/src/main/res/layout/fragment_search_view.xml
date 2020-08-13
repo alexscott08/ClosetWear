@@ -30,8 +30,11 @@
         android:layout_marginStart="118dp"
         android:layout_marginEnd="131dp"
         android:layout_marginBottom="43dp"
+        android:backgroundTint="@color/purple"
         android:contentDescription="Filters"
         android:text="Filters"
-        app:icon="@drawable/ic_filter_variant_black_36dp" />
+        android:textColor="@color/white"
+        app:icon="@drawable/ic_filter_variant_black_36dp"
+        app:iconTint="@color/white" />
 
 </RelativeLayout>

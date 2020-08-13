@@ -13,6 +13,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.closetwear.Navigation;
+import com.example.closetwear.newoutfit.NewOutfitActivity;
 import com.example.closetwear.parse.ClothingPost;
 import com.example.closetwear.GlideApp;
 import com.example.closetwear.R;
@@ -20,29 +21,49 @@ import com.parse.ParseFile;
 
 import java.util.List;
 
+/**
+ * This class is the adapter to handle the content from {@link ClosetFragment}.
+ */
 public class ClosetAdapter extends RecyclerView.Adapter<ClosetAdapter.ViewHolder> {
     private Context context;
     private List<ClothingPost> posts;
     private FragmentManager fragmentManager;
 
+    /**
+     * This constructor creates a new instance of a ClosetAdapter.
+     *
+     * @param context         the current context of the Closet view
+     * @param posts           a list of all the {@link ClothingPost} to be bound onto the screen
+     * @param fragmentManager handles transactions between fragments
+     */
     public ClosetAdapter(Context context, List<ClothingPost> posts, FragmentManager fragmentManager) {
         this.context = context;
         this.posts = posts;
         this.fragmentManager = fragmentManager;
     }
 
-    // Clean all elements of the recycler
+    /**
+     * Clears all elements currently attached to the Recycler View
+     */
     public void clear() {
         posts.clear();
         notifyDataSetChanged();
     }
 
-    // Add a list of OutfitPost
+    /**
+     * Adds a list of {@link ClothingPost} to the current list of items to be bound onto the
+     * Recycler View
+     *
+     * @param list all {@link ClothingPost} instances to be added
+     */
     public void addAll(List<ClothingPost> list) {
         posts.addAll(list);
         notifyDataSetChanged();
     }
 
+    /**
+     * {@link androidx.recyclerview.widget.RecyclerView.Adapter#onCreateViewHolder(android.view.ViewGroup, int)}
+     */
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -50,17 +71,26 @@ public class ClosetAdapter extends RecyclerView.Adapter<ClosetAdapter.ViewHolder
         return new ViewHolder(view);
     }
 
+    /**
+     * {@link RecyclerView.Adapter#onBindViewHolder(androidx.recyclerview.widget.RecyclerView.ViewHolder, int)}
+     */
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         ClothingPost post = posts.get(position);
         holder.bind(post);
     }
 
+    /**
+     * {@link RecyclerView.Adapter#getItemCount()}
+     */
     @Override
     public int getItemCount() {
         return posts.size();
     }
 
+    /**
+     * {@link RecyclerView.ViewHolder}
+     */
     class ViewHolder extends RecyclerView.ViewHolder {
         private ImageView itemImg;
         private TextView brand;
@@ -69,6 +99,9 @@ public class ClosetAdapter extends RecyclerView.Adapter<ClosetAdapter.ViewHolder
         private TextView subcat;
         private String relativeDate;
 
+        /**
+         * {@link androidx.recyclerview.widget.RecyclerView.ViewHolder#ViewHolder(android.view.View)}
+         */
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             itemImg = itemView.findViewById(R.id.itemImg);
@@ -77,6 +110,13 @@ public class ClosetAdapter extends RecyclerView.Adapter<ClosetAdapter.ViewHolder
             dateCreated = itemView.findViewById(R.id.dateCreated);
             subcat = itemView.findViewById(R.id.subcat);
         }
+
+        /**
+         * Binds each {@link ClothingPost} to the adapter along with its details. Also sets a
+         * listener to navigate to {@link TaggedActivity} when an item in the closet is selected.
+         *
+         * @param post ClothingPost that needs to be bound
+         */
         public void bind(final ClothingPost post) {
             // Bind the post data to the view elements
             brand.setText(post.getBrand());

@@ -4,13 +4,27 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Lifecycle;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
+/**
+ * This class handles navigation between the three tabs shown in the {@link ProfileFragment}.
+ */
 public class ProfileTabAdapter extends FragmentStateAdapter {
+
+    /**
+     * This constructor creates a new instance of a NewOutfitAdapter.
+     *
+     * @param fragmentManager handles transactions between fragments
+     * @param lifecycle   the fragment's lifecycle
+     */
     public ProfileTabAdapter(@NonNull FragmentManager fragmentManager, @NonNull Lifecycle lifecycle) {
         super(fragmentManager, lifecycle);
     }
 
+    /**
+     * {@link FragmentStateAdapter#createFragment(int)}
+     */
     @NonNull
     @Override
     public Fragment createFragment(int position) {
@@ -29,6 +43,9 @@ public class ProfileTabAdapter extends FragmentStateAdapter {
         }
     }
 
+    /**
+     * {@link RecyclerView.Adapter#getItemCount()}
+     */
     @Override
     public int getItemCount() {
         return 3;
