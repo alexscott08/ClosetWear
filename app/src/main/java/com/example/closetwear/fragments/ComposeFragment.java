@@ -1,6 +1,4 @@
 package com.example.closetwear.fragments;
-
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -15,7 +13,6 @@ import androidx.fragment.app.Fragment;
 
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.text.Editable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,15 +26,11 @@ import com.example.closetwear.parse.OutfitPost;
 import com.example.closetwear.R;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
-import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -60,20 +53,24 @@ public class ComposeFragment extends Fragment {
     private OutfitPost newOutfit = new OutfitPost();
     private File save;
 
+    /**
+     * An empty public constructor required to create new instances.
+     */
     public ComposeFragment() {
-
     }
 
-    // The onCreateView method is called when Fragment should create its View object hierarchy,
-    // either dynamically or via XML layout inflation.
+    /**
+     * {@link Fragment#onCreateView(android.view.LayoutInflater, android.view.ViewGroup, android.os.Bundle)}
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
         // Defines the xml file for the fragment
         return inflater.inflate(R.layout.fragment_compose, parent, false);
     }
 
-    // This event is triggered soon after onCreateView().
-    // Any view setup should occur here.  E.g., view lookups and attaching view listeners.
+    /**
+     * {@link Fragment#onViewCreated(android.view.View, android.os.Bundle)}
+     */
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -81,11 +78,20 @@ public class ComposeFragment extends Fragment {
         setOnClickListeners();
     }
 
+    /**
+     * Finds all views from the compose fragment layout that need to be programatically updated.
+     *
+     * @param view the current view to pull layout items from
+     */
     private void bindViews(View view) {
         newItemBtn = view.findViewById(R.id.newItemBtn);
         newFitBtn = view.findViewById(R.id.newFitBtn);
     }
 
+    /**
+     * Sets all listeners for buttons on the layout. Pressing one of the buttons will determine
+     * the type (fit or item) and then call createDialog() to start the dialog view.
+     */
     private void setOnClickListeners() {
         newItemBtn.setOnClickListener(view -> {
             // AlertDialog to ask user to select between taking picture or opening photos gallery
@@ -100,6 +106,12 @@ public class ComposeFragment extends Fragment {
         });
     }
 
+    /**
+     * Sets all listeners for buttons on the layout. Pressing one of the buttons will determine
+     * the type (fit or item) and then call createDialog() to start the dialog view.
+     *
+     * @param view the current view to give context for the dialog
+     */
     private void createDialog(View view) {
         String[] singleChoiceItems = getResources().getStringArray(R.array.dialog_photo);
         new MaterialAlertDialogBuilder(getContext(), R.style.ThemeOverlay_App_MaterialAlertDialog)
@@ -122,7 +134,7 @@ public class ComposeFragment extends Fragment {
                 .show();
     }
 
-    private File persistImage(Bitmap bitmap, String name) {
+    private File persistImage(Bitmap bitmap) {
         File filesDir = getOutputMediaFile();
         if (filesDir == null) {
             Log.d(TAG, "Error creating media file, check storage permissions");
@@ -315,7 +327,7 @@ public class ComposeFragment extends Fragment {
     private void nextStep() {
         if (type != null) {
             if (selectedImage != null) {
-                save = persistImage(selectedImage, photoFileName);
+                save = persistImage(selectedImage);
                 if (type.equals("item")) {
                     Navigation.goNewItemActivity(getActivity(), save);
                 } else {

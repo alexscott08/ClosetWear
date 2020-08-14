@@ -38,10 +38,15 @@ public class HomeFragment extends Fragment {
     private EndlessRecyclerViewScrollListener scrollListener;
     private Date oldestPost;
 
+    /**
+     * An empty public constructor required to create new instances.
+     */
     public HomeFragment() {
-        // Required empty public constructor
     }
 
+    /**
+     * {@link Fragment#onCreateView(android.view.LayoutInflater, android.view.ViewGroup, android.os.Bundle)}
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -49,6 +54,9 @@ public class HomeFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_home, container, false);
     }
 
+    /**
+     * {@link androidx.fragment.app.Fragment#onViewCreated(android.view.View, android.os.Bundle)}
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -80,6 +88,7 @@ public class HomeFragment extends Fragment {
                 android.R.color.holo_red_light
         );
 
+        // Set a scroll listener that extends more data to bottom of page
         scrollListener = new EndlessRecyclerViewScrollListener(gridLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
@@ -92,7 +101,10 @@ public class HomeFragment extends Fragment {
         queryPosts();
     }
 
-
+    /**
+     * Makes a call to the Parse server to get a list of the 20 most recent {@link OutfitPost} to
+     * bind onto the Home view.
+     */
     protected void queryPosts() {
         // specify what type of data we want to query - OutfitPost.class
         ParseQuery<OutfitPost> query = ParseQuery.getQuery(OutfitPost.class);
@@ -120,6 +132,10 @@ public class HomeFragment extends Fragment {
         });
     }
 
+    /**
+     * Makes a call to the Parse server to get a list of the next 20 {@link OutfitPost} to
+     * bind onto the Home view, that haven't already been queried.
+     */
     private void loadMoreData() {
         ParseQuery<OutfitPost> query = ParseQuery.getQuery(OutfitPost.class);
         // include data referred by user key
